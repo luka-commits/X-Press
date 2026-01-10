@@ -1,0 +1,88 @@
+// XOS Database Schema
+// Säule 1: Digitale Fertigungs-Übersicht
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL") // Für Supabase Migrations
+}
+
+// Aufträge aus Prinance XML
+model Auftrag {
+  auftragsnummer String   @id
+  kundeId        Int?
+  kunde          Kunde?   @relation(fields: [kundeId], references: [id])
+
+  produkttyp         String?
+  produktbeschreibung String?
+  sachbearbeiter     String?
+
+  liefertermin   DateTime?
+  drucktermin    DateTime?
+  wtvTermin      DateTime?
+
+  prioritaet     Int?
+  status         String   @default("aktiv")
+
+  xmlImportDatum DateTime @default(now())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  arbeitsgaenge  Arbeitsgang[]
+}
+
+// Kunden
+model Kunde {
+  id            Int       @id @default(autoincrement())
+  name          String?
+  firma         String?
+  telefon       String?
+  mobil         String?
+  email         String?
+  adresse       String?
+  externeNummer String?
+
+  auftraege     Auftrag[]
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+// Arbeitsgänge (Produktionsschritte)
+model Arbeitsgang {
+  id              Int       @id @default(autoincrement())
+  auftragId       String
+  auftrag         Auftrag   @relation(fields: [auftragId], references: [auftragsnummer])
+
+  maschineId      Int?
+  maschine        Maschine? @relation(fields: [maschineId], references: [id])
+
+  sortOrder       Int?
+  zeitMinuten     Float?
+  geplantDatum    DateTime?
+  beschreibung    String?
+  kostenstelle    String?
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+// Maschinen (Leitmaschinen für Kapazitätsplanung)
+model Maschine {
+  id                      Int           @id @default(autoincrement())
+  name                    String
+  kurzname                String?
+  kostenstelle            String?       @unique
+  tageskapazitaetMinuten  Int           @default(480) // 8 Stunden
+  istLeitmaschine         Boolean       @default(false) // true = erscheint in Dashboard/Kalender
+  aktiv                   Boolean       @default(true)
+
+  arbeitsgaenge           Arbeitsgang[]
+
+  createdAt               DateTime      @default(now())
+  updatedAt               DateTime      @updatedAt
+}
