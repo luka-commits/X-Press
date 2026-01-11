@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<JDFAdapter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" PrinanceVersion="14.1000">
+  <Auftrag
+    Auftragsnummer="TEST_GP25-7745"
+    Produktart="Aufkleber"
+    Objektgruppenbezeichnung="Etiketten"
+    Produktbeschreibung1="2000 Aufkleber rund 50mm Durchmesser, 4/0-farbig, weisse Haftfolie, glaenzend"
+    Sachbearbeiter="Richter"
+    SachbearbeiterVorname="Hans"
+    KpPriorität="5"
+    DBName="XPRESS">
+
+    <Kunde ExterneAdressnummer="K-10189">
+      <Kundenadresse
+        Name="Dresden Kultur e.V."
+        Name2="Kulturverein Sachsen"
+        Kurzbezeichnung="DD-Kultur"
+        Strasse="Neumarkt 2"
+        PLZ="01067"
+        Ort="Dresden">
+        <KomEntry Kommtypname="Telefon" Wert="+49 351 22334455"/>
+        <KomEntry Kommtypname="Mobil" Wert="+49 172 55443322"/>
+        <KomEntry Kommtypname="E-Mail" Wert="info@dresden-kultur.org"/>
+      </Kundenadresse>
+    </Kunde>
+
+    <LeListe>
+      <LE LeNr="100" Wert="Druckvorbereitung"/>
+      <LE LeNr="200" Wert="Digitaldruck"/>
+      <LE LeNr="300" Wert="Schneiden"/>
+    </LeListe>
+
+    <Termine
+      TerminDruck="46037"
+      TerminWTV="46039"
+      Liefertermin="46041"/>
+
+    <Kalkulation>
+      <Bogengruppen Nr="1" Bogenartbezeichnung="Aufkleber">
+        <Arbeitsvorgang
+          Auftragsnummer="TEST_GP25-7745"
+          Name="Digitale Bogenmontage"
+          Sort="100010"
+          Kostenstelle="3300"
+          KostenstellenName="Digitale Bogenmontage"
+          KostenstellenKurzbez="Montage"
+          Noteprod="Nutzen-Montage 24-fach rund">
+          <Elemente ZEIT="18.00"/>
+        </Arbeitsvorgang>
+
+        <Arbeitsvorgang
+          Auftragsnummer="TEST_GP25-7745"
+          Name="Computer to Plate"
+          Sort="100020"
+          Kostenstelle="3400"
+          KostenstellenName="Computer to Plate"
+          KostenstellenKurzbez="CtP"
+          Noteprod="4 Platten">
+          <Elemente ZEIT="10.00"/>
+        </Arbeitsvorgang>
+
+        <Arbeitsvorgang
+          Auftragsnummer="TEST_GP25-7745"
+          Name="Offsetdruck 5-Farben"
+          Sort="200010"
+          Kostenstelle="4220"
+          KostenstellenName="Speedmaster CD 74-5P+LX"
+          KostenstellenKurzbez="SM CD74"
+          Noteprod="CMYK auf Haftfolie">
+          <Elemente ZEIT="28.00"/>
+        </Arbeitsvorgang>
+
+        <Arbeitsvorgang
+          Auftragsnummer="TEST_GP25-7745"
+          Name="UV-Lackierung"
+          Sort="300010"
+          Kostenstelle="5401"
+          KostenstellenName="SPS Vitessa XP"
+          KostenstellenKurzbez="Vitessa"
+          Noteprod="Glaenzend UV-lackieren">
+          <Elemente ZEIT="15.00"/>
+        </Arbeitsvorgang>
+
+        <Arbeitsvorgang
+          Auftragsnummer="TEST_GP25-7745"
+          Name="Stanzen"
+          Sort="400010"
+          Kostenstelle="5201"
+          KostenstellenName="IMG Brausse 1050 SEF"
+          KostenstellenKurzbez="Brausse"
+          Noteprod="Runde Aufkleber ausstanzen">
+          <Elemente ZEIT="35.00"/>
+        </Arbeitsvorgang>
+      </Bogengruppen>
+    </Kalkulation>
+
+    <Papier>
+      <Papierposition Bezeichnung="Haftfolie weiss glaenzend" Grammatur="80" Format="74x52"/>
+    </Papier>
+
+    <Auflage Menge="2000" Einheit="Stueck"/>
+
+    <Worklevel>
+      <Production/>
+    </Worklevel>
+  </Auftrag>
+</JDFAdapter>

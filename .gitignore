@@ -42,3 +42,12 @@ coverage/
 # Misc
 *.tsbuildinfo
 next-env.d.ts
+.vercel
+
+# Hotfolder - nur .gitkeep behalten
+data/hotfolder/*
+!data/hotfolder/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/failed/*
+!data/failed/.gitkeep

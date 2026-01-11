@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<JDFAdapter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" PrinanceVersion="14.1000">
+  <Auftrag
+    Auftragsnummer="TEST_GP25-7712"
+    Produktart="Kataloge"
+    Objektgruppenbezeichnung="Werbemittel"
+    Produktbeschreibung1="200 Produktkataloge A4, 48 Seiten + Umschlag, Rueckstich-Heftung, UV-Lack auf Umschlag"
+    Sachbearbeiter="Dural"
+    SachbearbeiterVorname="Andre"
+    KpPriorität="9"
+    DBName="XPRESS">
+
+    <Kunde ExterneAdressnummer="K-10078">
+      <Kundenadresse
+        Name="Hamburg Marketing AG"
+        Name2="Marketingagentur"
+        Kurzbezeichnung="HH-Marketing"
+        Strasse="Jungfernstieg 18"
+        PLZ="20354"
+        Ort="Hamburg">
+        <KomEntry Kommtypname="Telefon" Wert="+49 40 55667788"/>
+        <KomEntry Kommtypname="E-Mail" Wert="sandra.fischer@hh-marketing.de"/>
+      </Kundenadresse>
+    </Kunde>
+
+    <LeListe>
+      <LE LeNr="100" Wert="Druckvorbereitung"/>
+      <LE LeNr="200" Wert="Offsetdruck"/>
+      <LE LeNr="300" Wert="Weiterverarbeitung"/>
+      <LE LeNr="400" Wert="Sammelheftung"/>
+    </LeListe>
+
+    <Termine
+      TerminDruck="46036"
+      TerminWTV="46039"
+      Liefertermin="46042"/>
+
+    <Kalkulation>
+      <Bogengruppen Nr="1" Bogenartbezeichnung="Umschlag">
+        <Arbeitsvorgang
+          Auftragsnummer="TEST_GP25-7712"
+          Name="Digitale Bogenmontage"
+          Sort="100010"
+          Kostenstelle="3300"
+          KostenstellenName="Digitale Bogenmontage"
+          KostenstellenKurzbez="Montage"
+          Noteprod="Umschlag-Montage 4-seitig">
+          <Elemente ZEIT="20.00"/>
+        </Arbeitsvorgang>
+
+        <Arbeitsvorgang
+          Auftragsnummer="TEST_GP25-7712"
+          Name="Computer to Plate"
+          Sort="100020"
+          Kostenstelle="3400"
+          KostenstellenName="Computer to Plate"
+          KostenstellenKurzbez="CtP"
+          Noteprod="4 Platten Umschlag">
+          <Elemente ZEIT="10.00"/>
+        </Arbeitsvorgang>
+
+        <Arbeitsvorgang
+          Auftragsnummer="TEST_GP25-7712"
+          Name="Offsetdruck 6-Farben"
+          Sort="200010"
+          Kostenstelle="4240"
+          KostenstellenName="Speedmaster CX 102-6+L"
+          KostenstellenKurzbez="SM CX102"
+          Noteprod="Umschlag CMYK + UV-Lack">
+          <Elemente ZEIT="45.00"/>
+        </Arbeitsvorgang>
+      </Bogengruppen>
+
+      <Bogengruppen Nr="2" Bogenartbezeichnung="Inhalt">
+        <Arbeitsvorgang
+          Auftragsnummer="TEST_GP25-7712"
+          Name="Digitale Bogenmontage"
+          Sort="100030"
+          Kostenstelle="3300"
+          KostenstellenName="Digitale Bogenmontage"
+          KostenstellenKurzbez="Montage"
+          Noteprod="Inhalt-Montage 48 Seiten">
+          <Elemente ZEIT="35.00"/>
+        </Arbeitsvorgang>
+
+        <Arbeitsvorgang
+          Auftragsnummer="TEST_GP25-7712"
+          Name="Computer to Plate"
+          Sort="100040"
+          Kostenstelle="3400"
+          KostenstellenName="Computer to Plate"
+          KostenstellenKurzbez="CtP"
+          Noteprod="24 Platten Inhalt">
+          <Elemente ZEIT="25.00"/>
+        </Arbeitsvorgang>
+
+        <Arbeitsvorgang
+          Auftragsnummer="TEST_GP25-7712"
+          Name="Offsetdruck 5-Farben"
+          Sort="200020"
+          Kostenstelle="4230"
+          KostenstellenName="Speedmaster CD 102-5L"
+          KostenstellenKurzbez="SM CD102"
+          Noteprod="Inhalt 4/4-farbig">
+          <Elemente ZEIT="60.00"/>
+        </Arbeitsvorgang>
+
+        <Arbeitsvorgang
+          Auftragsnummer="TEST_GP25-7712"
+          Name="Schneiden"
+          Sort="300010"
+          Kostenstelle="5101"
+          KostenstellenName="POLAR PACE 137 LW"
+          KostenstellenKurzbez="POLAR"
+          Noteprod="Vorschneiden und Rillen">
+          <Elemente ZEIT="25.00"/>
+        </Arbeitsvorgang>
+
+        <Arbeitsvorgang
+          Auftragsnummer="TEST_GP25-7712"
+          Name="Sammelheften"
+          Sort="400010"
+          Kostenstelle="5301"
+          KostenstellenName="Sammelhefter ST-400"
+          KostenstellenKurzbez="ST-400"
+          Noteprod="Rueckstich-Heftung 2 Klammern">
+          <Elemente ZEIT="40.00"/>
+        </Arbeitsvorgang>
+      </Bogengruppen>
+    </Kalkulation>
+
+    <Papier>
+      <Papierposition Bezeichnung="Bilderdruckpapier glaenzend 135g" Grammatur="135" Format="102x72"/>
+      <Papierposition Bezeichnung="Bilderdruckkarton 300g Umschlag" Grammatur="300" Format="102x72"/>
+    </Papier>
+
+    <Auflage Menge="200" Einheit="Stueck"/>
+
+    <Worklevel>
+      <Production/>
+    </Worklevel>
+  </Auftrag>
+</JDFAdapter>
