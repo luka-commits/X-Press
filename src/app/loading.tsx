@@ -47,10 +47,7 @@ function SkeletonWeekStats() {
 
 export default function DashboardLoading() {
   return (
-    <MainLayout
-      title="Dashboard"
-      subtitle="Übersicht aller Aufträge und Maschinen"
-    >
+    <MainLayout>
       {/* Week Statistics Skeleton */}
       <SkeletonWeekStats />
 

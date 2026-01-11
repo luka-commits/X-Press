@@ -1,14 +1,21 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
+
+const navigation = [
+  { name: "Dashboard", href: "/" },
+  { name: "Aufträge", href: "/orders" },
+  { name: "Kalender", href: "/calendar" },
+];
 
 interface HeaderProps {
-  title: string;
-  subtitle?: string;
   headerRight?: React.ReactNode;
 }
 
-export function Header({ title, subtitle, headerRight }: HeaderProps) {
+export function Header({ headerRight }: HeaderProps) {
+  const pathname = usePathname();
   const router = useRouter();
 
   const handleRefresh = () => {
@@ -16,14 +23,40 @@ export function Header({ title, subtitle, headerRight }: HeaderProps) {
   };
 
   return (
-    <header className="h-auto min-h-16 bg-white border-b border-neutral-200 flex items-center justify-between px-6 py-3">
-      <div>
-        <h1 className="text-lg font-semibold text-xpress-text">{title}</h1>
-        {subtitle && (
-          <p className="text-sm text-neutral-500">{subtitle}</p>
-        )}
+    <header className="h-14 bg-white border-b border-neutral-200 flex items-center justify-between px-6">
+      {/* Left: Logo + Navigation */}
+      <div className="flex items-center gap-8">
+        {/* Logo */}
+        <span className="text-xl font-semibold text-xpress-text">
+          X-Press <span className="text-xpress-blue">XOS</span>
+        </span>
+
+        {/* Navigation Tabs */}
+        <nav className="flex items-center gap-1">
+          {navigation.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={cn(
+                  "px-4 py-2 text-sm font-medium transition-colors relative",
+                  isActive
+                    ? "text-xpress-text"
+                    : "text-neutral-500 hover:text-xpress-text"
+                )}
+              >
+                {item.name}
+                {isActive && (
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-xpress-yellow" />
+                )}
+              </Link>
+            );
+          })}
+        </nav>
       </div>
 
+      {/* Right: Actions */}
       {headerRight || (
         <button
           onClick={handleRefresh}

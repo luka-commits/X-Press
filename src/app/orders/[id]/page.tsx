@@ -123,10 +123,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
   const isActive = order.computedStatus === 'aktiv';
 
   return (
-    <MainLayout
-      title={`Auftrag ${order.auftragsnummer}`}
-      subtitle={order.produkttyp || 'Auftragsdetails'}
-    >
+    <MainLayout>
       <div className="space-y-6">
         {/* Kopfbereich */}
         <div className="flex items-center justify-between">

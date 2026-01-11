@@ -104,8 +104,6 @@ export async function getMachineCapacityForWeek(
   weekStart: Date
 ): Promise<MachineWeekCapacity[]> {
   const weekEnd = endOfWeek(weekStart, { weekStartsOn: 1 });
-  const weekStartISO = startOfDay(weekStart).toISOString();
-  const weekEndISO = endOfDay(weekEnd).toISOString();
 
   // Get all days in the week
   const daysInWeek = eachDayOfInterval({
@@ -142,14 +140,17 @@ export async function getMachineCapacityForWeek(
   return machines.map((m) => {
     // Calculate capacity for each day
     const days: DayCapacity[] = daysInWeek.map((day) => {
-      const dayStart = startOfDay(day).toISOString();
-      const dayEnd = endOfDay(day).toISOString();
+      // Use date-only format for comparison (avoids timezone issues)
+      // DB stores dates as "2026-01-10T00:00:00" without timezone
+      const dayDateStr = format(day, 'yyyy-MM-dd');
 
-      // Filter Arbeitsgänge for this day
+      // Filter Arbeitsgänge for this day by comparing date part only
       const tagesArbeit =
         m.Arbeitsgang?.filter((ag: { geplantDatum: string | null }) => {
           if (!ag.geplantDatum) return false;
-          return ag.geplantDatum >= dayStart && ag.geplantDatum <= dayEnd;
+          // Extract date part from geplantDatum (e.g., "2026-01-10" from "2026-01-10T00:00:00")
+          const agDateStr = ag.geplantDatum.substring(0, 10);
+          return agDateStr === dayDateStr;
         }) || [];
 
       // Count unique orders
@@ -212,8 +213,11 @@ export async function getMachineOrdersForDay(
     zeitMinuten: number;
   }[]
 > {
-  const dayStart = startOfDay(date).toISOString();
-  const dayEnd = endOfDay(date).toISOString();
+  // Use date-only format for comparison (avoids timezone issues)
+  // DB stores dates as "2026-01-10T00:00:00" without timezone
+  const dayDateStr = format(date, 'yyyy-MM-dd');
+  const dayStart = `${dayDateStr}T00:00:00`;
+  const dayEnd = `${dayDateStr}T23:59:59`;
 
   const { data: arbeitsgaenge, error } = await supabase
     .from('Arbeitsgang')

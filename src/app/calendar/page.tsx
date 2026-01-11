@@ -35,10 +35,7 @@ export default async function CalendarPage({ searchParams }: CalendarPageProps) 
   const machines = await getMachineCapacityForWeek(weekStart);
 
   return (
-    <MainLayout
-      title="Maschinen-Kalender"
-      subtitle="Wochenansicht der Leitmaschinen-Auslastung"
-    >
+    <MainLayout>
       <div className="space-y-4">
         <WeekNavigation currentWeek={weekInfo} />
         <MachineCalendarGrid machines={machines} />
