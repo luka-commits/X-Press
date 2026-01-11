@@ -23,12 +23,12 @@ export function Header({ headerRight }: HeaderProps) {
   };
 
   return (
-    <header className="h-14 bg-white border-b border-neutral-200 flex items-center justify-between px-6">
+    <header className="h-16 bg-white border-b border-ghl-border flex items-center justify-between px-6">
       {/* Left: Logo + Navigation */}
       <div className="flex items-center gap-8">
         {/* Logo */}
-        <span className="text-xl font-semibold text-xpress-text">
-          X-Press <span className="text-xpress-blue">XOS</span>
+        <span className="text-xl font-semibold text-ghl-text">
+          X-Press <span className="text-ghl-blue">XOS</span>
         </span>
 
         {/* Navigation Tabs */}
@@ -40,16 +40,13 @@ export function Header({ headerRight }: HeaderProps) {
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  "px-4 py-2 text-sm font-medium transition-colors relative",
+                  "px-4 py-2 text-sm font-medium transition-colors rounded-md",
                   isActive
-                    ? "text-xpress-text"
-                    : "text-neutral-500 hover:text-xpress-text"
+                    ? "bg-ghl-blue/10 text-ghl-blue"
+                    : "text-ghl-text-secondary hover:text-ghl-text hover:bg-gray-100"
                 )}
               >
                 {item.name}
-                {isActive && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-xpress-yellow" />
-                )}
               </Link>
             );
           })}
@@ -60,7 +57,7 @@ export function Header({ headerRight }: HeaderProps) {
       {headerRight || (
         <button
           onClick={handleRefresh}
-          className="px-4 py-2 text-sm font-medium text-xpress-text bg-xpress-yellow hover:bg-xpress-yellow-hover rounded-md transition-colors"
+          className="px-4 py-2 text-sm font-medium text-white bg-ghl-blue hover:bg-ghl-blue-hover rounded-md transition-colors shadow-sm"
         >
           Aktualisieren
         </button>

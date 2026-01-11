@@ -40,16 +40,16 @@ function MachineCard({ machine }: { machine: MachineCapacity }) {
   const statusBgClass = getStatusBgClass(machine.auslastung);
 
   return (
-    <div className="bg-white rounded-lg border border-neutral-200 overflow-hidden transition-all duration-200 hover:shadow-md hover:border-neutral-300">
+    <div className="bg-white rounded-lg border border-ghl-border overflow-hidden transition-all duration-200 hover:shadow-md hover:border-blue-200 shadow-sm">
       {/* Header with machine name and utilization */}
       <div
         className={`px-4 py-3 border-b ${statusBgClass} flex items-center justify-between`}
       >
         <div>
-          <h3 className="font-semibold text-xpress-text">
+          <h3 className="font-semibold text-ghl-text">
             {machine.kurzname || machine.name}
           </h3>
-          <p className="text-xs text-neutral-500">{machine.name}</p>
+          <p className="text-xs text-ghl-text-secondary">{machine.name}</p>
         </div>
         <div className="text-right">
           <p
@@ -58,7 +58,7 @@ function MachineCard({ machine }: { machine: MachineCapacity }) {
           >
             {machine.auslastung}%
           </p>
-          <p className="text-xs text-neutral-500">
+          <p className="text-xs text-ghl-text-secondary">
             {Math.round(machine.gesamtZeit)} / {machine.kapazitaet} min
           </p>
         </div>
@@ -76,20 +76,20 @@ function MachineCard({ machine }: { machine: MachineCapacity }) {
               <Link
                 key={order.auftragsnummer}
                 href={`/orders/${order.auftragsnummer}`}
-                className="block p-2 rounded hover:bg-neutral-50 transition-colors border border-transparent hover:border-neutral-200"
+                className="block p-2 rounded hover:bg-gray-50 transition-colors border border-transparent hover:border-ghl-border"
               >
                 <div className="flex items-center justify-between">
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-xpress-blue truncate">
+                    <p className="text-sm font-medium text-ghl-blue truncate">
                       {order.auftragsnummer}
                     </p>
-                    <p className="text-xs text-neutral-500 truncate">
+                    <p className="text-xs text-ghl-text-secondary truncate">
                       {order.kunde}
                       {order.produkttyp && ` • ${order.produkttyp}`}
                     </p>
                   </div>
                   <div className="ml-2 text-right flex-shrink-0">
-                    <p className="text-sm font-medium text-neutral-700">
+                    <p className="text-sm font-medium text-ghl-text">
                       {Math.round(order.zeitMinuten)} min
                     </p>
                   </div>
@@ -126,7 +126,7 @@ export function MachineCards({ machines, selectedDate }: MachineCardsProps) {
   if (machines.length === 0) {
     return (
       <div className="bg-white rounded-lg p-6 border border-neutral-200">
-        <h2 className="text-lg font-semibold text-xpress-text mb-4">
+        <h2 className="text-lg font-semibold text-ghl-text mb-4">
           Maschinen-Übersicht ({dateLabel})
         </h2>
         <p className="text-neutral-500 text-center py-8">
@@ -139,7 +139,7 @@ export function MachineCards({ machines, selectedDate }: MachineCardsProps) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-xpress-text">
+        <h2 className="text-lg font-semibold text-ghl-text">
           Maschinen-Übersicht ({dateLabel})
         </h2>
         <div className="flex items-center gap-4 text-xs">

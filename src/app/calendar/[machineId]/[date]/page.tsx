@@ -51,7 +51,7 @@ export default async function CalendarDetailPage({
         {/* Back button */}
         <Link
           href="/calendar"
-          className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-xpress-blue transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-neutral-600 hover:text-ghl-blue transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Zurück zum Kalender
@@ -61,7 +61,7 @@ export default async function CalendarDetailPage({
         <div className="bg-white rounded-lg border border-neutral-200 p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-xl font-semibold text-xpress-text">
+              <h2 className="text-xl font-semibold text-ghl-text">
                 {machine?.kurzname || machine?.name}
               </h2>
               {machine?.kurzname && (
@@ -96,7 +96,7 @@ export default async function CalendarDetailPage({
         {/* Orders list */}
         <div className="bg-white rounded-lg border border-neutral-200">
           <div className="px-6 py-4 border-b border-neutral-200">
-            <h3 className="font-semibold text-xpress-text">
+            <h3 className="font-semibold text-ghl-text">
               Aufträge ({orders.length})
             </h3>
           </div>
@@ -115,7 +115,7 @@ export default async function CalendarDetailPage({
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium text-xpress-blue">
+                      <p className="font-medium text-ghl-blue">
                         {order.auftragsnummer}
                       </p>
                       <p className="text-sm text-neutral-500">

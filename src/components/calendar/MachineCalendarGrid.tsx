@@ -48,11 +48,10 @@ export function MachineCalendarGrid({ machines }: MachineCalendarGridProps) {
           return (
             <div
               key={index}
-              className={`p-3 text-center font-medium text-sm border-l border-neutral-200 ${
-                isToday
-                  ? 'bg-xpress-blue/5 text-xpress-blue'
+              className={`p-3 text-center font-medium text-sm border-l border-neutral-200 ${isToday
+                  ? 'bg-ghl-blue/5 text-ghl-blue'
                   : 'text-neutral-600'
-              }`}
+                }`}
             >
               {day.dateFormatted}
               {isToday && (
@@ -71,7 +70,7 @@ export function MachineCalendarGrid({ machines }: MachineCalendarGridProps) {
         >
           {/* Machine name */}
           <div className="p-3 flex flex-col justify-center">
-            <p className="font-medium text-xpress-text text-sm">
+            <p className="font-medium text-ghl-text text-sm">
               {machine.kurzname || machine.name}
             </p>
             {machine.kurzname && (
@@ -87,9 +86,8 @@ export function MachineCalendarGrid({ machines }: MachineCalendarGridProps) {
             return (
               <div
                 key={index}
-                className={`p-2 border-l border-neutral-100 ${
-                  isToday ? 'bg-xpress-blue/5' : ''
-                }`}
+                className={`p-2 border-l border-neutral-100 ${isToday ? 'bg-ghl-blue/5' : ''
+                  }`}
               >
                 <CalendarCell
                   machineId={machine.id}

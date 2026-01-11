@@ -143,7 +143,7 @@ export function OrderFilters({ produkttypen, sachbearbeiter }: OrderFiltersProps
           variant="ghost"
           size="sm"
           onClick={clearFilters}
-          className="text-neutral-500 hover:text-xpress-text"
+          className="text-neutral-500 hover:text-ghl-text"
         >
           Filter zurücksetzen
         </Button>

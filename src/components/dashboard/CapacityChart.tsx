@@ -30,7 +30,7 @@ export function CapacityChart({ machines }: CapacityChartProps) {
   if (machines.length === 0) {
     return (
       <div className="bg-white rounded-lg p-6 border border-neutral-200">
-        <h2 className="text-lg font-semibold text-xpress-text mb-4">Maschinen-Auslastung</h2>
+        <h2 className="text-lg font-semibold text-ghl-text mb-4">Maschinen-Auslastung</h2>
         <p className="text-neutral-500 text-center py-8">
           Keine Leitmaschinen konfiguriert
         </p>
@@ -48,8 +48,8 @@ export function CapacityChart({ machines }: CapacityChartProps) {
   }));
 
   return (
-    <div className="bg-white rounded-lg p-6 border border-neutral-200">
-      <h2 className="text-lg font-semibold text-xpress-text mb-4">
+    <div className="bg-white rounded-lg p-6 border border-ghl-border shadow-sm">
+      <h2 className="text-lg font-semibold text-ghl-text mb-4">
         Maschinen-Auslastung (Heute)
       </h2>
       <div style={{ width: '100%', height: 256, minHeight: 256 }}>

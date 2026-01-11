@@ -15,14 +15,14 @@ interface KPICardProps {
 
 export function KPICard({ label, value, suffix = '', variant = 'default' }: KPICardProps) {
   const valueColorClass = {
-    default: 'text-xpress-text',
+    default: 'text-ghl-text',
     critical: 'text-capacity-red',
     warning: 'text-capacity-yellow',
     success: 'text-capacity-green',
   }[variant];
 
   return (
-    <div className="bg-white rounded-lg p-6 border border-neutral-200 transition-all duration-200 hover:shadow-md hover:border-neutral-300">
+    <div className="bg-white rounded-lg p-6 border border-ghl-border transition-all duration-200 hover:shadow-md hover:border-blue-200 shadow-sm">
       <p className="text-sm text-neutral-500 mb-1">{label}</p>
       <p className={cn('text-3xl font-semibold', valueColorClass)}>
         {value}

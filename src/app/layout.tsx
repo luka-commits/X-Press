@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-// X-Press Corporate Fonts
-const dmSans = DM_Sans({
+// GoHiLevel / SaaS Standard Font
+const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-dm-sans",
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
@@ -21,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="de">
-      <body className={`${dmSans.variable} font-sans antialiased bg-xpress-bg text-xpress-text`}>
+      <body className={`${inter.variable} font-sans antialiased bg-background text-foreground`}>
         {children}
       </body>
     </html>

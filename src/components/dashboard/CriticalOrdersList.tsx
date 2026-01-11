@@ -18,7 +18,7 @@ export function CriticalOrdersList({ orders }: CriticalOrdersListProps) {
   if (orders.length === 0) {
     return (
       <div className="bg-white rounded-lg p-6 border border-neutral-200">
-        <h2 className="text-lg font-semibold text-xpress-text mb-4">Bald fällig</h2>
+        <h2 className="text-lg font-semibold text-ghl-text mb-4">Bald fällig</h2>
         <div className="text-center py-8">
           <p className="text-capacity-green font-medium">Keine Aufträge bald fällig</p>
           <p className="text-neutral-500 text-sm mt-1">Alles im grünen Bereich!</p>
@@ -28,36 +28,36 @@ export function CriticalOrdersList({ orders }: CriticalOrdersListProps) {
   }
 
   return (
-    <div className="bg-white rounded-lg p-6 border border-neutral-200">
-      <h2 className="text-lg font-semibold text-xpress-text mb-4">
+    <div className="bg-white rounded-lg p-6 border border-ghl-border shadow-sm">
+      <h2 className="text-lg font-semibold text-ghl-text mb-4">
         Bald fällig ({orders.length})
       </h2>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-neutral-200">
-              <th className="text-left py-2 px-3 font-medium text-neutral-600">Auftrag</th>
-              <th className="text-left py-2 px-3 font-medium text-neutral-600">Kunde</th>
-              <th className="text-left py-2 px-3 font-medium text-neutral-600">Liefertermin</th>
-              <th className="text-right py-2 px-3 font-medium text-neutral-600">Tage</th>
+            <tr className="border-b border-ghl-border">
+              <th className="text-left py-2 px-3 font-medium text-ghl-text-secondary">Auftrag</th>
+              <th className="text-left py-2 px-3 font-medium text-ghl-text-secondary">Kunde</th>
+              <th className="text-left py-2 px-3 font-medium text-ghl-text-secondary">Liefertermin</th>
+              <th className="text-right py-2 px-3 font-medium text-ghl-text-secondary">Tage</th>
             </tr>
           </thead>
           <tbody>
             {orders.map((order) => (
               <tr
                 key={order.auftragsnummer}
-                className="border-b border-neutral-100 hover:bg-neutral-50"
+                className="border-b border-gray-100 hover:bg-gray-50"
               >
                 <td className="py-2 px-3">
                   <Link
                     href={`/orders/${order.auftragsnummer}`}
-                    className="text-xpress-blue hover:underline font-medium"
+                    className="text-ghl-blue hover:underline font-medium"
                   >
                     {order.auftragsnummer}
                   </Link>
                 </td>
-                <td className="py-2 px-3 text-neutral-700">{order.kunde}</td>
-                <td className="py-2 px-3 text-neutral-700">
+                <td className="py-2 px-3 text-ghl-text">{order.kunde}</td>
+                <td className="py-2 px-3 text-ghl-text">
                   {order.liefertermin
                     ? format(new Date(order.liefertermin), 'dd.MM.yyyy', { locale: de })
                     : '–'}
