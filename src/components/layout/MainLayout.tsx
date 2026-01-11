@@ -9,7 +9,7 @@ interface MainLayoutProps {
 
 export function MainLayout({ children, headerRight }: MainLayoutProps) {
   return (
-    <div className="min-h-screen bg-xpress-bg flex flex-col">
+    <div className="min-h-screen bg-ghl-bg flex flex-col">
       <Header headerRight={headerRight} />
 
       <main className="flex-1 p-6">

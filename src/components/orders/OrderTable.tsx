@@ -92,11 +92,10 @@ export function OrderTable({ orders, total, page, totalPages }: OrderTableProps)
     const isActive = status === 'aktiv';
     return (
       <span
-        className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-          isActive
+        className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${isActive
             ? 'bg-capacity-green/10 text-capacity-green'
             : 'bg-neutral-100 text-neutral-500'
-        }`}
+          }`}
       >
         {isActive ? 'Aktiv' : 'Abgeschlossen'}
       </span>
@@ -158,7 +157,7 @@ export function OrderTable({ orders, total, page, totalPages }: OrderTableProps)
                 <TableCell>{getStatusBadge(order.computedStatus)}</TableCell>
                 <TableCell className="text-right">
                   <Link href={`/orders/${order.auftragsnummer}`}>
-                    <Button variant="ghost" size="sm" className="text-xpress-blue hover:text-xpress-blue-light">
+                    <Button variant="ghost" size="sm" className="text-ghl-blue hover:text-ghl-blue-hover">
                       Details <ArrowRight className="ml-1 h-4 w-4" />
                     </Button>
                   </Link>

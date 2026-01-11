@@ -10,21 +10,16 @@ const config: Config = {
   theme: {
   	extend: {
   		colors: {
-  			// X-Press Corporate Colors (von x-press.de)
-  			xpress: {
-  				bg: '#DEDCD3',           // Beige Hintergrund
-  				yellow: '#F9FF73',       // Primär - Buttons, CTAs
-  				'yellow-hover': '#e6eb68',
-  				blue: '#3B4DFF',         // Akzent - Links, Grafiken
-  				'blue-light': '#5B6CFF',
-  				text: '#1A1A1A',         // Text
-  			},
-  			// Kapazitäts-Ampel
-  			capacity: {
-  				green: '#22c55e',        // <70%
-  				yellow: '#eab308',       // 70-90%
-  				red: '#ef4444',          // >90%
-  			},
+            // GoHiLevel / Clean SaaS Palette
+            ghl: {
+                bg: '#F3F4F6',           // Light Gray Background
+                card: '#FFFFFF',         // White Card Background
+                blue: '#155EEF',         // Primary Blue (Action)
+                'blue-hover': '#175CD3', // Primary Blue Hover
+                text: '#111827',         // Primary Text (Gray 900)
+                'text-secondary': '#6B7280', // Secondary Text (Gray 500)
+                border: '#E5E7EB',       // Light Border
+            },
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
@@ -64,7 +59,13 @@ const config: Config = {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
-  			}
+  			},
+            // Legacy/Functional colors that might still be used
+            capacity: {
+                green: '#22c55e',
+                yellow: '#eab308',
+                red: '#ef4444',
+            },
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -72,7 +73,7 @@ const config: Config = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		fontFamily: {
-  			sans: ['var(--font-dm-sans)', 'system-ui', 'sans-serif'],
+  			sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
   		}
   	}
   },

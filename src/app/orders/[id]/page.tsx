@@ -128,17 +128,16 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
         {/* Kopfbereich */}
         <div className="flex items-center justify-between">
           <Link href="/orders">
-            <Button variant="ghost" className="text-xpress-blue">
+            <Button variant="ghost" className="text-ghl-blue">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Zurück zur Übersicht
             </Button>
           </Link>
           <span
-            className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-              isActive
-                ? 'bg-capacity-green/10 text-capacity-green'
-                : 'bg-neutral-100 text-neutral-500'
-            }`}
+            className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${isActive
+              ? 'bg-capacity-green/10 text-capacity-green'
+              : 'bg-neutral-100 text-neutral-500'
+              }`}
           >
             {isActive ? 'Aktiv' : 'Abgeschlossen'}
           </span>
@@ -147,11 +146,11 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Kundendaten */}
           <div className="bg-white rounded-lg border border-neutral-200 p-6">
-            <h2 className="text-lg font-semibold text-xpress-text mb-4">Kunde</h2>
+            <h2 className="text-lg font-semibold text-ghl-text mb-4">Kunde</h2>
             {order.kunde ? (
               <div className="space-y-3">
                 <div>
-                  <p className="font-medium text-xpress-text">
+                  <p className="font-medium text-ghl-text">
                     {order.kunde.firma || order.kunde.name || '–'}
                   </p>
                   {order.kunde.firma && order.kunde.name && (
@@ -171,7 +170,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
                     <Mail className="h-4 w-4" />
                     <a
                       href={`mailto:${order.kunde.email}`}
-                      className="text-xpress-blue hover:underline"
+                      className="text-ghl-blue hover:underline"
                     >
                       {order.kunde.email}
                     </a>
@@ -192,18 +191,18 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
 
           {/* Produktdaten */}
           <div className="bg-white rounded-lg border border-neutral-200 p-6">
-            <h2 className="text-lg font-semibold text-xpress-text mb-4">Produkt</h2>
+            <h2 className="text-lg font-semibold text-ghl-text mb-4">Produkt</h2>
             <div className="space-y-3">
               <div>
                 <p className="text-sm text-neutral-500">Produkttyp</p>
-                <p className="font-medium text-xpress-text">
+                <p className="font-medium text-ghl-text">
                   {order.produkttyp || '–'}
                 </p>
               </div>
               {order.produktbeschreibung && (
                 <div>
                   <p className="text-sm text-neutral-500">Beschreibung</p>
-                  <p className="text-xpress-text">{order.produktbeschreibung}</p>
+                  <p className="text-ghl-text">{order.produktbeschreibung}</p>
                 </div>
               )}
             </div>
@@ -212,25 +211,25 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
 
         {/* Termine */}
         <div className="bg-white rounded-lg border border-neutral-200 p-6">
-          <h2 className="text-lg font-semibold text-xpress-text mb-4">
+          <h2 className="text-lg font-semibold text-ghl-text mb-4">
             Termine (SOLL)
           </h2>
           <div className="grid gap-4 sm:grid-cols-3">
             <div>
               <p className="text-sm text-neutral-500">Drucktermin</p>
-              <p className="font-medium text-xpress-text">
+              <p className="font-medium text-ghl-text">
                 {formatDate(order.drucktermin)}
               </p>
             </div>
             <div>
               <p className="text-sm text-neutral-500">WTV-Termin</p>
-              <p className="font-medium text-xpress-text">
+              <p className="font-medium text-ghl-text">
                 {formatDate(order.wtvTermin)}
               </p>
             </div>
             <div>
               <p className="text-sm text-neutral-500">Liefertermin</p>
-              <p className="font-medium text-xpress-text">
+              <p className="font-medium text-ghl-text">
                 {formatDate(order.liefertermin)}
               </p>
             </div>
@@ -240,7 +239,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
         {/* Arbeitsgänge */}
         <div className="bg-white rounded-lg border border-neutral-200 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-xpress-text">Arbeitsgänge</h2>
+            <h2 className="text-lg font-semibold text-ghl-text">Arbeitsgänge</h2>
             <p className="text-sm text-neutral-500">
               {order.arbeitsgaenge.length} Schritte · Gesamt:{' '}
               <span className="font-medium">{formatMinutes(order.gesamtZeit)}</span>

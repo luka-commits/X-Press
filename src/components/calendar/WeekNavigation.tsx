@@ -39,30 +39,30 @@ export function WeekNavigation({ currentWeek }: WeekNavigationProps) {
       <div className="flex items-center gap-2">
         <button
           onClick={() => navigateToWeek('prev')}
-          className="p-2 rounded-lg hover:bg-neutral-100 transition-colors"
+          className="p-2 rounded-lg hover:bg-white hover:shadow-sm transition-all border border-transparent hover:border-ghl-border"
           aria-label="Vorherige Woche"
         >
-          <ChevronLeft className="w-5 h-5 text-neutral-600" />
+          <ChevronLeft className="w-5 h-5 text-ghl-text-secondary" />
         </button>
 
-        <h2 className="text-lg font-semibold text-xpress-text min-w-[140px] text-center">
+        <h2 className="text-lg font-semibold text-ghl-text min-w-[140px] text-center">
           {currentWeek.label}
         </h2>
 
         <button
           onClick={() => navigateToWeek('next')}
-          className="p-2 rounded-lg hover:bg-neutral-100 transition-colors"
+          className="p-2 rounded-lg hover:bg-white hover:shadow-sm transition-all border border-transparent hover:border-ghl-border"
           aria-label="Nächste Woche"
         >
-          <ChevronRight className="w-5 h-5 text-neutral-600" />
+          <ChevronRight className="w-5 h-5 text-ghl-text-secondary" />
         </button>
       </div>
 
       <button
         onClick={() => navigateToWeek('today')}
-        className="flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-xpress-yellow hover:bg-xpress-yellow-hover transition-colors text-xpress-text font-medium"
+        className="flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg bg-white border border-ghl-border hover:bg-gray-50 transition-colors text-ghl-text font-medium shadow-sm"
       >
-        <Calendar className="w-4 h-4" />
+        <Calendar className="w-4 h-4 text-ghl-text-secondary" />
         Heute
       </button>
     </div>

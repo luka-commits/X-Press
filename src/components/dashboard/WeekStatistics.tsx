@@ -20,11 +20,11 @@ export function WeekStatistics({
   kalenderwoche,
 }: WeekStatisticsProps) {
   return (
-    <div className="bg-gradient-to-r from-xpress-blue/5 to-xpress-blue/10 rounded-lg border border-xpress-blue/20 p-4 mb-6">
+    <div className="bg-white rounded-lg border border-ghl-border p-4 mb-6 shadow-sm">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Calendar className="w-5 h-5 text-xpress-blue" />
-          <span className="font-medium text-xpress-text">
+          <Calendar className="w-5 h-5 text-ghl-blue" />
+          <span className="font-medium text-ghl-text">
             Woche {kalenderwoche}
           </span>
         </div>
@@ -32,13 +32,13 @@ export function WeekStatistics({
           <div className="flex items-center gap-2">
             <Printer className="w-4 h-4 text-neutral-400" />
             <span className="text-neutral-600">
-              <span className="font-semibold text-xpress-text">{auftraegeGesamt}</span> Aufträge
+              <span className="font-semibold text-ghl-text">{auftraegeGesamt}</span> Aufträge
             </span>
           </div>
           <div className="flex items-center gap-2">
             <Clock className="w-4 h-4 text-neutral-400" />
             <span className="text-neutral-600">
-              <span className="font-semibold text-xpress-text">{maschinenStunden}h</span> geplant
+              <span className="font-semibold text-ghl-text">{maschinenStunden}h</span> geplant
             </span>
           </div>
           <div className="text-neutral-400 text-xs">
