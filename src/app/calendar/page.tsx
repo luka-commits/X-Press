@@ -7,8 +7,8 @@ import {
 } from '@/lib/calendar-queries';
 import { startOfWeek } from 'date-fns';
 
-// Revalidate every 60 seconds
-export const revalidate = 60;
+// Disable caching - always fetch fresh data
+export const dynamic = 'force-dynamic';
 
 interface CalendarPageProps {
   searchParams: Promise<{

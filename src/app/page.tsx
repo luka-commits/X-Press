@@ -4,27 +4,31 @@ import {
   MachineCards,
   CriticalOrdersList,
   DashboardClient,
+  WeekStatistics,
 } from '@/components/dashboard';
 import {
   getDashboardKPIs,
   getMachineCapacityToday,
   getCriticalOrders,
+  getWeekStatistics,
 } from '@/lib/dashboard-queries';
-import { format } from 'date-fns';
+import { format, getWeek } from 'date-fns';
 import { de } from 'date-fns/locale';
 
-// Revalidate every 60 seconds (in addition to client-side refresh)
-export const revalidate = 60;
+// Disable caching - always fetch fresh data
+export const dynamic = 'force-dynamic';
 
 export default async function DashboardPage() {
   // Fetch all dashboard data in parallel
-  const [kpis, machines, criticalOrders] = await Promise.all([
+  const [kpis, machines, criticalOrders, weekStats] = await Promise.all([
     getDashboardKPIs(),
     getMachineCapacityToday(),
     getCriticalOrders(),
+    getWeekStatistics(),
   ]);
 
   const lastUpdated = format(new Date(), 'HH:mm:ss', { locale: de });
+  const kalenderwoche = getWeek(new Date(), { locale: de, weekStartsOn: 1 });
 
   return (
     <MainLayout
@@ -32,6 +36,14 @@ export default async function DashboardPage() {
       subtitle="Übersicht aller Aufträge und Maschinen"
       headerRight={<DashboardClient lastUpdated={lastUpdated} />}
     >
+      {/* Week Statistics */}
+      <WeekStatistics
+        auftraegeGesamt={weekStats.auftraegeGesamt}
+        maschinenStunden={weekStats.maschinenStunden}
+        leitmaschinenAnzahl={weekStats.leitmaschinenAnzahl}
+        kalenderwoche={kalenderwoche}
+      />
+
       {/* KPI Cards */}
       <KPICardsGrid
         total={kpis.total}

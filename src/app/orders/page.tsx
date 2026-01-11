@@ -7,6 +7,9 @@ import { supabase, type Auftrag, type Kunde } from '@/lib/supabase';
 import { startOfDay, endOfDay, startOfWeek, endOfWeek } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
 
+// Disable caching - always fetch fresh data
+export const dynamic = 'force-dynamic';
+
 const TIMEZONE = 'Europe/Berlin';
 
 interface OrdersPageProps {
