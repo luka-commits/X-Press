@@ -14,9 +14,12 @@ import { XMLParser } from 'fast-xml-parser';
 export interface ParsedAuftrag {
   auftragsnummer: string;
   produktart: string | null;
-  produktbeschreibung: string | null;
+  produktbeschreibung: string | null; // Kombiniert aus 1, 2, 3
   sachbearbeiter: string | null;
+  sachbearbeiterTelefon: string | null;
+  sachbearbeiterEmail: string | null;
   prioritaet: number | null;
+  auflage: number | null; // Auflagenhoehe (Stückzahl)
 
   // Termine (Excel OLE Dates konvertiert)
   liefertermin: Date | null;
@@ -238,15 +241,32 @@ export function parseXML(xmlContent: string): ParsedAuftrag {
     })
     .sort((a, b) => a.sortOrder - b.sortOrder);
 
+  // Kombiniere Produktbeschreibungen 1, 2, 3
+  const beschreibungTeile = [
+    auftrag['@_Produktbeschreibung1'],
+    auftrag['@_Produktbeschreibung2'],
+    auftrag['@_Produktbeschreibung3'],
+  ].filter(Boolean);
+  const produktbeschreibung = beschreibungTeile.length > 0
+    ? beschreibungTeile.join(' ').trim()
+    : null;
+
+  // Auflage extrahieren
+  const auflagenhoehe = auftrag.Auflage?.['@_Auflagenhoehe'];
+  const auflage = auflagenhoehe ? parseInt(auflagenhoehe, 10) : null;
+
   // Build result
   const result: ParsedAuftrag = {
     auftragsnummer,
     produktart: auftrag['@_Produktart'] || null,
-    produktbeschreibung: auftrag['@_Produktbeschreibung1'] || null,
+    produktbeschreibung,
     sachbearbeiter: auftrag['@_Sachbearbeiter']
       ? `${auftrag['@_SachbearbeiterVorname'] || ''} ${auftrag['@_Sachbearbeiter']}`.trim()
       : null,
+    sachbearbeiterTelefon: auftrag['@_SachbearbeiterTelefon'] || null,
+    sachbearbeiterEmail: auftrag['@_SachbearbeiterEmail'] || null,
     prioritaet: auftrag['@_KpPriorität'] ? parseInt(auftrag['@_KpPriorität'], 10) : null,
+    auflage,
     liefertermin,
     drucktermin,
     wtvTermin,
@@ -269,6 +289,8 @@ export function summarizeAuftrag(auftrag: ParsedAuftrag): string {
     `Auftrag: ${auftrag.auftragsnummer}`,
     `Kunde: ${auftrag.kunde?.name || 'Unbekannt'}`,
     `Produkt: ${auftrag.produktart || 'N/A'}`,
+    `Auflage: ${auftrag.auflage || 'N/A'} Stück`,
+    `Sachbearbeiter: ${auftrag.sachbearbeiter || 'N/A'}`,
     `Liefertermin: ${auftrag.liefertermin?.toISOString().split('T')[0] || 'N/A'}`,
     `Drucktermin: ${auftrag.drucktermin?.toISOString().split('T')[0] || 'N/A'}`,
     `WTV-Termin: ${auftrag.wtvTermin?.toISOString().split('T')[0] || 'N/A'}`,

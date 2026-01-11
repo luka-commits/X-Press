@@ -22,7 +22,7 @@ export function KPICard({ label, value, suffix = '', variant = 'default' }: KPIC
   }[variant];
 
   return (
-    <div className="bg-white rounded-lg p-6 border border-neutral-200">
+    <div className="bg-white rounded-lg p-6 border border-neutral-200 transition-all duration-200 hover:shadow-md hover:border-neutral-300">
       <p className="text-sm text-neutral-500 mb-1">{label}</p>
       <p className={cn('text-3xl font-semibold', valueColorClass)}>
         {value}
@@ -60,9 +60,9 @@ export function KPICardsGrid({ total, critical, avgCapacity, engpass }: KPICards
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
       <KPICard label="Aktive Aufträge" value={total} />
       <KPICard
-        label="Kritisch (≤2 Tage)"
+        label="Bald fällig (≤2 Tage)"
         value={critical}
-        variant={critical > 0 ? 'critical' : 'default'}
+        variant={critical > 0 ? 'warning' : 'default'}
       />
       <KPICard
         label="Ø Auslastung"

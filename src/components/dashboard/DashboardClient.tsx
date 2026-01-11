@@ -8,7 +8,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface DashboardClientProps {
@@ -20,15 +20,22 @@ const AUTO_REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
 export function DashboardClient({ lastUpdated }: DashboardClientProps) {
   const router = useRouter();
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [countdown, setCountdown] = useState(AUTO_REFRESH_INTERVAL / 1000);
 
   const handleRefresh = useCallback(() => {
     setIsRefreshing(true);
+    setShowSuccess(false);
     router.refresh();
     // Reset countdown
     setCountdown(AUTO_REFRESH_INTERVAL / 1000);
-    // Reset isRefreshing after a short delay
-    setTimeout(() => setIsRefreshing(false), 500);
+    // Show success state after refresh
+    setTimeout(() => {
+      setIsRefreshing(false);
+      setShowSuccess(true);
+      // Hide success after 2 seconds
+      setTimeout(() => setShowSuccess(false), 2000);
+    }, 500);
   }, [router]);
 
   // Auto-refresh timer
@@ -53,7 +60,7 @@ export function DashboardClient({ lastUpdated }: DashboardClientProps) {
 
   return (
     <div className="flex items-center gap-4 text-sm text-neutral-500">
-      <span>
+      <span className="transition-opacity duration-300">
         Aktualisiert: {lastUpdated}
       </span>
       <span className="text-neutral-400">|</span>
@@ -61,14 +68,25 @@ export function DashboardClient({ lastUpdated }: DashboardClientProps) {
         Nächste Aktualisierung in {countdownText}
       </span>
       <Button
-        variant="outline"
+        variant={showSuccess ? 'default' : 'outline'}
         size="sm"
         onClick={handleRefresh}
         disabled={isRefreshing}
-        className="ml-2"
+        className={`ml-2 transition-all duration-300 ${
+          showSuccess ? 'bg-capacity-green hover:bg-capacity-green/90 text-white border-capacity-green' : ''
+        }`}
       >
-        <RefreshCw className={`w-4 h-4 mr-1.5 ${isRefreshing ? 'animate-spin' : ''}`} />
-        Aktualisieren
+        {showSuccess ? (
+          <>
+            <Check className="w-4 h-4 mr-1.5" />
+            Aktualisiert
+          </>
+        ) : (
+          <>
+            <RefreshCw className={`w-4 h-4 mr-1.5 ${isRefreshing ? 'animate-spin' : ''}`} />
+            Aktualisieren
+          </>
+        )}
       </Button>
     </div>
   );
