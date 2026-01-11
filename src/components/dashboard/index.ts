@@ -4,3 +4,4 @@ export { MachineCards } from './MachineCards';
 export { CriticalOrdersList } from './CriticalOrdersList';
 export { DashboardClient } from './DashboardClient';
 export { WeekStatistics } from './WeekStatistics';
+export { DashboardDateNavigation } from './DashboardDateNavigation';

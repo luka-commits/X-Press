@@ -18,10 +18,7 @@ function SkeletonRow() {
 
 export default function OrdersLoading() {
   return (
-    <MainLayout
-      title="Aufträge"
-      subtitle="Alle Aufträge durchsuchen und filtern"
-    >
+    <MainLayout>
       {/* Search & Filter Skeleton */}
       <div className="flex flex-wrap gap-4 mb-6 animate-pulse">
         <div className="h-10 w-64 bg-neutral-200 rounded" />

@@ -46,10 +46,7 @@ export default async function CalendarDetailPage({
   };
 
   return (
-    <MainLayout
-      title={machine?.kurzname || machine?.name || 'Maschine'}
-      subtitle={dateFormatted}
-    >
+    <MainLayout>
       <div className="space-y-4">
         {/* Back button */}
         <Link

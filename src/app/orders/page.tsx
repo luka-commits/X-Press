@@ -231,7 +231,7 @@ async function OrdersContent({ searchParams }: OrdersPageProps) {
 
 export default async function OrdersPage({ searchParams }: OrdersPageProps) {
   return (
-    <MainLayout title="Aufträge" subtitle="Alle Aufträge durchsuchen und filtern">
+    <MainLayout>
       <Suspense fallback={<OrdersLoading />}>
         <OrdersContent searchParams={searchParams} />
       </Suspense>

@@ -17,10 +17,7 @@ function SkeletonCalendarRow() {
 
 export default function CalendarLoading() {
   return (
-    <MainLayout
-      title="Maschinen-Kalender"
-      subtitle="Wochenansicht der Maschinenauslastung"
-    >
+    <MainLayout>
       {/* Navigation Skeleton */}
       <div className="flex items-center justify-between mb-6 animate-pulse">
         <div className="h-10 w-10 bg-neutral-200 rounded" />

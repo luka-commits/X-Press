@@ -5,7 +5,7 @@
  */
 
 import { supabase } from './supabase';
-import { startOfDay, endOfDay, addDays, differenceInDays, startOfWeek, endOfWeek } from 'date-fns';
+import { startOfDay, endOfDay, addDays, differenceInDays, startOfWeek, endOfWeek, format } from 'date-fns';
 import { de } from 'date-fns/locale';
 
 // ============================================================
@@ -61,11 +61,12 @@ export interface WeekStatistics {
 
 /**
  * Lädt alle KPIs für das Dashboard
+ * @param date - Referenzdatum für die Berechnung (Default: heute)
  */
-export async function getDashboardKPIs(): Promise<DashboardKPIs> {
-  const today = new Date();
-  const twoDaysLater = addDays(today, 2);
-  const todayStart = startOfDay(today);
+export async function getDashboardKPIs(date: Date = new Date()): Promise<DashboardKPIs> {
+  const referenceDate = date;
+  const twoDaysLater = addDays(referenceDate, 2);
+  const dateStart = startOfDay(referenceDate);
 
   // Parallel queries for performance
   const [activeResult, criticalResult, overdueResult] = await Promise.all([
@@ -75,24 +76,24 @@ export async function getDashboardKPIs(): Promise<DashboardKPIs> {
       .select('*', { count: 'exact', head: true })
       .eq('status', 'aktiv'),
 
-    // Critical orders (liefertermin within 2 days, including today)
+    // Critical orders (liefertermin within 2 days from reference date)
     supabase
       .from('Auftrag')
       .select('*', { count: 'exact', head: true })
       .eq('status', 'aktiv')
-      .gte('liefertermin', todayStart.toISOString())
+      .gte('liefertermin', dateStart.toISOString())
       .lte('liefertermin', endOfDay(twoDaysLater).toISOString()),
 
-    // Overdue orders (liefertermin before today)
+    // Overdue orders (liefertermin before reference date)
     supabase
       .from('Auftrag')
       .select('*', { count: 'exact', head: true })
       .eq('status', 'aktiv')
-      .lt('liefertermin', todayStart.toISOString()),
+      .lt('liefertermin', dateStart.toISOString()),
   ]);
 
   // Get average capacity and engpass (calculated from machine capacity)
-  const machines = await getMachineCapacityToday();
+  const machines = await getMachineCapacityForDate(referenceDate);
   const avgCapacity =
     machines.length > 0
       ? Math.round(machines.reduce((sum, m) => sum + m.auslastung, 0) / machines.length)
@@ -120,12 +121,13 @@ export async function getDashboardKPIs(): Promise<DashboardKPIs> {
 // ============================================================
 
 /**
- * Lädt die Auslastung aller Leitmaschinen für heute inkl. Auftragsdetails
+ * Lädt die Auslastung aller Leitmaschinen für ein Datum inkl. Auftragsdetails
+ * @param date - Das Datum für die Abfrage (Default: heute)
  */
-export async function getMachineCapacityToday(): Promise<MachineCapacity[]> {
-  const today = new Date();
-  const dayStart = startOfDay(today).toISOString();
-  const dayEnd = endOfDay(today).toISOString();
+export async function getMachineCapacityForDate(date: Date = new Date()): Promise<MachineCapacity[]> {
+  // Use date-only format for comparison (avoids timezone issues)
+  // DB stores dates as "2026-01-10T00:00:00" without timezone
+  const dateStr = format(date, 'yyyy-MM-dd');
 
   // Get all Leitmaschinen with their Arbeitsgänge and related Aufträge
   const { data: machines, error } = await supabase
@@ -158,11 +160,13 @@ export async function getMachineCapacityToday(): Promise<MachineCapacity[]> {
   }
 
   return machines.map((m) => {
-    // Filter Arbeitsgänge für heute
+    // Filter Arbeitsgänge für das gewählte Datum by comparing date part only
     const tagesArbeit =
       m.Arbeitsgang?.filter((ag: { geplantDatum: string | null }) => {
         if (!ag.geplantDatum) return false;
-        return ag.geplantDatum >= dayStart && ag.geplantDatum <= dayEnd;
+        // Extract date part from geplantDatum (e.g., "2026-01-10" from "2026-01-10T00:00:00")
+        const agDateStr = ag.geplantDatum.substring(0, 10);
+        return agDateStr === dateStr;
       }) || [];
 
     // Aggregate orders - group by Auftragsnummer and sum time
@@ -220,12 +224,13 @@ export async function getMachineCapacityToday(): Promise<MachineCapacity[]> {
 // ============================================================
 
 /**
- * Lädt alle kritischen Aufträge (Liefertermin ≤ 2 Tage)
+ * Lädt alle kritischen Aufträge (Liefertermin ≤ 2 Tage vom Referenzdatum)
+ * @param date - Referenzdatum (Default: heute)
  */
-export async function getCriticalOrders(): Promise<CriticalOrder[]> {
-  const today = new Date();
-  const twoDaysLater = addDays(today, 2);
-  const todayStart = startOfDay(today);
+export async function getCriticalOrders(date: Date = new Date()): Promise<CriticalOrder[]> {
+  const referenceDate = date;
+  const twoDaysLater = addDays(referenceDate, 2);
+  const dateStart = startOfDay(referenceDate);
 
   const { data, error } = await supabase
     .from('Auftrag')
@@ -238,7 +243,7 @@ export async function getCriticalOrders(): Promise<CriticalOrder[]> {
     `
     )
     .eq('status', 'aktiv')
-    .gte('liefertermin', todayStart.toISOString())
+    .gte('liefertermin', dateStart.toISOString())
     .lte('liefertermin', endOfDay(twoDaysLater).toISOString())
     .order('liefertermin', { ascending: true });
 
@@ -252,7 +257,7 @@ export async function getCriticalOrders(): Promise<CriticalOrder[]> {
     const rawKunde = order.Kunde as any;
     const kunde = Array.isArray(rawKunde) ? rawKunde[0] : rawKunde;
     const liefertermin = order.liefertermin ? new Date(order.liefertermin) : null;
-    const tageUebrig = liefertermin ? differenceInDays(liefertermin, todayStart) : 0;
+    const tageUebrig = liefertermin ? differenceInDays(liefertermin, dateStart) : 0;
 
     return {
       auftragsnummer: order.auftragsnummer,
@@ -269,12 +274,13 @@ export async function getCriticalOrders(): Promise<CriticalOrder[]> {
 // ============================================================
 
 /**
- * Lädt Statistiken für die aktuelle Woche
+ * Lädt Statistiken für eine Woche
+ * @param weekStartDate - Wochenstart (Montag) - Default: aktuelle Woche
  */
-export async function getWeekStatistics(): Promise<WeekStatistics> {
-  const today = new Date();
-  const weekStart = startOfWeek(today, { locale: de, weekStartsOn: 1 }); // Montag
-  const weekEnd = endOfWeek(today, { locale: de, weekStartsOn: 1 }); // Sonntag
+export async function getWeekStatistics(weekStartDate?: Date): Promise<WeekStatistics> {
+  const referenceDate = weekStartDate || new Date();
+  const weekStart = startOfWeek(referenceDate, { locale: de, weekStartsOn: 1 }); // Montag
+  const weekEnd = endOfWeek(referenceDate, { locale: de, weekStartsOn: 1 }); // Sonntag
 
   // Aufträge mit Liefertermin diese Woche
   const { count: auftraegeCount } = await supabase

@@ -8,9 +8,12 @@
 
 import Link from 'next/link';
 import { MachineCapacity } from '@/lib/dashboard-queries';
+import { format, isSameDay } from 'date-fns';
+import { de } from 'date-fns/locale';
 
 interface MachineCardsProps {
   machines: MachineCapacity[];
+  selectedDate?: Date;
 }
 
 // Ampel-Farben
@@ -65,7 +68,7 @@ function MachineCard({ machine }: { machine: MachineCapacity }) {
       <div className="p-4">
         {machine.auftraege.length === 0 ? (
           <p className="text-sm text-neutral-400 text-center py-4">
-            Keine Aufträge heute
+            Keine Aufträge
           </p>
         ) : (
           <div className="space-y-2">
@@ -113,12 +116,18 @@ function MachineCard({ machine }: { machine: MachineCapacity }) {
   );
 }
 
-export function MachineCards({ machines }: MachineCardsProps) {
+export function MachineCards({ machines, selectedDate }: MachineCardsProps) {
+  const displayDate = selectedDate || new Date();
+  const isToday = isSameDay(displayDate, new Date());
+  const dateLabel = isToday
+    ? 'Heute'
+    : format(displayDate, 'EEEE, dd.MM.', { locale: de });
+
   if (machines.length === 0) {
     return (
       <div className="bg-white rounded-lg p-6 border border-neutral-200">
         <h2 className="text-lg font-semibold text-xpress-text mb-4">
-          Maschinen-Übersicht (Heute)
+          Maschinen-Übersicht ({dateLabel})
         </h2>
         <p className="text-neutral-500 text-center py-8">
           Keine Leitmaschinen konfiguriert
@@ -131,7 +140,7 @@ export function MachineCards({ machines }: MachineCardsProps) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold text-xpress-text">
-          Maschinen-Übersicht (Heute)
+          Maschinen-Übersicht ({dateLabel})
         </h2>
         <div className="flex items-center gap-4 text-xs">
           <div className="flex items-center gap-1.5">
