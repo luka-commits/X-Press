@@ -3,3 +3,4 @@ export { CapacityChart } from './CapacityChart';
 export { MachineCards } from './MachineCards';
 export { CriticalOrdersList } from './CriticalOrdersList';
 export { DashboardClient } from './DashboardClient';
+export { WeekStatistics } from './WeekStatistics';

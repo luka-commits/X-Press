@@ -37,7 +37,7 @@ function MachineCard({ machine }: { machine: MachineCapacity }) {
   const statusBgClass = getStatusBgClass(machine.auslastung);
 
   return (
-    <div className="bg-white rounded-lg border border-neutral-200 overflow-hidden">
+    <div className="bg-white rounded-lg border border-neutral-200 overflow-hidden transition-all duration-200 hover:shadow-md hover:border-neutral-300">
       {/* Header with machine name and utilization */}
       <div
         className={`px-4 py-3 border-b ${statusBgClass} flex items-center justify-between`}

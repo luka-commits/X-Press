@@ -23,8 +23,12 @@ export const supabase = createClient(supabaseUrl, supabaseKey, {
       return fetch(url, {
         ...options,
         signal: controller.signal,
+        cache: 'no-store', // Disable caching
       }).finally(() => clearTimeout(timeoutId));
     },
+  },
+  db: {
+    schema: 'public',
   },
 });
 

@@ -34,8 +34,11 @@ export async function GET() {
       parsed: {
         auftragsnummer: parsed.auftragsnummer,
         produktart: parsed.produktart,
-        produktbeschreibung: parsed.produktbeschreibung?.substring(0, 100) + '...',
+        produktbeschreibung: parsed.produktbeschreibung?.substring(0, 150) + '...',
         sachbearbeiter: parsed.sachbearbeiter,
+        sachbearbeiterTelefon: parsed.sachbearbeiterTelefon,
+        sachbearbeiterEmail: parsed.sachbearbeiterEmail,
+        auflage: parsed.auflage,
         prioritaet: parsed.prioritaet,
         termine: {
           liefertermin: parsed.liefertermin?.toISOString().split('T')[0],

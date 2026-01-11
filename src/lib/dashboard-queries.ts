@@ -5,7 +5,8 @@
  */
 
 import { supabase } from './supabase';
-import { startOfDay, endOfDay, addDays, differenceInDays } from 'date-fns';
+import { startOfDay, endOfDay, addDays, differenceInDays, startOfWeek, endOfWeek } from 'date-fns';
+import { de } from 'date-fns/locale';
 
 // ============================================================
 // Types
@@ -46,6 +47,12 @@ export interface CriticalOrder {
   produkttyp: string | null;
   liefertermin: string;
   tageUebrig: number;
+}
+
+export interface WeekStatistics {
+  auftraegeGesamt: number;
+  maschinenStunden: number;
+  leitmaschinenAnzahl: number;
 }
 
 // ============================================================
@@ -255,4 +262,54 @@ export async function getCriticalOrders(): Promise<CriticalOrder[]> {
       tageUebrig,
     };
   });
+}
+
+// ============================================================
+// Week Statistics Query
+// ============================================================
+
+/**
+ * Lädt Statistiken für die aktuelle Woche
+ */
+export async function getWeekStatistics(): Promise<WeekStatistics> {
+  const today = new Date();
+  const weekStart = startOfWeek(today, { locale: de, weekStartsOn: 1 }); // Montag
+  const weekEnd = endOfWeek(today, { locale: de, weekStartsOn: 1 }); // Sonntag
+
+  // Aufträge mit Liefertermin diese Woche
+  const { count: auftraegeCount } = await supabase
+    .from('Auftrag')
+    .select('*', { count: 'exact', head: true })
+    .gte('liefertermin', startOfDay(weekStart).toISOString())
+    .lte('liefertermin', endOfDay(weekEnd).toISOString());
+
+  // Geplante Maschinenzeit diese Woche (nur Leitmaschinen)
+  const { data: arbeitsgaenge } = await supabase
+    .from('Arbeitsgang')
+    .select(`
+      zeitMinuten,
+      geplantDatum,
+      Maschine!inner(istLeitmaschine)
+    `)
+    .gte('geplantDatum', startOfDay(weekStart).toISOString())
+    .lte('geplantDatum', endOfDay(weekEnd).toISOString())
+    .eq('Maschine.istLeitmaschine', true);
+
+  // Anzahl aktiver Leitmaschinen
+  const { count: maschinenCount } = await supabase
+    .from('Maschine')
+    .select('*', { count: 'exact', head: true })
+    .eq('istLeitmaschine', true)
+    .eq('aktiv', true);
+
+  const gesamtMinuten = arbeitsgaenge?.reduce(
+    (sum, ag) => sum + (ag.zeitMinuten || 0),
+    0
+  ) || 0;
+
+  return {
+    auftraegeGesamt: auftraegeCount || 0,
+    maschinenStunden: Math.round((gesamtMinuten / 60) * 10) / 10,
+    leitmaschinenAnzahl: maschinenCount || 0,
+  };
 }

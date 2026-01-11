@@ -1,7 +1,7 @@
 /**
- * Critical Orders List Component
+ * Soon Due Orders List Component
  *
- * Zeigt Aufträge mit Liefertermin ≤ 2 Tage
+ * Zeigt Aufträge mit geplantem Liefertermin ≤ 2 Tage (SOLL-Daten)
  */
 
 import Link from 'next/link';
@@ -18,9 +18,9 @@ export function CriticalOrdersList({ orders }: CriticalOrdersListProps) {
   if (orders.length === 0) {
     return (
       <div className="bg-white rounded-lg p-6 border border-neutral-200">
-        <h2 className="text-lg font-semibold text-xpress-text mb-4">Kritische Aufträge</h2>
+        <h2 className="text-lg font-semibold text-xpress-text mb-4">Bald fällig</h2>
         <div className="text-center py-8">
-          <p className="text-capacity-green font-medium">Keine kritischen Aufträge</p>
+          <p className="text-capacity-green font-medium">Keine Aufträge bald fällig</p>
           <p className="text-neutral-500 text-sm mt-1">Alles im grünen Bereich!</p>
         </div>
       </div>
@@ -30,7 +30,7 @@ export function CriticalOrdersList({ orders }: CriticalOrdersListProps) {
   return (
     <div className="bg-white rounded-lg p-6 border border-neutral-200">
       <h2 className="text-lg font-semibold text-xpress-text mb-4">
-        Kritische Aufträge ({orders.length})
+        Bald fällig ({orders.length})
       </h2>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">

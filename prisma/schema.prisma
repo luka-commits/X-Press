@@ -17,9 +17,12 @@ model Auftrag {
   kundeId        Int?
   kunde          Kunde?   @relation(fields: [kundeId], references: [id])
 
-  produkttyp         String?
+  produkttyp          String?
   produktbeschreibung String?
-  sachbearbeiter     String?
+  sachbearbeiter      String?
+  sachbearbeiterTelefon String?
+  sachbearbeiterEmail   String?
+  auflage             Int?     // Auflagenhoehe (Stückzahl)
 
   liefertermin   DateTime?
   drucktermin    DateTime?
