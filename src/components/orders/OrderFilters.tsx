@@ -62,25 +62,23 @@ export function OrderFilters({ produkttypen, sachbearbeiter }: OrderFiltersProps
     currentSachbearbeiter !== '';
 
   return (
-    <div className="flex flex-wrap gap-3 items-center">
-      {/* Deadline Filter Buttons */}
-      <div className="flex gap-1">
-        {deadlineOptions.map((option) => (
-          <Button
-            key={option.value}
-            variant={currentDeadline === option.value ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => updateFilter('deadline', option.value)}
-            className={
-              currentDeadline === option.value
-                ? 'bg-xpress-yellow text-xpress-text hover:bg-xpress-yellow-hover'
-                : ''
-            }
-          >
-            {option.label}
-          </Button>
-        ))}
-      </div>
+    <div className="flex gap-2 items-center">
+      {/* Deadline Dropdown */}
+      <Select
+        value={currentDeadline}
+        onValueChange={(value) => updateFilter('deadline', value)}
+      >
+        <SelectTrigger className="w-[140px] bg-white">
+          <SelectValue placeholder="Termin" />
+        </SelectTrigger>
+        <SelectContent>
+          {deadlineOptions.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
 
       {/* Status Dropdown */}
       <Select
