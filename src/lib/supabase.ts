@@ -82,6 +82,9 @@ export interface Auftrag {
   wtvTermin: string | null;
   prioritaet: number | null;
   status: string;
+  istStatus: 'in_produktion' | 'fertig' | 'problem' | null;
+  statusKommentar: string | null;
+  statusUpdatedAt: string | null;
   xmlImportDatum: string;
   createdAt: string;
   updatedAt: string;
