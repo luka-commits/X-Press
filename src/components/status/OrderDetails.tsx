@@ -1,10 +1,62 @@
 "use client";
 
-import { X } from "lucide-react";
+import { X, Circle, CheckCircle2, AlertCircle } from "lucide-react";
 import { format } from "date-fns";
 import { de } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import type { OrderSearchResult } from "./OrderSearch";
+
+type IstStatusType = 'in_produktion' | 'fertig' | 'problem' | null;
+
+/**
+ * Status badge component with color-coded display
+ */
+function StatusBadge({ status }: { status: IstStatusType }) {
+  const config = {
+    in_produktion: {
+      label: "In Produktion",
+      icon: Circle,
+      bgColor: "bg-blue-500/10",
+      textColor: "text-blue-500",
+      borderColor: "border-blue-500/30",
+    },
+    fertig: {
+      label: "Fertig",
+      icon: CheckCircle2,
+      bgColor: "bg-green-500/10",
+      textColor: "text-green-500",
+      borderColor: "border-green-500/30",
+    },
+    problem: {
+      label: "Problem",
+      icon: AlertCircle,
+      bgColor: "bg-red-500/10",
+      textColor: "text-red-500",
+      borderColor: "border-red-500/30",
+    },
+  };
+
+  if (!status) {
+    return (
+      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-500 border border-gray-200">
+        <Circle className="w-4 h-4" />
+        Kein Status
+      </span>
+    );
+  }
+
+  const { label, icon: Icon, bgColor, textColor, borderColor } = config[status];
+
+  return (
+    <span className={cn(
+      "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium border",
+      bgColor, textColor, borderColor
+    )}>
+      <Icon className="w-4 h-4" />
+      {label}
+    </span>
+  );
+}
 
 interface OrderDetailsProps {
   order: OrderSearchResult;
@@ -54,6 +106,12 @@ export function OrderDetails({ order, onClear, className }: OrderDetailsProps) {
 
       {/* Order details sections */}
       <div className="space-y-3">
+        {/* Status section - prominently displayed */}
+        <div>
+          <p className="text-sm font-semibold text-ghl-text-secondary">Aktueller Status</p>
+          <StatusBadge status={order.istStatus} />
+        </div>
+
         {/* Kunde section */}
         <div>
           <p className="text-sm font-semibold text-ghl-text-secondary">Kunde</p>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -46,12 +46,18 @@ export function StatusButtons({
   const [comment, setComment] = useState("");
   const [pendingStatus, setPendingStatus] = useState<IstStatusType | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [shakeTextarea, setShakeTextarea] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Focus and expand textarea when "Problem" is clicked without comment
+  // Also trigger shake animation for better visual feedback
   useEffect(() => {
     if (pendingStatus === "problem" && validationError) {
       textareaRef.current?.focus();
+      // Trigger shake animation
+      setShakeTextarea(true);
+      const timer = setTimeout(() => setShakeTextarea(false), 500);
+      return () => clearTimeout(timer);
     }
   }, [pendingStatus, validationError]);
 
@@ -153,8 +159,26 @@ export function StatusButtons({
         )}
       </button>
 
-      {/* Comment textarea */}
+      {/* Comment textarea with validation error */}
       <div className="relative">
+        {/* Validation error banner - displayed prominently above textarea */}
+        {validationError && (
+          <div
+            className="mb-2 flex items-center gap-2 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400"
+            role="alert"
+          >
+            <AlertTriangle className="w-5 h-5 flex-shrink-0" />
+            <span className="text-sm font-medium">{validationError}</span>
+          </div>
+        )}
+
+        {/* Label for textarea when Problem validation fails */}
+        {isProblemPending && (
+          <label className="block mb-1.5 text-sm font-semibold text-red-400">
+            Problembeschreibung erforderlich *
+          </label>
+        )}
+
         <textarea
           ref={textareaRef}
           value={comment}
@@ -163,7 +187,7 @@ export function StatusButtons({
             // Clear validation error when user starts typing
             if (validationError) setValidationError(null);
           }}
-          placeholder={isProblemPending ? "Bitte Problem beschreiben..." : "Kommentar (optional)"}
+          placeholder={isProblemPending ? "Was ist das Problem? Bitte hier beschreiben..." : "Kommentar (optional)"}
           disabled={disabled || isLoading}
           rows={isProblemPending ? 3 : 2}
           className={cn(
@@ -171,12 +195,10 @@ export function StatusButtons({
             "bg-ghl-card border-ghl-border text-white placeholder:text-gray-400",
             "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",
             "disabled:opacity-50 disabled:cursor-not-allowed",
-            isProblemPending && "border-red-500 ring-2 ring-red-500/50"
+            isProblemPending && "border-red-500 ring-2 ring-red-500/50 placeholder:text-red-400/70",
+            shakeTextarea && "animate-shake"
           )}
         />
-        {validationError && (
-          <p className="mt-1.5 text-sm text-red-400">{validationError}</p>
-        )}
       </div>
     </div>
   );

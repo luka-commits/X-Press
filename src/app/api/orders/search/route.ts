@@ -12,6 +12,7 @@ interface OrderSearchResult {
   auftragsnummer: string;
   produkttyp: string | null;
   liefertermin: Date | null;
+  istStatus: 'in_produktion' | 'fertig' | 'problem' | null;
   kunde: {
     firma: string | null;
     name: string | null;
@@ -47,6 +48,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<SearchResp
         auftragsnummer: true,
         produkttyp: true,
         liefertermin: true,
+        istStatus: true,
         kunde: {
           select: {
             firma: true,

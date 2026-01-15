@@ -11,6 +11,7 @@ export interface OrderSearchResult {
   auftragsnummer: string;
   produkttyp: string | null;
   liefertermin: string | null;
+  istStatus: 'in_produktion' | 'fertig' | 'problem' | null;
   kunde: {
     firma: string | null;
     name: string | null;
