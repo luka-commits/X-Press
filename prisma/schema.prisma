@@ -11,6 +11,13 @@ datasource db {
   directUrl = env("DIRECT_URL") // Für Supabase Migrations
 }
 
+// IST-Status für mobile Status-Updates vom Shopfloor
+enum IstStatus {
+  in_produktion // Currently being worked on
+  fertig        // Completed
+  problem       // Has issues that need attention
+}
+
 // Aufträge aus Prinance XML
 model Auftrag {
   auftragsnummer String   @id
@@ -30,6 +37,11 @@ model Auftrag {
 
   prioritaet     Int?
   status         String   @default("aktiv")
+
+  // Mobile Status-Update fields (IST-Zustand vom Shopfloor)
+  istStatus        IstStatus? // Actual production state from shopfloor
+  statusKommentar  String?    // Optional comment from worker
+  statusUpdatedAt  DateTime?  // When status was last changed
 
   xmlImportDatum DateTime @default(now())
   createdAt      DateTime @default(now())
