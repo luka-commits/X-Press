@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-16)
 
 **Core value:** Mitarbeiter können mit 3 Klicks den Auftragsstatus vom Handy aus updaten.
-**Current focus:** Phase 5 — Order Selection (Complete)
+**Current focus:** Phase 6 — Status Update UI (In progress)
 
 ## Current Position
 
-Phase: 5 of 8 (Order Selection)
-Plan: 1 of 1 in current phase
-Status: Phase complete
-Last activity: 2026-01-16 — Completed 05-01-PLAN.md
+Phase: 6 of 8 (Status Update UI)
+Plan: 1 of 2 in current phase
+Status: In progress
+Last activity: 2026-01-16 — Completed 06-01-PLAN.md
 
-Progress: ██████░░░░ 60%
+Progress: ███████░░░ 70%
 
 ## Performance Metrics
 
@@ -32,9 +32,10 @@ Progress: ██████░░░░ 60%
 | 03-mobile-layout | 1 | 3 min | 3 min |
 | 04-order-search | 2 | 6 min | 3 min |
 | 05-order-selection | 1 | 1 min | 1 min |
+| 06-status-update-ui | 1 | 2 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 3 min, 3 min, 3 min, 1 min
+- Last 5 plans: 3 min, 3 min, 1 min, 2 min
 - Trend: Consistent fast execution
 
 ## Accumulated Context
@@ -61,5 +62,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-16
-Stopped at: Completed 05-01-PLAN.md (Phase 5 complete)
+Stopped at: Completed 06-01-PLAN.md (Phase 6 in progress)
 Resume file: None

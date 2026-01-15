@@ -19,7 +19,7 @@ None
 - [x] **Phase 3: Mobile Layout** - Mobile-optimiertes Layout für /status (Completed 2026-01-16)
 - [x] **Phase 4: Order Search** - Suchfeld mit Autocomplete (Completed 2026-01-16)
 - [x] **Phase 5: Order Selection** - Auftragsdetails nach Auswahl (Completed 2026-01-16)
-- [ ] **Phase 6: Status Update UI** - Status-Buttons mit Feedback
+- [ ] **Phase 6: Status Update UI** - Status-Buttons mit Feedback (In progress)
 - [ ] **Phase 7: Dashboard Status Column** - IST-Status in Auftragsliste
 - [ ] **Phase 8: Dashboard Problem Features** - Problem-Zähler und Filter
 
@@ -78,7 +78,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 06-01: Status-Buttons mit API-Integration
+- [x] 06-01: Status-Buttons mit API-Integration
 - [ ] 06-02: Kommentarfeld und Erfolgsbestätigung
 
 ### Phase 7: Dashboard Status Column
@@ -112,6 +112,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 3. Mobile Layout | 1/1 | Complete | 2026-01-16 |
 | 4. Order Search | 2/2 | Complete | 2026-01-16 |
 | 5. Order Selection | 1/1 | Complete | 2026-01-16 |
-| 6. Status Update UI | 0/2 | Not started | - |
+| 6. Status Update UI | 1/2 | In progress | - |
 | 7. Dashboard Status Column | 0/1 | Not started | - |
 | 8. Dashboard Problem Features | 0/2 | Not started | - |
