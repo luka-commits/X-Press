@@ -51,6 +51,7 @@ export default async function DashboardPage() {
         critical={kpis.critical}
         avgCapacity={kpis.avgCapacity}
         engpass={kpis.engpass}
+        problemOrders={kpis.problemOrders}
       />
 
       {/* Machine Cards - Full Width */}
