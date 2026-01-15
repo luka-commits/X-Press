@@ -10,6 +10,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { startOfDay, endOfDay, startOfWeek, endOfWeek } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
+import { getCoordinatesForPlz } from '@/lib/geocoding/plz-lookup';
 
 const TIMEZONE = 'Europe/Berlin';
 
@@ -80,6 +81,8 @@ export async function GET(request: NextRequest) {
           lieferPlz: true,
           lieferOrt: true,
           lieferLand: true,
+          lieferLat: true,
+          lieferLng: true,
           kunde: {
             select: {
               firma: true,
@@ -94,8 +97,31 @@ export async function GET(request: NextRequest) {
       prisma.auftrag.count({ where }),
     ]);
 
+    // Enrich orders with coordinates from PLZ lookup if not already geocoded
+    const ordersWithCoordinates = orders.map((order) => {
+      // If coordinates already exist in DB, use them
+      if (order.lieferLat !== null && order.lieferLng !== null) {
+        return order;
+      }
+
+      // If PLZ exists but no coordinates, look up from static dataset
+      if (order.lieferPlz) {
+        const coords = getCoordinatesForPlz(order.lieferPlz);
+        if (coords) {
+          return {
+            ...order,
+            lieferLat: coords.lat,
+            lieferLng: coords.lng,
+          };
+        }
+      }
+
+      // No coordinates available
+      return order;
+    });
+
     return NextResponse.json({
-      orders,
+      orders: ordersWithCoordinates,
       total,
       page,
       totalPages: Math.ceil(total / limit),

@@ -19,6 +19,8 @@ export interface VersandOrder {
   lieferPlz: string | null;
   lieferOrt: string | null;
   lieferLand: string | null;
+  lieferLat: number | null;
+  lieferLng: number | null;
   kunde: {
     firma: string | null;
     name: string | null;
