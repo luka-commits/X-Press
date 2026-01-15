@@ -63,12 +63,12 @@ Plans:
 
 **Goal**: Map-Integration mit Lieferadressen, PLZ-Cluster-Visualisierung
 **Depends on**: Phase 11
-**Research**: Likely (map library integration)
-**Research topics**: Leaflet vs Mapbox vs Google Maps, React integration, PLZ clustering
-**Plans**: TBD
+**Research**: Complete (12-RESEARCH.md)
+**Plans**: 2
 
 Plans:
-- [ ] 12-01: TBD
+- [x] 12-01: Geocoding Setup (DB fields, PLZ lookup utility, API coordinates)
+- [ ] 12-02: Map Component (Leaflet integration, marker clustering)
 
 ## Progress
 
@@ -85,4 +85,4 @@ Plans:
 | 9. Versand-Datenmodell | v1.1 | 1/1 | Complete | 2026-01-15 |
 | 10. Versand-API & Liste | v1.1 | 1/1 | Complete | 2026-01-15 |
 | 11. Versand-UI Seite | v1.1 | 1/1 | Complete | 2026-01-15 |
-| 12. Kartenansicht | v1.1 | 0/? | Not started | - |
+| 12. Kartenansicht | v1.1 | 1/2 | In progress | - |
