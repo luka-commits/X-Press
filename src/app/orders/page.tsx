@@ -16,6 +16,7 @@ interface OrdersPageProps {
   searchParams: Promise<{
     search?: string;
     status?: string;
+    istStatus?: string;
     deadline?: string;
     produkttyp?: string;
     sachbearbeiter?: string;
@@ -34,6 +35,7 @@ async function getOrders(searchParams: OrdersPageProps['searchParams']) {
 
   const search = params.search || '';
   const status = params.status || 'all';
+  const istStatus = params.istStatus || 'all';
   const deadline = params.deadline || 'all';
   const produkttyp = params.produkttyp || '';
   const sachbearbeiter = params.sachbearbeiter || '';
@@ -95,6 +97,11 @@ async function getOrders(searchParams: OrdersPageProps['searchParams']) {
   // Sachbearbeiter-Filter
   if (sachbearbeiter) {
     query = query.eq('sachbearbeiter', sachbearbeiter);
+  }
+
+  // IST-Status filter
+  if (istStatus && istStatus !== 'all') {
+    query = query.eq('istStatus', istStatus);
   }
 
   // Volltext-Suche (OR-Bedingung) - jetzt inkl. Kunde
