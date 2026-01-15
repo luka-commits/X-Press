@@ -14,7 +14,7 @@ None
 - Integer phases (1, 2, 3): Planned milestone work
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
-- [ ] **Phase 1: Database Schema** - Neue Felder für Status-Tracking
+- [x] **Phase 1: Database Schema** - Neue Felder für Status-Tracking (Completed 2026-01-15)
 - [ ] **Phase 2: Status API** - PATCH Endpoint für Status-Updates
 - [ ] **Phase 3: Mobile Layout** - Mobile-optimiertes Layout für /status
 - [ ] **Phase 4: Order Search** - Suchfeld mit Autocomplete
@@ -32,7 +32,7 @@ None
 **Plans**: 1 plan
 
 Plans:
-- [ ] 01-01: Schema-Migration und Prisma-Client-Update
+- [x] 01-01: Schema-Migration und Prisma-Client-Update
 
 ### Phase 2: Status API
 **Goal**: PATCH /api/orders/[id]/status Endpoint mit Validierung
@@ -107,7 +107,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Database Schema | 0/1 | Not started | - |
+| 1. Database Schema | 1/1 | Complete | 2026-01-15 |
 | 2. Status API | 0/1 | Not started | - |
 | 3. Mobile Layout | 0/1 | Not started | - |
 | 4. Order Search | 0/2 | Not started | - |
