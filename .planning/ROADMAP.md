@@ -54,10 +54,10 @@ Plans:
 **Goal**: /versand Route mit PLZ-Sortierung, Versandfertig-Button
 **Depends on**: Phase 10
 **Research**: Unlikely (similar to Phase 3/6 mobile UI patterns)
-**Plans**: TBD
+**Plans**: 1
 
 Plans:
-- [ ] 11-01: TBD
+- [ ] 11-01: Versand-UI (page, order list, status buttons)
 
 #### Phase 12: Kartenansicht
 
