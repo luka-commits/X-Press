@@ -33,6 +33,7 @@ export function OrderSearch({ onSelect, className }: OrderSearchProps) {
   const [results, setResults] = useState<OrderSearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [hasSelected, setHasSelected] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -46,6 +47,12 @@ export function OrderSearch({ onSelect, className }: OrderSearchProps) {
     // Clear previous timeout
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
+    }
+
+    // Skip search if user just selected an order
+    // This prevents the dropdown from reappearing after selection
+    if (hasSelected) {
+      return;
     }
 
     // Clear results if search term is too short
@@ -80,12 +87,19 @@ export function OrderSearch({ onSelect, className }: OrderSearchProps) {
         clearTimeout(debounceRef.current);
       }
     };
-  }, [searchTerm]);
+  }, [searchTerm, hasSelected]);
 
   const handleSelect = (order: OrderSearchResult) => {
     setShowDropdown(false);
+    setHasSelected(true);
     setSearchTerm(order.auftragsnummer);
     onSelect(order);
+  };
+
+  // Reset hasSelected when user starts typing again (for next search)
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setHasSelected(false);
+    setSearchTerm(e.target.value);
   };
 
   return (
@@ -103,7 +117,7 @@ export function OrderSearch({ onSelect, className }: OrderSearchProps) {
           ref={inputRef}
           type="text"
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={handleInputChange}
           placeholder="Auftragsnummer oder Kunde..."
           className="w-full min-h-12 pl-12 pr-4 bg-white border border-ghl-border rounded-lg text-ghl-text placeholder:text-ghl-text-secondary focus:outline-none focus:ring-2 focus:ring-ghl-blue focus:border-transparent"
         />
