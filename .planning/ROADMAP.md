@@ -34,10 +34,10 @@ Erweiterung des XOS Dashboards um mobile Status-Update-Funktionalität. Produkti
 **Goal**: VersandStatus Enum und Adress-Parsing aus XML erweitern
 **Depends on**: v1.0 complete
 **Research**: Unlikely (extending existing schema patterns)
-**Plans**: TBD
+**Plans**: 1
 
 Plans:
-- [ ] 09-01: TBD (run /gsd:plan-phase 9 to break down)
+- [x] 09-01: Versand-Datenmodell (VersandStatus enum, address fields)
 
 #### Phase 10: Versand-API & Liste
 
@@ -82,7 +82,7 @@ Plans:
 | 6. Status Update UI | v1.0 | 2/2 | Complete | 2026-01-16 |
 | 7. Dashboard Status Column | v1.0 | 1/1 | Complete | 2026-01-16 |
 | 8. Dashboard Problem Features | v1.0 | 2/2 | Complete | 2026-01-16 |
-| 9. Versand-Datenmodell | v1.1 | 0/? | Not started | - |
+| 9. Versand-Datenmodell | v1.1 | 1/1 | Complete | 2026-01-15 |
 | 10. Versand-API & Liste | v1.1 | 0/? | Not started | - |
 | 11. Versand-UI Seite | v1.1 | 0/? | Not started | - |
 | 12. Kartenansicht | v1.1 | 0/? | Not started | - |
