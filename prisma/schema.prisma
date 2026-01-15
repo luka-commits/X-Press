@@ -60,6 +60,8 @@ model Auftrag {
   lieferPlz         String?        // Postal code for sorting/clustering
   lieferOrt         String?        // City name
   lieferLand        String?        // Country code/name
+  lieferLat         Float?         // Latitude for map marker (from PLZ geocoding)
+  lieferLng         Float?         // Longitude for map marker (from PLZ geocoding)
 
   xmlImportDatum DateTime @default(now())
   createdAt      DateTime @default(now())
