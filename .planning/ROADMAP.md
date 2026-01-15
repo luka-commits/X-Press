@@ -21,7 +21,7 @@ None
 - [x] **Phase 5: Order Selection** - Auftragsdetails nach Auswahl (Completed 2026-01-16)
 - [x] **Phase 6: Status Update UI** - Status-Buttons mit Feedback (Completed 2026-01-16)
 - [x] **Phase 7: Dashboard Status Column** - IST-Status in Auftragsliste (Completed 2026-01-16)
-- [ ] **Phase 8: Dashboard Problem Features** - Problem-Zähler und Filter
+- [x] **Phase 8: Dashboard Problem Features** - Problem-Zähler und Filter (Completed 2026-01-16)
 
 ## Phase Details
 
@@ -98,7 +98,7 @@ Plans:
 
 Plans:
 - [x] 08-01: Problem-Zähler auf Dashboard
-- [ ] 08-02: Problemaufträge-Filter
+- [x] 08-02: Problemaufträge-Filter
 
 ## Progress
 
@@ -114,4 +114,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 5. Order Selection | 1/1 | Complete | 2026-01-16 |
 | 6. Status Update UI | 2/2 | Complete | 2026-01-16 |
 | 7. Dashboard Status Column | 1/1 | Complete | 2026-01-16 |
-| 8. Dashboard Problem Features | 1/2 | In progress | - |
+| 8. Dashboard Problem Features | 2/2 | Complete | 2026-01-16 |
