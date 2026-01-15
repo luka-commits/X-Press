@@ -24,9 +24,9 @@ export default function StatusPage() {
 
   /**
    * Handle status change - calls PATCH /api/orders/[id]/status
-   * Plan 06-02 will add proper feedback UI (toast notifications, etc.)
+   * Includes optional comment parameter (required for "Problem" status)
    */
-  const handleStatusChange = async (status: IstStatusType) => {
+  const handleStatusChange = async (status: IstStatusType, comment?: string) => {
     if (!selectedOrder) return;
 
     setLoadingStatus(status);
@@ -34,21 +34,21 @@ export default function StatusPage() {
       const response = await fetch(`/api/orders/${selectedOrder.auftragsnummer}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ istStatus: status }),
+        body: JSON.stringify({ istStatus: status, comment }),
       });
 
       if (response.ok) {
         const result = await response.json();
         console.log('Status updated successfully:', result);
-        // Plan 06-02 will add proper success feedback
+        // TODO: Plan 06-02 Task 2 will add proper success feedback
       } else {
         const error = await response.json();
         console.error('Status update failed:', error);
-        // Plan 06-02 will add proper error feedback
+        // TODO: Plan 06-02 Task 2 will add proper error feedback
       }
     } catch (error) {
       console.error('Status update error:', error);
-      // Plan 06-02 will add proper error feedback
+      // TODO: Plan 06-02 Task 2 will add proper error feedback
     } finally {
       setLoadingStatus(null);
     }

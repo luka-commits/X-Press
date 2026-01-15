@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useRef, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -11,7 +12,7 @@ export type IstStatusType = "in_produktion" | "fertig" | "problem";
 
 interface StatusButtonsProps {
   orderId: string;
-  onStatusChange: (status: IstStatusType) => Promise<void>;
+  onStatusChange: (status: IstStatusType, comment?: string) => Promise<void>;
   disabled?: boolean;
   loadingStatus?: IstStatusType | null;
   className?: string;
@@ -23,13 +24,16 @@ interface StatusButtonsProps {
  * 3 large, mobile-friendly buttons for quick status updates:
  * - "In Produktion" (in_produktion) - Blue accent
  * - "Fertig" (fertig) - Green/success
- * - "Problem" (problem) - Red/warning
+ * - "Problem" (problem) - Red/warning - REQUIRES comment
  *
- * Design:
+ * Features:
  * - Large touch targets (min-h-14 = 56px) for mobile usability
  * - Full width buttons stacked vertically with gap-3
  * - Loading spinner on active button during API call
  * - Disabled state prevents double-clicks
+ * - Comment textarea: optional for normal statuses, required for "Problem"
+ * - Validation error shown when "Problem" clicked without comment
+ * - Comment clears after successful submission
  */
 export function StatusButtons({
   orderId,
@@ -39,11 +43,46 @@ export function StatusButtons({
   className,
 }: StatusButtonsProps) {
   const isLoading = loadingStatus !== null;
+  const [comment, setComment] = useState("");
+  const [pendingStatus, setPendingStatus] = useState<IstStatusType | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Focus and expand textarea when "Problem" is clicked without comment
+  useEffect(() => {
+    if (pendingStatus === "problem" && validationError) {
+      textareaRef.current?.focus();
+    }
+  }, [pendingStatus, validationError]);
+
+  // Clear comment after successful submit (when loading ends)
+  useEffect(() => {
+    if (loadingStatus === null && pendingStatus !== null) {
+      // Loading finished, clear everything
+      setComment("");
+      setPendingStatus(null);
+      setValidationError(null);
+    }
+  }, [loadingStatus, pendingStatus]);
 
   const handleClick = async (status: IstStatusType) => {
     if (disabled || isLoading) return;
-    await onStatusChange(status);
+
+    // Clear previous validation error
+    setValidationError(null);
+
+    // Require comment for "Problem" status
+    if (status === "problem" && !comment.trim()) {
+      setPendingStatus("problem");
+      setValidationError("Bitte beschreiben Sie das Problem");
+      return;
+    }
+
+    setPendingStatus(status);
+    await onStatusChange(status, comment.trim() || undefined);
   };
+
+  const isProblemPending = pendingStatus === "problem" && validationError;
 
   return (
     <div
@@ -113,6 +152,32 @@ export function StatusButtons({
           "Problem"
         )}
       </button>
+
+      {/* Comment textarea */}
+      <div className="relative">
+        <textarea
+          ref={textareaRef}
+          value={comment}
+          onChange={(e) => {
+            setComment(e.target.value);
+            // Clear validation error when user starts typing
+            if (validationError) setValidationError(null);
+          }}
+          placeholder={isProblemPending ? "Bitte Problem beschreiben..." : "Kommentar (optional)"}
+          disabled={disabled || isLoading}
+          rows={isProblemPending ? 3 : 2}
+          className={cn(
+            "w-full rounded-lg border px-4 py-3 text-sm resize-none transition-all",
+            "bg-ghl-card border-ghl-border text-white placeholder:text-gray-400",
+            "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",
+            "disabled:opacity-50 disabled:cursor-not-allowed",
+            isProblemPending && "border-red-500 ring-2 ring-red-500/50"
+          )}
+        />
+        {validationError && (
+          <p className="mt-1.5 text-sm text-red-400">{validationError}</p>
+        )}
+      </div>
     </div>
   );
 }
