@@ -5,15 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-16)
 
 **Core value:** Mitarbeiter können mit 3 Klicks den Auftragsstatus vom Handy aus updaten.
-**Current focus:** v1.0 complete — planning next milestone
+**Current focus:** v1.1 Versand-Übersicht — Versand-Team Workflow
 
 ## Current Position
 
-Phase: v1.0 complete (8 phases, 11 plans)
-Status: Milestone shipped
-Last activity: 2026-01-16 — v1.0 milestone complete
+Phase: 9 of 12 (Versand-Datenmodell)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-01-16 — Milestone v1.1 created
 
-Progress: ██████████ 100%
+Progress: ░░░░░░░░░░ 0%
 
 ## Performance Metrics
 
@@ -22,7 +23,7 @@ Progress: ██████████ 100%
 - Average duration: 2.7 min
 - Total execution time: 30 min
 
-**By Phase:**
+**By Phase (v1.0):**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
@@ -49,9 +50,13 @@ None.
 
 None.
 
+### Roadmap Evolution
+
+- Milestone v1.1 created: Versand-Übersicht, 4 phases (Phase 9-12)
+
 ## Session Continuity
 
 Last session: 2026-01-16
-Stopped at: v1.0 milestone complete
+Stopped at: Milestone v1.1 initialization
 Resume file: None
-Next: /gsd:discuss-milestone or /gsd:new-milestone
+Next: /gsd:plan-phase 9
