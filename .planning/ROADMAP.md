@@ -20,7 +20,7 @@ None
 - [x] **Phase 4: Order Search** - Suchfeld mit Autocomplete (Completed 2026-01-16)
 - [x] **Phase 5: Order Selection** - Auftragsdetails nach Auswahl (Completed 2026-01-16)
 - [x] **Phase 6: Status Update UI** - Status-Buttons mit Feedback (Completed 2026-01-16)
-- [ ] **Phase 7: Dashboard Status Column** - IST-Status in Auftragsliste
+- [x] **Phase 7: Dashboard Status Column** - IST-Status in Auftragsliste (Completed 2026-01-16)
 - [ ] **Phase 8: Dashboard Problem Features** - Problem-Zähler und Filter
 
 ## Phase Details
@@ -88,7 +88,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 07-01: Status-Spalte mit Farbcodierung
+- [x] 07-01: Status-Spalte mit Farbcodierung
 
 ### Phase 8: Dashboard Problem Features
 **Goal**: Problem-Zähler auf Startseite + Filter für Problemaufträge
@@ -97,7 +97,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 08-01: Problem-Zähler auf Dashboard
+- [x] 08-01: Problem-Zähler auf Dashboard
 - [ ] 08-02: Problemaufträge-Filter
 
 ## Progress
@@ -113,5 +113,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 4. Order Search | 2/2 | Complete | 2026-01-16 |
 | 5. Order Selection | 1/1 | Complete | 2026-01-16 |
 | 6. Status Update UI | 2/2 | Complete | 2026-01-16 |
-| 7. Dashboard Status Column | 0/1 | Not started | - |
-| 8. Dashboard Problem Features | 0/2 | Not started | - |
+| 7. Dashboard Status Column | 1/1 | Complete | 2026-01-16 |
+| 8. Dashboard Problem Features | 1/2 | In progress | - |

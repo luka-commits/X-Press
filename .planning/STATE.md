@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-16)
 
 **Core value:** Mitarbeiter können mit 3 Klicks den Auftragsstatus vom Handy aus updaten.
-**Current focus:** Phase 7 — Dashboard Status Column (Complete)
+**Current focus:** Phase 8 — Dashboard Problem Features (COMPLETE)
 
 ## Current Position
 
-Phase: 7 of 8 (Dashboard Status Column)
-Plan: 1 of 1 in current phase (PHASE COMPLETE)
+Phase: 8 of 8 (Dashboard Problem Features)
+Plan: 2 of 2 in current phase (PHASE COMPLETE)
 Status: Complete
-Last activity: 2026-01-16 — Completed 07-01-PLAN.md
+Last activity: 2026-01-16 — Completed 08-02-PLAN.md
 
-Progress: █████████░ 90%
+Progress: ██████████ 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
-- Average duration: 2.6 min
-- Total execution time: 24 min
+- Total plans completed: 11
+- Average duration: 2.7 min
+- Total execution time: 30 min
 
 **By Phase:**
 
@@ -34,9 +34,10 @@ Progress: █████████░ 90%
 | 05-order-selection | 1 | 1 min | 1 min |
 | 06-status-update-ui | 2 | 5 min | 2.5 min |
 | 07-dashboard-status-column | 1 | 4 min | 4 min |
+| 08-dashboard-problem-features | 2 | 6 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 3 min, 1 min, 2 min, 3 min, 4 min
+- Last 5 plans: 2 min, 3 min, 4 min, 3 min, 3 min
 - Trend: Consistent fast execution
 
 ## Accumulated Context
@@ -53,6 +54,7 @@ Recent decisions affecting current work:
 | 03 | Created ESLint config with @typescript-eslint | Pre-existing code had lint comments for undefined rules; build was failing |
 | 07 | Added istStatus to Auftrag type in supabase.ts | Type was missing from initial definition but exists in database |
 | 07 | Used amber-100/amber-700 for 'in_produktion' | Visual distinction from green 'fertig' and red 'problem' |
+| 08-02 | IST-Status filter placed after Status dropdown | Logical grouping of status-related filters |
 
 ### Pending Todos
 
@@ -65,6 +67,6 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-16
-Stopped at: Completed 07-01-PLAN.md (Phase 7 complete)
+Stopped at: Completed 08-02-PLAN.md (Phase 8 complete, Milestone complete)
 Resume file: None
-Next: Start Phase 8 (if applicable)
+Next: /gsd:complete-milestone
