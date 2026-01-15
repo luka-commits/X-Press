@@ -1,40 +1,37 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { MobileLayout } from '@/components/layout';
-import { OrderSearch, type OrderSearchResult } from '@/components/status';
-import { CheckCircle } from 'lucide-react';
+import { OrderSearch, OrderDetails, type OrderSearchResult } from '@/components/status';
 
 export default function StatusPage() {
   const [selectedOrder, setSelectedOrder] = useState<OrderSearchResult | null>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   const handleOrderSelect = (order: OrderSearchResult) => {
     setSelectedOrder(order);
+  };
+
+  const handleClear = () => {
+    setSelectedOrder(null);
+    // Re-focus search input after clearing
+    const input = searchRef.current?.querySelector('input');
+    if (input) {
+      input.focus();
+    }
   };
 
   return (
     <MobileLayout>
       <div className="space-y-4">
         {/* Order Search */}
-        <OrderSearch onSelect={handleOrderSelect} />
+        <div ref={searchRef}>
+          <OrderSearch onSelect={handleOrderSelect} />
+        </div>
 
-        {/* Selected Order Confirmation (temporary - Phase 5 will replace with details) */}
+        {/* Order Details */}
         {selectedOrder && (
-          <div className="bg-white rounded-lg border border-ghl-border p-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                <CheckCircle className="w-5 h-5 text-green-600" />
-              </div>
-              <div>
-                <p className="font-semibold text-ghl-text">
-                  Auftrag ausgewählt: {selectedOrder.auftragsnummer}
-                </p>
-                <p className="text-sm text-ghl-text-secondary">
-                  {selectedOrder.kunde?.firma || selectedOrder.kunde?.name || 'Unbekannter Kunde'}
-                </p>
-              </div>
-            </div>
-          </div>
+          <OrderDetails order={selectedOrder} onClear={handleClear} />
         )}
       </div>
     </MobileLayout>
