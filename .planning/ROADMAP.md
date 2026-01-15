@@ -3,6 +3,7 @@
 ## Milestones
 
 - ✅ **v1.0 Mobile Status-Update** — Phases 1-8 (shipped 2026-01-16)
+- 🚧 **v1.1 Versand-Übersicht** — Phases 9-12 (in progress)
 
 ## Completed Milestones
 
@@ -24,6 +25,51 @@ Erweiterung des XOS Dashboards um mobile Status-Update-Funktionalität. Produkti
 
 </details>
 
+### 🚧 v1.1 Versand-Übersicht (In Progress)
+
+**Milestone Goal:** Versand-Team kann sehen welche Aufträge wann wohin müssen, optimiert durch PLZ-Sortierung und Kartenansicht
+
+#### Phase 9: Versand-Datenmodell
+
+**Goal**: VersandStatus Enum und Adress-Parsing aus XML erweitern
+**Depends on**: v1.0 complete
+**Research**: Unlikely (extending existing schema patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 09-01: TBD (run /gsd:plan-phase 9 to break down)
+
+#### Phase 10: Versand-API & Liste
+
+**Goal**: Endpunkte für Versandfertig-Markierung, Liste mit Liefertermin-Filter
+**Depends on**: Phase 9
+**Research**: Unlikely (similar to Phase 2 Status API)
+**Plans**: TBD
+
+Plans:
+- [ ] 10-01: TBD
+
+#### Phase 11: Versand-UI Seite
+
+**Goal**: /versand Route mit PLZ-Sortierung, Versandfertig-Button
+**Depends on**: Phase 10
+**Research**: Unlikely (similar to Phase 3/6 mobile UI patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 11-01: TBD
+
+#### Phase 12: Kartenansicht
+
+**Goal**: Map-Integration mit Lieferadressen, PLZ-Cluster-Visualisierung
+**Depends on**: Phase 11
+**Research**: Likely (map library integration)
+**Research topics**: Leaflet vs Mapbox vs Google Maps, React integration, PLZ clustering
+**Plans**: TBD
+
+Plans:
+- [ ] 12-01: TBD
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -36,3 +82,7 @@ Erweiterung des XOS Dashboards um mobile Status-Update-Funktionalität. Produkti
 | 6. Status Update UI | v1.0 | 2/2 | Complete | 2026-01-16 |
 | 7. Dashboard Status Column | v1.0 | 1/1 | Complete | 2026-01-16 |
 | 8. Dashboard Problem Features | v1.0 | 2/2 | Complete | 2026-01-16 |
+| 9. Versand-Datenmodell | v1.1 | 0/? | Not started | - |
+| 10. Versand-API & Liste | v1.1 | 0/? | Not started | - |
+| 11. Versand-UI Seite | v1.1 | 0/? | Not started | - |
+| 12. Kartenansicht | v1.1 | 0/? | Not started | - |
