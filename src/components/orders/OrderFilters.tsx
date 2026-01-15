@@ -21,6 +21,7 @@ export function OrderFilters({ produkttypen, sachbearbeiter }: OrderFiltersProps
 
   const currentDeadline = searchParams.get('deadline') || 'all';
   const currentStatus = searchParams.get('status') || 'all';
+  const currentIstStatus = searchParams.get('istStatus') || 'all';
   const currentProdukttyp = searchParams.get('produkttyp') || '';
   const currentSachbearbeiter = searchParams.get('sachbearbeiter') || '';
 
@@ -48,6 +49,13 @@ export function OrderFilters({ produkttypen, sachbearbeiter }: OrderFiltersProps
     { value: 'abgeschlossen', label: 'Abgeschlossen' },
   ];
 
+  const istStatusOptions = [
+    { value: 'all', label: 'Alle IST-Status' },
+    { value: 'fertig', label: 'Fertig' },
+    { value: 'in_produktion', label: 'In Produktion' },
+    { value: 'problem', label: 'Problem' },
+  ];
+
   const clearFilters = () => {
     const params = new URLSearchParams();
     const search = searchParams.get('search');
@@ -58,6 +66,7 @@ export function OrderFilters({ produkttypen, sachbearbeiter }: OrderFiltersProps
   const hasActiveFilters =
     currentDeadline !== 'all' ||
     currentStatus !== 'all' ||
+    currentIstStatus !== 'all' ||
     currentProdukttyp !== '' ||
     currentSachbearbeiter !== '';
 
@@ -90,6 +99,23 @@ export function OrderFilters({ produkttypen, sachbearbeiter }: OrderFiltersProps
         </SelectTrigger>
         <SelectContent>
           {statusOptions.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
+      {/* IST-Status Dropdown */}
+      <Select
+        value={currentIstStatus}
+        onValueChange={(value) => updateFilter('istStatus', value)}
+      >
+        <SelectTrigger className="w-[150px] bg-white">
+          <SelectValue placeholder="IST-Status" />
+        </SelectTrigger>
+        <SelectContent>
+          {istStatusOptions.map((option) => (
             <SelectItem key={option.value} value={option.value}>
               {option.label}
             </SelectItem>
