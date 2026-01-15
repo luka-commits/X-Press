@@ -57,7 +57,7 @@ Plans:
 **Plans**: 1
 
 Plans:
-- [ ] 11-01: Versand-UI (page, order list, status buttons)
+- [x] 11-01: Versand-UI (page, order list, status buttons)
 
 #### Phase 12: Kartenansicht
 
@@ -84,5 +84,5 @@ Plans:
 | 8. Dashboard Problem Features | v1.0 | 2/2 | Complete | 2026-01-16 |
 | 9. Versand-Datenmodell | v1.1 | 1/1 | Complete | 2026-01-15 |
 | 10. Versand-API & Liste | v1.1 | 1/1 | Complete | 2026-01-15 |
-| 11. Versand-UI Seite | v1.1 | 0/? | Not started | - |
+| 11. Versand-UI Seite | v1.1 | 1/1 | Complete | 2026-01-15 |
 | 12. Kartenansicht | v1.1 | 0/? | Not started | - |
