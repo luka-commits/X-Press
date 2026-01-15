@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Check, X } from "lucide-react";
+import { Check, X, Map, ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { VersandOrderCard, type VersandOrder } from "./VersandOrderCard";
 import { VersandStatusButtons, type VersandStatusType } from "./VersandStatusButtons";
+import { DeliveryMap } from "@/components/map";
 
 /**
  * Deadline filter options
@@ -57,6 +58,9 @@ export function VersandOrderList() {
   // Filters
   const [deadlineFilter, setDeadlineFilter] = useState<DeadlineFilter>("today");
   const [statusFilter, setStatusFilter] = useState<VersandStatusFilter>("offen");
+
+  // Map toggle
+  const [showMap, setShowMap] = useState(false);
 
   // Auto-dismiss feedback after 3 seconds
   useEffect(() => {
@@ -196,6 +200,34 @@ export function VersandOrderList() {
           </FilterPill>
         </div>
       </div>
+
+      {/* Map Toggle Button */}
+      <button
+        onClick={() => setShowMap(!showMap)}
+        className={cn(
+          "w-full flex items-center justify-between p-3 rounded-lg border transition-colors",
+          showMap
+            ? "bg-blue-500/10 border-blue-500/30 text-blue-400"
+            : "bg-ghl-card border-ghl-border text-gray-300 hover:border-gray-500"
+        )}
+      >
+        <div className="flex items-center gap-2">
+          <Map className="w-5 h-5" />
+          <span className="font-medium">Karte anzeigen</span>
+        </div>
+        {showMap ? (
+          <ChevronUp className="w-5 h-5" />
+        ) : (
+          <ChevronDown className="w-5 h-5" />
+        )}
+      </button>
+
+      {/* Delivery Map (collapsible) */}
+      {showMap && (
+        <div className="overflow-hidden rounded-lg">
+          <DeliveryMap orders={orders} />
+        </div>
+      )}
 
       {/* Feedback Banner */}
       {feedback && (
