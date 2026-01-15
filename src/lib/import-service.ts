@@ -136,6 +136,11 @@ export async function importAuftrag(parsed: ParsedAuftrag): Promise<ImportResult
             wtvTermin: parsed.wtvTermin,
             prioritaet: parsed.prioritaet,
             xmlImportDatum: new Date(),
+            // Individual address fields (customer address as delivery address)
+            lieferStrasse: parsed.kunde?.strasse,
+            lieferPlz: parsed.kunde?.plz,
+            lieferOrt: parsed.kunde?.ort,
+            lieferLand: parsed.kunde?.land,
           },
         });
       } else {
@@ -154,6 +159,11 @@ export async function importAuftrag(parsed: ParsedAuftrag): Promise<ImportResult
             wtvTermin: parsed.wtvTermin,
             prioritaet: parsed.prioritaet,
             status: 'aktiv',
+            // Individual address fields (customer address as delivery address)
+            lieferStrasse: parsed.kunde?.strasse,
+            lieferPlz: parsed.kunde?.plz,
+            lieferOrt: parsed.kunde?.ort,
+            lieferLand: parsed.kunde?.land,
           },
         });
       }

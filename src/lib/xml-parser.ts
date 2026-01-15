@@ -39,8 +39,13 @@ export interface ParsedKunde {
   telefon: string | null;
   mobil: string | null;
   email: string | null;
-  adresse: string | null;
+  adresse: string | null;  // Combined address for backwards compatibility
   externeNummer: string | null;
+  // Individual address fields for PLZ sorting and map clustering
+  strasse: string | null;
+  plz: string | null;
+  ort: string | null;
+  land: string | null;
 }
 
 export interface ParsedArbeitsgang {
@@ -188,10 +193,13 @@ export function parseXML(xmlContent: string): ParsedAuftrag {
     const mobil = komArray.find((k: any) => k['@_Kommtypname'] === 'Mobil')?.['@_Wert'] || null;
     const email = komArray.find((k: any) => k['@_Kommtypname'] === 'E-Mail')?.['@_Wert'] || null;
 
-    // Build address string
+    // Extract individual address fields
     const strasse = kundeNode['@_Strasse'] || '';
     const plz = kundeNode['@_PLZ'] || '';
     const ort = kundeNode['@_Ort'] || '';
+    const land = kundeNode['@_LandName'] || kundeNode['@_LKZ'] || '';
+
+    // Build combined address string for backwards compatibility
     const adresse = [strasse, `${plz} ${ort}`.trim()].filter(Boolean).join(', ');
 
     kunde = {
@@ -202,6 +210,11 @@ export function parseXML(xmlContent: string): ParsedAuftrag {
       email,
       adresse: adresse || null,
       externeNummer: auftrag.Kunde?.['@_ExterneAdressnummer'] || null,
+      // Individual address fields for PLZ sorting and map clustering
+      strasse: strasse || null,
+      plz: plz || null,
+      ort: ort || null,
+      land: land || null,
     };
   }
 
