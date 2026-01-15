@@ -2,7 +2,7 @@
 
 ## What This Is
 
-Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftragsstatus in Echtzeit zu aktualisieren. Die App erweitert das bestehende XOS Dashboard um IST-Zustand-Erfassung und beendet die "Black Box" in der Produktion.
+Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftragsstatus in Echtzeit zu aktualisieren. Die App erweitert das bestehende XOS Dashboard um IST-Zustand-Erfassung vom Shopfloor mit einem 3-Klick-Workflow.
 
 ## Core Value
 
@@ -15,31 +15,14 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 - ✓ Dashboard zeigt SOLL-Daten aus Prinance XML — existing
 - ✓ Auftragssuche und Filterung funktioniert — existing
 - ✓ Datenbank-Schema für Aufträge vorhanden — existing
+- ✓ Mobile Status-Update Seite (`/status`) mit 3-Klick-Workflow — v1.0
+- ✓ Datenbank-Erweiterung (istStatus, statusKommentar, statusUpdatedAt) — v1.0
+- ✓ API-Endpoint für Status-Updates (PATCH /api/orders/[id]/status) — v1.0
+- ✓ Dashboard-Integration (IST-Status-Spalte, Problem-Zähler, Filter) — v1.0
 
 ### Active
 
-- [ ] Mobile Status-Update Seite (`/status`)
-  - Suchfeld mit Autocomplete (Auftragsnummer, Kunde, Produkt)
-  - Auftragsdetails anzeigen (Kunde, Produkt, Liefertermin)
-  - 3 große Status-Buttons: "In Produktion" / "Fertig" / "Problem"
-  - Optionales Kommentarfeld
-  - Bestätigungsmeldung nach Update
-
-- [ ] Datenbank-Erweiterung
-  - Neues Feld `istStatus` in Auftrag-Tabelle
-  - Neues Feld `statusKommentar` in Auftrag-Tabelle
-  - Neues Feld `statusUpdatedAt` für Zeitstempel
-
-- [ ] API-Endpoint für Status-Updates
-  - PATCH `/api/orders/[id]/status`
-  - Akzeptiert: status, kommentar
-  - Validierung der Status-Werte
-
-- [ ] Dashboard-Integration
-  - IST-Status-Spalte in Auftragsliste
-  - Farbcodierung: 🟢 Fertig, 🟡 In Produktion, 🔴 Problem
-  - Problem-Zähler auf Dashboard-Startseite
-  - Filter: "Nur Problemaufträge anzeigen"
+(None yet — plan next milestone)
 
 ### Out of Scope
 
@@ -51,22 +34,16 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 
 ## Context
 
-**Ausgangssituation:**
-- XOS Dashboard zeigt nur SOLL-Zustand (Prinance XML)
-- Kein Feedback vom Shopfloor
-- Produktion ist "Black Box"
-- Bisherige Lösung: Analoge Auftragstasche
+**Shipped v1.0:**
+- 5,914 LOC TypeScript
+- Tech stack: Next.js 14, Supabase, Prisma, Tailwind CSS
+- Mobile-first /status page for shopfloor workers
+- Dashboard integration with IST-Status visibility
 
-**Nutzer:**
-- Produktionsmitarbeiter (Drucker, Schneider, Buchbinder)
-- Arbeiten an Maschinen, haben Smartphone dabei
-- Wollen nicht viel tippen
-
-**Technische Basis:**
-- Bestehendes Next.js 14 Projekt
-- Supabase PostgreSQL
-- Prisma ORM
-- Deployed auf Vercel
+**Production State:**
+- Produktionsmitarbeiter können Auftragsstatus updaten
+- Dashboard zeigt IST-Zustand vom Shopfloor
+- Problem-Aufträge sind sofort sichtbar
 
 ## Constraints
 
@@ -79,11 +56,14 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Auftrag-basiert statt Arbeitsgang-basiert | Einfacher = höhere Adoption bei Mitarbeitern | — Pending |
-| Kein Login für MVP | Schneller Start, Komplexität reduzieren | — Pending |
-| Gleiche Codebase | Shared DB, Types, API - weniger Wartung | — Pending |
-| 3 Status-Optionen | Klar und eindeutig, keine Entscheidungsmüdigkeit | — Pending |
-| Kommentar optional | Pflichtfeld würde Nutzung reduzieren | — Pending |
+| Auftrag-basiert statt Arbeitsgang-basiert | Einfacher = höhere Adoption bei Mitarbeitern | ✓ Good |
+| Kein Login für MVP | Schneller Start, Komplexität reduzieren | ✓ Good |
+| Gleiche Codebase | Shared DB, Types, API - weniger Wartung | ✓ Good |
+| 3 Status-Optionen | Klar und eindeutig, keine Entscheidungsmüdigkeit | ✓ Good |
+| Kommentar optional | Pflichtfeld würde Nutzung reduzieren | ✓ Good |
+| Prisma db push statt migrate dev | Database hatte Drift (Tables ohne Migration History) | ✓ Good |
+| IstStatus separat von status Feld | IST-Zustand vom Shopfloor, nicht Order Lifecycle | ✓ Good |
+| Amber für in_produktion | Visuelle Unterscheidung von grün (fertig) und rot (problem) | ✓ Good |
 
 ---
-*Last updated: 2026-01-16 after project initialization*
+*Last updated: 2026-01-16 after v1.0 milestone*
