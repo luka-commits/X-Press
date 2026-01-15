@@ -15,7 +15,7 @@ None
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
 - [x] **Phase 1: Database Schema** - Neue Felder für Status-Tracking (Completed 2026-01-15)
-- [ ] **Phase 2: Status API** - PATCH Endpoint für Status-Updates
+- [x] **Phase 2: Status API** - PATCH Endpoint für Status-Updates (Completed 2026-01-15)
 - [ ] **Phase 3: Mobile Layout** - Mobile-optimiertes Layout für /status
 - [ ] **Phase 4: Order Search** - Suchfeld mit Autocomplete
 - [ ] **Phase 5: Order Selection** - Auftragsdetails nach Auswahl
@@ -41,7 +41,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 02-01: API-Route mit Status-Validierung
+- [x] 02-01: API-Route mit Status-Validierung
 
 ### Phase 3: Mobile Layout
 **Goal**: Mobile-optimiertes Layout für /status Route
@@ -108,7 +108,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Database Schema | 1/1 | Complete | 2026-01-15 |
-| 2. Status API | 0/1 | Not started | - |
+| 2. Status API | 1/1 | Complete | 2026-01-15 |
 | 3. Mobile Layout | 0/1 | Not started | - |
 | 4. Order Search | 0/2 | Not started | - |
 | 5. Order Selection | 0/1 | Not started | - |
