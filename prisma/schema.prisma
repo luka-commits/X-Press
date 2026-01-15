@@ -18,6 +18,13 @@ enum IstStatus {
   problem       // Has issues that need attention
 }
 
+// Versand-Status für Versand-Team Workflow
+enum VersandStatus {
+  offen         // Not yet ready for shipping (default)
+  versandbereit // Ready to be shipped
+  versendet     // Shipped
+}
+
 // Aufträge aus Prinance XML
 model Auftrag {
   auftragsnummer String   @id
@@ -42,6 +49,17 @@ model Auftrag {
   istStatus        IstStatus? // Actual production state from shopfloor
   statusKommentar  String?    // Optional comment from worker
   statusUpdatedAt  DateTime?  // When status was last changed
+
+  // Versand Status fields (Versand-Team Workflow)
+  versandStatus     VersandStatus? // Shipping status for Versand-Team
+  versandKommentar  String?        // Optional comment from shipping team
+  versandUpdatedAt  DateTime?      // When shipping status was last changed
+
+  // Lieferadresse fields (für PLZ-Sortierung und Kartenansicht)
+  lieferStrasse     String?        // Street address for delivery
+  lieferPlz         String?        // Postal code for sorting/clustering
+  lieferOrt         String?        // City name
+  lieferLand        String?        // Country code/name
 
   xmlImportDatum DateTime @default(now())
   createdAt      DateTime @default(now())
