@@ -17,7 +17,7 @@ None
 - [x] **Phase 1: Database Schema** - Neue Felder für Status-Tracking (Completed 2026-01-15)
 - [x] **Phase 2: Status API** - PATCH Endpoint für Status-Updates (Completed 2026-01-15)
 - [x] **Phase 3: Mobile Layout** - Mobile-optimiertes Layout für /status (Completed 2026-01-16)
-- [ ] **Phase 4: Order Search** - Suchfeld mit Autocomplete
+- [x] **Phase 4: Order Search** - Suchfeld mit Autocomplete (Completed 2026-01-16)
 - [ ] **Phase 5: Order Selection** - Auftragsdetails nach Auswahl
 - [ ] **Phase 6: Status Update UI** - Status-Buttons mit Feedback
 - [ ] **Phase 7: Dashboard Status Column** - IST-Status in Auftragsliste
@@ -59,8 +59,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 04-01: Such-API mit Autocomplete-Ergebnissen
-- [ ] 04-02: Suchfeld-Komponente mit Debounce
+- [x] 04-01: Such-API mit Autocomplete-Ergebnissen
+- [x] 04-02: Suchfeld-Komponente mit Debounce
 
 ### Phase 5: Order Selection
 **Goal**: Auftragsdetails nach Auswahl anzeigen (Kunde, Produkt, Liefertermin)
@@ -110,7 +110,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 1. Database Schema | 1/1 | Complete | 2026-01-15 |
 | 2. Status API | 1/1 | Complete | 2026-01-15 |
 | 3. Mobile Layout | 1/1 | Complete | 2026-01-16 |
-| 4. Order Search | 0/2 | Not started | - |
+| 4. Order Search | 2/2 | Complete | 2026-01-16 |
 | 5. Order Selection | 0/1 | Not started | - |
 | 6. Status Update UI | 0/2 | Not started | - |
 | 7. Dashboard Status Column | 0/1 | Not started | - |
