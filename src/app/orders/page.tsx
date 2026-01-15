@@ -139,6 +139,7 @@ async function getOrders(searchParams: OrdersPageProps['searchParams']) {
       liefertermin: order.liefertermin,
       status: order.status,
       computedStatus,
+      istStatus: order.istStatus,
       kunde: order.Kunde ? {
         id: order.Kunde.id,
         name: order.Kunde.name,

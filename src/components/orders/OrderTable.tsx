@@ -28,6 +28,7 @@ interface Order {
   liefertermin: string | null;
   status: string;
   computedStatus: string;
+  istStatus: string | null;
   _count: {
     arbeitsgaenge: number;
   };
