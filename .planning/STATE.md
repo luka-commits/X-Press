@@ -5,14 +5,13 @@
 See: .planning/PROJECT.md (updated 2026-01-16)
 
 **Core value:** Mitarbeiter können mit 3 Klicks den Auftragsstatus vom Handy aus updaten.
-**Current focus:** Phase 8 — Dashboard Problem Features (COMPLETE)
+**Current focus:** v1.0 complete — planning next milestone
 
 ## Current Position
 
-Phase: 8 of 8 (Dashboard Problem Features)
-Plan: 2 of 2 in current phase (PHASE COMPLETE)
-Status: Complete
-Last activity: 2026-01-16 — Completed 08-02-PLAN.md
+Phase: v1.0 complete (8 phases, 11 plans)
+Status: Milestone shipped
+Last activity: 2026-01-16 — v1.0 milestone complete
 
 Progress: ██████████ 100%
 
@@ -36,37 +35,23 @@ Progress: ██████████ 100%
 | 07-dashboard-status-column | 1 | 4 min | 4 min |
 | 08-dashboard-problem-features | 2 | 6 min | 3 min |
 
-**Recent Trend:**
-- Last 5 plans: 2 min, 3 min, 4 min, 3 min, 3 min
-- Trend: Consistent fast execution
-
 ## Accumulated Context
 
 ### Decisions
 
-Decisions are logged in PROJECT.md Key Decisions table.
-Recent decisions affecting current work:
-
-| Phase | Decision | Rationale |
-|-------|----------|-----------|
-| 01 | Used prisma db push instead of migrate dev | Database had drift (existing tables without migration history) |
-| 01 | IstStatus enum separate from existing status field | Tracks shopfloor IST-Zustand, distinct from order lifecycle |
-| 03 | Created ESLint config with @typescript-eslint | Pre-existing code had lint comments for undefined rules; build was failing |
-| 07 | Added istStatus to Auftrag type in supabase.ts | Type was missing from initial definition but exists in database |
-| 07 | Used amber-100/amber-700 for 'in_produktion' | Visual distinction from green 'fertig' and red 'problem' |
-| 08-02 | IST-Status filter placed after Status dropdown | Logical grouping of status-related filters |
+See PROJECT.md Key Decisions table for full history.
 
 ### Pending Todos
 
-None yet.
+None.
 
 ### Blockers/Concerns
 
-None yet.
+None.
 
 ## Session Continuity
 
 Last session: 2026-01-16
-Stopped at: Completed 08-02-PLAN.md (Phase 8 complete, Milestone complete)
+Stopped at: v1.0 milestone complete
 Resume file: None
-Next: /gsd:complete-milestone
+Next: /gsd:discuss-milestone or /gsd:new-milestone
