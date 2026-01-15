@@ -21,6 +21,7 @@ export interface DashboardKPIs {
     name: string;
     auslastung: number;
   } | null;
+  problemOrders: number;
 }
 
 export interface MachineOrder {
@@ -69,7 +70,7 @@ export async function getDashboardKPIs(date: Date = new Date()): Promise<Dashboa
   const dateStart = startOfDay(referenceDate);
 
   // Parallel queries for performance
-  const [activeResult, criticalResult, overdueResult] = await Promise.all([
+  const [activeResult, criticalResult, overdueResult, problemResult] = await Promise.all([
     // Total active orders
     supabase
       .from('Auftrag')
@@ -90,6 +91,13 @@ export async function getDashboardKPIs(date: Date = new Date()): Promise<Dashboa
       .select('*', { count: 'exact', head: true })
       .eq('status', 'aktiv')
       .lt('liefertermin', dateStart.toISOString()),
+
+    // Problem orders (istStatus = 'problem')
+    supabase
+      .from('Auftrag')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'aktiv')
+      .eq('istStatus', 'problem'),
   ]);
 
   // Get average capacity and engpass (calculated from machine capacity)
@@ -113,6 +121,7 @@ export async function getDashboardKPIs(date: Date = new Date()): Promise<Dashboa
       name: engpassMachine.kurzname || engpassMachine.name,
       auslastung: engpassMachine.auslastung,
     } : null,
+    problemOrders: problemResult.count || 0,
   };
 }
 
@@ -282,24 +291,23 @@ export async function getWeekStatistics(weekStartDate?: Date): Promise<WeekStati
   const weekStart = startOfWeek(referenceDate, { locale: de, weekStartsOn: 1 }); // Montag
   const weekEnd = endOfWeek(referenceDate, { locale: de, weekStartsOn: 1 }); // Sonntag
 
-  // Aufträge mit Liefertermin diese Woche
-  const { count: auftraegeCount } = await supabase
-    .from('Auftrag')
-    .select('*', { count: 'exact', head: true })
-    .gte('liefertermin', startOfDay(weekStart).toISOString())
-    .lte('liefertermin', endOfDay(weekEnd).toISOString());
-
-  // Geplante Maschinenzeit diese Woche (nur Leitmaschinen)
+  // Geplante Arbeitsgänge diese Woche (nur Leitmaschinen) - mit Auftrags-IDs
   const { data: arbeitsgaenge } = await supabase
     .from('Arbeitsgang')
     .select(`
       zeitMinuten,
       geplantDatum,
+      auftragId,
       Maschine!inner(istLeitmaschine)
     `)
     .gte('geplantDatum', startOfDay(weekStart).toISOString())
     .lte('geplantDatum', endOfDay(weekEnd).toISOString())
     .eq('Maschine.istLeitmaschine', true);
+
+  // Zähle eindeutige Aufträge basierend auf geplantDatum (nicht Liefertermin)
+  const uniqueAuftraege = new Set(
+    arbeitsgaenge?.map(ag => ag.auftragId).filter(Boolean) || []
+  );
 
   // Anzahl aktiver Leitmaschinen
   const { count: maschinenCount } = await supabase
@@ -314,7 +322,7 @@ export async function getWeekStatistics(weekStartDate?: Date): Promise<WeekStati
   ) || 0;
 
   return {
-    auftraegeGesamt: auftraegeCount || 0,
+    auftraegeGesamt: uniqueAuftraege.size,
     maschinenStunden: Math.round((gesamtMinuten / 60) * 10) / 10,
     leitmaschinenAnzahl: maschinenCount || 0,
   };
