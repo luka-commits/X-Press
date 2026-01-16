@@ -85,12 +85,12 @@ Plans:
 
 **Goal**: /reports/analytics mit Zeitraum-Selector und Charts für Volumen-Trends
 **Depends on**: Phase 18
-**Research**: Likely (charting library selection)
-**Research topics**: Recharts vs Chart.js vs other React charting libraries
-**Plans**: TBD
+**Research**: Complete — uses existing Recharts v3.6.0
+**Plans**: 1/2 complete
 
 Plans:
-- [ ] 19-01: TBD
+- [x] 19-01: DateRangePicker component + analytics API — completed 2026-01-17
+- [ ] 19-02: Analytics page with volume chart
 
 #### Phase 20: Versand-Reports
 
@@ -124,5 +124,5 @@ Plans:
 | 16. Routenoptimierung | v1.3 | 1/1 | Complete | 2026-01-16 |
 | 17. Export & Fahrer | v1.3 | 1/1 | Complete | 2026-01-16 |
 | 18. Reports-Grundstruktur | v1.4 | 1/1 | Complete | 2026-01-16 |
-| 19. Zeitraum-Analysen | v1.4 | 0/? | Not started | - |
+| 19. Zeitraum-Analysen | v1.4 | 1/2 | In progress | - |
 | 20. Versand-Reports | v1.4 | 0/? | Not started | - |
