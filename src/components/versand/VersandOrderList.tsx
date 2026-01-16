@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { Check, X, Map, ChevronDown, ChevronUp, Calendar, Package } from "lucide-react";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { Check, X, Map, ChevronDown, ChevronUp, Calendar, Package, Route } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { VersandOrderCard, type VersandOrder } from "./VersandOrderCard";
 import { VersandStatusButtons, type VersandStatusType } from "./VersandStatusButtons";
 import { VersandKPIs, type VersandStatusFilter } from "./VersandKPIs";
-import { DeliveryMap } from "@/components/map";
+import { DeliveryMap, type MapOrder } from "@/components/map";
 
 /**
  * Deadline filter options
@@ -64,6 +64,10 @@ export function VersandOrderList() {
 
   // Map toggle (mobile only)
   const [showMap, setShowMap] = useState(false);
+
+  // Route planning mode
+  const [routePlanningMode, setRoutePlanningMode] = useState(false);
+  const [routeOrders, setRouteOrders] = useState<string[]>([]);
 
   // Auto-dismiss feedback after 3 seconds
   useEffect(() => {
@@ -145,6 +149,43 @@ export function VersandOrderList() {
     }
   };
 
+  // Toggle route planning mode
+  const handleRoutePlanningToggle = () => {
+    if (routePlanningMode) {
+      // Exiting mode - clear selected route orders
+      setRouteOrders([]);
+    }
+    setRoutePlanningMode(!routePlanningMode);
+    // Also clear selected order when entering/exiting route planning mode
+    setSelectedOrder(null);
+  };
+
+  // Toggle an order in/out of the route
+  const handleRouteOrderToggle = (orderId: string) => {
+    setRouteOrders((prev) => {
+      if (prev.includes(orderId)) {
+        // Remove from route
+        return prev.filter((id) => id !== orderId);
+      } else {
+        // Add to end of route
+        return [...prev, orderId];
+      }
+    });
+  };
+
+  // Get route position for an order (1-based, null if not in route)
+  const getRoutePosition = (orderId: string): number | null => {
+    const index = routeOrders.indexOf(orderId);
+    return index >= 0 ? index + 1 : null;
+  };
+
+  // Build ordered list of mappable route orders for the map
+  const routeOrdersForMap: MapOrder[] = useMemo(() => {
+    return routeOrders
+      .map((orderId) => orders.find((o) => o.auftragsnummer === orderId))
+      .filter((o): o is VersandOrder => o !== undefined && o.lieferLat !== null && o.lieferLng !== null);
+  }, [routeOrders, orders]);
+
   // Handle status change
   const handleStatusChange = async (status: VersandStatusType, comment?: string) => {
     if (!selectedOrder) return;
@@ -212,6 +253,20 @@ export function VersandOrderList() {
           {/* Divider */}
           <div className="hidden sm:block w-px h-6 bg-neutral-200" />
 
+          {/* Route Planning Toggle */}
+          <button
+            onClick={handleRoutePlanningToggle}
+            className={cn(
+              "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
+              routePlanningMode
+                ? "bg-blue-500 text-white"
+                : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
+            )}
+          >
+            <Route className="w-4 h-4" />
+            Routenplanung
+          </button>
+
           {/* Map Toggle - mobile only, inline */}
           <div className="md:hidden ml-auto">
             <button
@@ -265,6 +320,8 @@ export function VersandOrderList() {
                 className="h-[350px]"
                 selectedOrderId={selectedOrder?.auftragsnummer ?? null}
                 onOrderSelect={handleMapOrderSelect}
+                routePlanningMode={routePlanningMode}
+                routeOrders={routeOrdersForMap}
               />
             </div>
           )}
@@ -317,6 +374,9 @@ export function VersandOrderList() {
                     order={order}
                     isSelected={selectedOrder?.auftragsnummer === order.auftragsnummer}
                     onSelect={handleOrderSelect}
+                    routePlanningMode={routePlanningMode}
+                    routePosition={getRoutePosition(order.auftragsnummer)}
+                    onRouteToggle={() => handleRouteOrderToggle(order.auftragsnummer)}
                   />
 
                   {/* Status Buttons (shown when order is selected) */}
@@ -343,6 +403,8 @@ export function VersandOrderList() {
                 className="h-[calc(100vh-280px)]"
                 selectedOrderId={selectedOrder?.auftragsnummer ?? null}
                 onOrderSelect={handleMapOrderSelect}
+                routePlanningMode={routePlanningMode}
+                routeOrders={routeOrdersForMap}
               />
             </div>
           </div>
