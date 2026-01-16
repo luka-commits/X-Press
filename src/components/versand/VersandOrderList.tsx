@@ -112,12 +112,30 @@ export function VersandOrderList() {
     fetchOrders();
   }, [fetchOrders]);
 
-  // Handle order selection
+  // Handle order selection from list
   const handleOrderSelect = (order: VersandOrder) => {
     if (selectedOrder?.auftragsnummer === order.auftragsnummer) {
       setSelectedOrder(null);
     } else {
       setSelectedOrder(order);
+      // On mobile: auto-show map if order has coordinates
+      if (order.lieferLat && order.lieferLng && !showMap) {
+        // Check if we're on mobile (no md breakpoint)
+        if (window.innerWidth < 768) {
+          setShowMap(true);
+        }
+      }
+    }
+  };
+
+  // Handle order selection from map marker click
+  const handleMapOrderSelect = (orderId: string) => {
+    const order = orders.find((o) => o.auftragsnummer === orderId);
+    if (order) {
+      setSelectedOrder(order);
+      // Scroll to the order card in the list
+      const element = document.getElementById(`order-card-${orderId}`);
+      element?.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   };
 
@@ -240,7 +258,12 @@ export function VersandOrderList() {
         {/* Mobile Map (collapsible) */}
         {showMap && (
           <div className="md:hidden overflow-hidden rounded-lg">
-            <DeliveryMap orders={orders} className="h-[400px]" />
+            <DeliveryMap
+              orders={orders}
+              className="h-[400px]"
+              selectedOrderId={selectedOrder?.auftragsnummer ?? null}
+              onOrderSelect={handleMapOrderSelect}
+            />
           </div>
         )}
 
@@ -320,7 +343,12 @@ export function VersandOrderList() {
 
       {/* Right Column: Map - always visible on desktop */}
       <div className="hidden md:block md:sticky md:top-0 md:h-[calc(100vh-200px)]">
-        <DeliveryMap orders={orders} className="h-full rounded-lg" />
+        <DeliveryMap
+          orders={orders}
+          className="h-full rounded-lg"
+          selectedOrderId={selectedOrder?.auftragsnummer ?? null}
+          onOrderSelect={handleMapOrderSelect}
+        />
       </div>
     </div>
   );
