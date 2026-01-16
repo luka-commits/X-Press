@@ -98,15 +98,15 @@ export async function importAuftrag(parsed: ParsedAuftrag): Promise<ImportResult
       }
     }
 
-    // 4. Maschinen-Lookup für Arbeitsgänge vorbereiten
+    // 4. Maschinen-Lookup für Arbeitsgänge vorbereiten (batch query to avoid N+1)
     const maschineMap = new Map<string, number>();
-    for (const ag of parsed.arbeitsgaenge) {
-      if (ag.kostenstelle && !maschineMap.has(ag.kostenstelle)) {
-        const maschine = await prisma.maschine.findUnique({
-          where: { kostenstelle: ag.kostenstelle },
-        });
-        if (maschine) {
-          maschineMap.set(ag.kostenstelle, maschine.id);
+    if (uniqueKostenstellen.length > 0) {
+      const maschinen = await prisma.maschine.findMany({
+        where: { kostenstelle: { in: uniqueKostenstellen } },
+      });
+      for (const maschine of maschinen) {
+        if (maschine.kostenstelle) {
+          maschineMap.set(maschine.kostenstelle, maschine.id);
         }
       }
     }
