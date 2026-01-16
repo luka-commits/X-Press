@@ -22,6 +22,7 @@ export function OrderFilters({ produkttypen, sachbearbeiter }: OrderFiltersProps
   const currentDeadline = searchParams.get('deadline') || 'all';
   const currentStatus = searchParams.get('status') || 'all';
   const currentIstStatus = searchParams.get('istStatus') || 'all';
+  const currentVersandStatus = searchParams.get('versandStatus') || 'all';
   const currentProdukttyp = searchParams.get('produkttyp') || '';
   const currentSachbearbeiter = searchParams.get('sachbearbeiter') || '';
 
@@ -56,6 +57,13 @@ export function OrderFilters({ produkttypen, sachbearbeiter }: OrderFiltersProps
     { value: 'problem', label: 'Problem' },
   ];
 
+  const versandStatusOptions = [
+    { value: 'all', label: 'Alle Versand-Status' },
+    { value: 'offen', label: 'Offen' },
+    { value: 'versandbereit', label: 'Versandbereit' },
+    { value: 'versendet', label: 'Versendet' },
+  ];
+
   const clearFilters = () => {
     const params = new URLSearchParams();
     const search = searchParams.get('search');
@@ -67,6 +75,7 @@ export function OrderFilters({ produkttypen, sachbearbeiter }: OrderFiltersProps
     currentDeadline !== 'all' ||
     currentStatus !== 'all' ||
     currentIstStatus !== 'all' ||
+    currentVersandStatus !== 'all' ||
     currentProdukttyp !== '' ||
     currentSachbearbeiter !== '';
 
@@ -116,6 +125,23 @@ export function OrderFilters({ produkttypen, sachbearbeiter }: OrderFiltersProps
         </SelectTrigger>
         <SelectContent>
           {istStatusOptions.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+
+      {/* Versand-Status Dropdown */}
+      <Select
+        value={currentVersandStatus}
+        onValueChange={(value) => updateFilter('versandStatus', value)}
+      >
+        <SelectTrigger className="w-[170px] bg-white">
+          <SelectValue placeholder="Versand-Status" />
+        </SelectTrigger>
+        <SelectContent>
+          {versandStatusOptions.map((option) => (
             <SelectItem key={option.value} value={option.value}>
               {option.label}
             </SelectItem>
