@@ -1,6 +1,7 @@
 'use client';
 
 import { MainLayout } from '@/components/layout';
+import { CompletedOrdersTable } from '@/components/reports';
 import { FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -61,9 +62,7 @@ export default function ReportsPage() {
         </div>
 
         {/* Content Area */}
-        <div className="bg-white rounded-lg border border-neutral-200 p-6">
-          <p className="text-neutral-500">Tabelle wird geladen...</p>
-        </div>
+        <CompletedOrdersTable />
       </div>
     </MainLayout>
   );
