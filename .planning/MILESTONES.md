@@ -1,5 +1,31 @@
 # Project Milestones: XOS Mobile Status-Update
 
+## v1.5 System-Konsolidierung (Shipped: 2026-01-17)
+
+**Delivered:** Kohäsives System mit kombinierter Pipeline-Status-Spalte und klaren Tab-Verantwortlichkeiten.
+
+**Phases completed:** 21-22 (2 plans total)
+
+**Key accomplishments:**
+
+- Combined Pipeline-Status column replacing fragmented Status + IST-Status columns
+- VersandStatus filter dropdown on Aufträge page
+- Reports link in main sidebar navigation
+- Abgeschlossene tab now shows only shipped orders (versandStatus='versendet')
+
+**Stats:**
+
+- 11 files modified (+285/-83 lines)
+- 9,777 lines of TypeScript total
+- 2 phases, 2 plans
+- 2 days (2026-01-16 → 2026-01-17)
+
+**Git range:** `70da5c5` (feat(21-01)) → `c12eb7a` (feat(22-01))
+
+**Archive:** [v1.5-ROADMAP.md](milestones/v1.5-ROADMAP.md)
+
+---
+
 ## v1.0 Mobile Status-Update (Shipped: 2026-01-16)
 
 **Delivered:** Mobile-optimierte Status-Update-Funktionalität für Produktionsmitarbeiter mit 3-Klick-Workflow und Dashboard-Integration.

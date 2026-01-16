@@ -34,6 +34,10 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 - ✓ DateRangePicker mit deutschen Presets — v1.4
 - ✓ Zeitraum-Analysen mit VolumeChart — v1.4
 - ✓ Versand-Reports mit Liefermetriken und PLZ-Verteilung — v1.4
+- ✓ Combined Pipeline-Status column (In Produktion → Fertig → Versandbereit → Versendet + Problem) — v1.5
+- ✓ VersandStatus filter auf Aufträge-Seite — v1.5
+- ✓ Reports in Sidebar-Navigation — v1.5
+- ✓ Abgeschlossene tab zeigt nur versendete Aufträge — v1.5
 
 ### Active
 
@@ -49,20 +53,21 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 
 ## Context
 
-**Shipped v1.4:**
-- 9,759 LOC TypeScript
+**Shipped v1.5:**
+- 9,777 LOC TypeScript
 - Tech stack: Next.js 14, Supabase, Prisma, Tailwind CSS, Google Maps API, Recharts
 - Mobile-first /status page for shopfloor workers
 - /versand page with routing optimization and navigation export
 - /reports page with completed orders, analytics, and shipping reports
-- Dashboard integration with IST-Status visibility
+- Dashboard integration with combined Pipeline-Status visibility
 
 **Production State:**
 - Produktionsmitarbeiter können Auftragsstatus updaten
-- Dashboard zeigt IST-Zustand vom Shopfloor
+- Dashboard zeigt IST-Zustand vom Shopfloor mit Pipeline-Status
 - Problem-Aufträge sind sofort sichtbar
 - Versand-Team hat Routenplanung mit Optimierung und Google Maps Export
 - Management hat Reports mit historischen Daten und Analytics
+- Klare Tab-Verantwortlichkeiten: Aufträge = in Bearbeitung, Reports = versendet
 
 ## Constraints
 
@@ -93,6 +98,8 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 | Inline tabs für Reports | Einfacher als layout.tsx für single-page reports section | ✓ Good |
 | Supabase REST für Read Queries | Konsistent mit dashboard-queries pattern | ✓ Good |
 | PLZ 2-Digit Gruppierung | Deutsche PLZ-Struktur erlaubt regionale Analyse | ✓ Good |
+| Pipeline-Status Priorität | Problem > VersandStatus > IstStatus für klare Sichtbarkeit | ✓ Good |
+| Abgeschlossene = nur versendet | Klare Trennung: Aufträge = in Bearbeitung, Reports = shipped | ✓ Good |
 
 ---
-*Last updated: 2026-01-17 after v1.4 milestone*
+*Last updated: 2026-01-17 after v1.5 milestone*
