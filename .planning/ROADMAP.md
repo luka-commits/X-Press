@@ -61,38 +61,29 @@ Versand-Team Workflow mit PLZ-Sortierung und Geocoding-Grundlagen.
 Plans:
 - [x] 13-01: Google Maps Migration (install deps, rewrite component, remove Leaflet) — completed 2026-01-16
 
-#### Phase 14: Karte-Liste Interaktion + Desktop Layout
+#### Phase 14: Desktop Layout + KPIs + Karte-Liste Interaktion
 
-**Goal**: Desktop Split-View Layout und bidirektionale Interaktion zwischen Liste und Karte
+**Goal**: Komplette Versand-Seite mit KPIs, Desktop Split-View und bidirektionaler Interaktion
 **Depends on**: Phase 13
 **Research**: Unlikely (internal patterns)
 **Plans**: 1
+
+KPIs (für Geschäftsführer):
+- Kompakte KPI-Leiste: "12 Offen · 5 Versandbereit · 3 Versendet · 2 Überfällig"
+- Sofortiger Überblick ohne Scrollen
 
 Layout:
 - Desktop (≥768px): Split-View mit Liste links, Karte rechts (immer sichtbar)
 - Mobile (<768px): Toggle-basierte Karte (bestehendes Verhalten)
 
-Features:
+Interaktion:
 - Klick auf Order-Card → Karte zoomt zu diesem Punkt, Marker highlighted
 - Klick auf Marker → Order-Card scrollt in View, wird hervorgehoben
-- Karte zeigt alle gefilterten Aufträge
 
 Plans:
-- [ ] 14-01: Desktop split-view + bidirectional list↔map interaction
+- [ ] 14-01: KPIs + desktop split-view + bidirectional list↔map interaction
 
-#### Phase 15: Inline Versand-KPIs
-
-**Goal**: Schnelle Übersichtszahlen direkt auf der Versandseite
-**Depends on**: Phase 14
-**Research**: Unlikely (existing patterns)
-**Plans**: TBD
-
-Features:
-- Kompakte KPI-Leiste: "12 Offen · 5 Versandbereit · 3 Versendet"
-- Klickbar als Filter-Shortcut
-
-Plans:
-- [ ] 15-01: TBD
+#### ~~Phase 15: Inline Versand-KPIs~~ (integriert in Phase 14)
 
 ## Progress
 
@@ -111,5 +102,4 @@ Plans:
 | 11. Versand-UI Seite | v1.1 | 1/1 | Complete | 2026-01-15 |
 | 12. Kartenansicht | v1.1 | 1/1 | Complete | 2026-01-16 |
 | 13. Google Maps Migration | v1.2 | 1/1 | Complete | 2026-01-16 |
-| 14. Karte-Liste Interaktion | v1.2 | 0/? | Not started | - |
-| 15. Inline Versand-KPIs | v1.2 | 0/? | Not started | - |
+| 14. Desktop + KPIs + Interaktion | v1.2 | 0/1 | Not started | - |

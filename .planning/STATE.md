@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-01-16)
 
 ## Current Position
 
-Phase: 14 of 15 (Karte-Liste Interaktion)
+Phase: 14 of 14 (Desktop + KPIs + Interaktion)
 Plan: 14-01 ready for execution
 Status: Ready
-Last activity: 2026-01-16 — Phase 13 completed (Google Maps Migration)
+Last activity: 2026-01-16 — Phase 13 completed, KPIs integrated into Phase 14
 
-Progress: ███░░░░░░░ 33% (1/3 phases in v1.2)
+Progress: █████░░░░░ 50% (1/2 phases in v1.2)
 
 **Phase 13 completed:** Google Maps integration verified and approved
 
