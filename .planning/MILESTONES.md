@@ -79,3 +79,53 @@
 **Archive:** [v1.2-ROADMAP.md](milestones/v1.2-ROADMAP.md)
 
 ---
+
+## v1.3 Routenplanung (Shipped: 2026-01-16)
+
+**Delivered:** Routenplanung für Versand-Team mit Optimierung und Google Maps Navigation Export.
+
+**Phases completed:** 15-17 (3 plans total)
+
+**Key accomplishments:**
+
+- Routenplanung-Basis mit manueller Reihenfolge-Sortierung
+- Nearest-Neighbor Routenoptimierung
+- Google Maps Navigation Export (einzeln und als Multi-Stop-Route)
+- Link-Export ausreichend, Fahrer-Management deferred
+
+**Stats:**
+
+- 3 phases, 3 plans
+- Same day (2026-01-16, ~22 min execution)
+
+**Archive:** [v1.3-ROADMAP.md](milestones/v1.3-ROADMAP.md)
+
+---
+
+## v1.4 Reporting (Shipped: 2026-01-17)
+
+**Delivered:** Historische Daten und Analytics für Management-Übersicht mit Reports-Sektion.
+
+**Phases completed:** 18-20 (5 plans total)
+
+**Key accomplishments:**
+
+- Reports page with sub-navigation tabs (Abgeschlossene, Zeitraum-Analysen, Versand-Reports)
+- Completed orders table with pagination and status badges
+- DateRangePicker with German presets
+- VolumeChart for order volume trends
+- Versand reports API with delivery metrics and PLZ distribution
+- VersandView with KPI cards and PLZ region bar chart
+
+**Stats:**
+
+- 28 files modified (+2,764 lines)
+- 9,759 LOC TypeScript total
+- 3 phases, 5 plans
+- 2 days (2026-01-16 → 2026-01-17)
+
+**Git range:** `2af47d7` (feat(18-01)) → `3f7fa44` (docs(20-02))
+
+**Archive:** [v1.4-ROADMAP.md](milestones/v1.4-ROADMAP.md)
+
+---
