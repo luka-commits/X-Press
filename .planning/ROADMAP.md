@@ -7,7 +7,7 @@
 - ✅ **v1.2 Versand Pro** — Phases 13-14 (shipped 2026-01-16)
 - ✅ **v1.3 Routenplanung** — Phases 15-17 (shipped 2026-01-16)
 - ✅ **v1.4 Reporting** — Phases 18-20 (shipped 2026-01-17)
-- 🚧 **v1.5 System-Konsolidierung** — Phases 21-22 (in progress)
+- ✅ **v1.5 System-Konsolidierung** — Phases 21-22 (shipped 2026-01-17)
 
 ## Completed Milestones
 
@@ -16,6 +16,7 @@
 - ✅ [v1.2 Versand Pro](milestones/v1.2-ROADMAP.md) (Phases 13-14) — SHIPPED 2026-01-16
 - ✅ [v1.3 Routenplanung](milestones/v1.3-ROADMAP.md) (Phases 15-17) — SHIPPED 2026-01-16
 - ✅ [v1.4 Reporting](milestones/v1.4-ROADMAP.md) (Phases 18-20) — SHIPPED 2026-01-17
+- ✅ [v1.5 System-Konsolidierung](milestones/v1.5-ROADMAP.md) (Phases 21-22) — SHIPPED 2026-01-17
 
 <details>
 <summary>✅ v1.0 Mobile Status-Update (Phases 1-8) — SHIPPED 2026-01-16</summary>
@@ -80,29 +81,15 @@ Historische Daten und Analytics für Management-Übersicht mit Reports-Sektion.
 
 </details>
 
-### 🚧 v1.5 System-Konsolidierung (In Progress)
+<details>
+<summary>✅ v1.5 System-Konsolidierung (Phases 21-22) — SHIPPED 2026-01-17</summary>
 
-**Milestone Goal:** Kohäsives System aus User-Sicht: klare Pipeline-Logik, klare Tab-Verantwortlichkeiten, keine gemischten Daten
+Kohäsives System aus User-Sicht: klare Pipeline-Logik, klare Tab-Verantwortlichkeiten, keine gemischten Daten.
 
-#### Phase 21: Aufträge Pipeline-View
+- [x] Phase 21: Aufträge Pipeline-View (1/1 plans) — completed 2026-01-16
+- [x] Phase 22: Reports & Navigation (1/1 plans) — completed 2026-01-17
 
-**Goal**: Kombinierte Status-Spalte zeigt volle Pipeline (In Produktion → Fertig → Versandbereit → Versendet + Problem), VersandStatus-Filter hinzufügen
-**Depends on**: Phase 20 (v1.4 complete)
-**Research**: Unlikely (internal patterns)
-**Plans**: TBD
-
-Plans:
-- [x] 21-01: Pipeline-Status Column + VersandStatus Filter — completed 2026-01-16
-
-#### Phase 22: Reports & Navigation
-
-**Goal**: Abgeschlossene-Tab zeigt nur versandStatus='versendet', Reports in Sidebar-Navigation aufnehmen
-**Depends on**: Phase 21
-**Research**: Unlikely (internal patterns)
-**Plans**: TBD
-
-Plans:
-- [ ] 22-01: TBD (run /gsd:plan-phase 22 to break down)
+</details>
 
 ## Progress
 
@@ -129,4 +116,4 @@ Plans:
 | 19. Zeitraum-Analysen | v1.4 | 2/2 | Complete | 2026-01-17 |
 | 20. Versand-Reports | v1.4 | 2/2 | Complete | 2026-01-17 |
 | 21. Aufträge Pipeline-View | v1.5 | 1/1 | Complete | 2026-01-16 |
-| 22. Reports & Navigation | v1.5 | 0/? | Not started | - |
+| 22. Reports & Navigation | v1.5 | 1/1 | Complete | 2026-01-17 |
