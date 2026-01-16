@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-01-17)
 
 ## Current Position
 
-Phase: 20 of 20 (complete)
-Plan: N/A
-Status: All milestones shipped, ready for next milestone
-Last activity: 2026-01-17 — v1.4 archived
+Phase: 21 of 22 (Aufträge Pipeline-View)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-01-17 — Milestone v1.5 created
 
-Progress: ██████████ 100% (v1.0-v1.4 complete)
+Progress: ░░░░░░░░░░ 0% (v1.5)
 
 ## Milestones
 
@@ -23,6 +23,7 @@ Progress: ██████████ 100% (v1.0-v1.4 complete)
 - ✅ v1.2 Versand Pro (Phases 13-14) — SHIPPED 2026-01-16
 - ✅ v1.3 Routenplanung (Phases 15-17) — SHIPPED 2026-01-16
 - ✅ v1.4 Reporting (Phases 18-20) — SHIPPED 2026-01-17
+- 🚧 v1.5 System-Konsolidierung (Phases 21-22) — IN PROGRESS
 
 ## Performance Metrics
 
@@ -62,10 +63,11 @@ None currently.
 - v1.2 shipped: 2026-01-16 (2 phases, 2 plans)
 - v1.3 shipped: 2026-01-16 (3 phases, 3 plans)
 - v1.4 shipped: 2026-01-17 (3 phases, 5 plans)
+- v1.5 created: 2026-01-17 (System-Konsolidierung, 2 phases: 21-22)
 
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: v1.4 milestone archived
+Stopped at: Milestone v1.5 System-Konsolidierung created
 Resume file: None
-Next: `/gsd:discuss-milestone` to plan v1.5
+Next: `/gsd:plan-phase 21` to plan first phase
