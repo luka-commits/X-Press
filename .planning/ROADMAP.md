@@ -66,7 +66,7 @@ Plans:
 **Goal**: Bidirektionale Interaktion zwischen Liste und Karte
 **Depends on**: Phase 13
 **Research**: Unlikely (internal patterns)
-**Plans**: TBD
+**Plans**: 1
 
 Features:
 - Klick auf Order-Card → Karte zoomt zu diesem Punkt, Marker highlighted
@@ -74,7 +74,7 @@ Features:
 - Karte zeigt alle gefilterten Aufträge
 
 Plans:
-- [ ] 14-01: TBD
+- [ ] 14-01: Bidirectional list↔map interaction
 
 #### Phase 15: Inline Versand-KPIs
 
