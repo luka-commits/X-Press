@@ -5,6 +5,7 @@
 - ✅ **v1.0 Mobile Status-Update** — Phases 1-8 (shipped 2026-01-16)
 - ✅ **v1.1 Versand-Übersicht** — Phases 9-12 (shipped 2026-01-16)
 - ✅ **v1.2 Versand Pro** — Phases 13-14 (shipped 2026-01-16)
+- 🚧 **v1.3 Routenplanung** — Phases 15-18 (in progress)
 
 ## Completed Milestones
 
@@ -52,6 +53,51 @@ Verbesserte Versand-Seite mit Google Maps, interaktiver Karte und Inline-KPIs.
 
 </details>
 
+### 🚧 v1.3 Routenplanung (In Progress)
+
+**Milestone Goal:** Routenplanung für Versand-Team mit Optimierung und Multi-Fahrer Support
+
+#### Phase 15: Routenplanung-Basis
+
+**Goal**: Modus-Toggle, Auftragsauswahl, Route auf Karte visualisieren
+**Depends on**: v1.2 complete
+**Research**: Unlikely (internal patterns, existing /versand page)
+**Plans**: TBD
+
+Plans:
+- [ ] 15-01: TBD (run /gsd:plan-phase 15 to break down)
+
+#### Phase 16: Routenoptimierung
+
+**Goal**: Google Routes API Integration, optimale Reihenfolge berechnen
+**Depends on**: Phase 15
+**Research**: Likely (external API integration)
+**Research topics**: Google Routes API, Directions API vs Routes API, waypoint optimization
+**Plans**: TBD
+
+Plans:
+- [ ] 16-01: TBD
+
+#### Phase 17: Export & Fahrer
+
+**Goal**: Navigation-Export (Deep Links), Fahrer-Zuweisung Basis
+**Depends on**: Phase 16
+**Research**: Unlikely (standard patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 17-01: TBD
+
+#### Phase 18: Fahrer-Management
+
+**Goal**: Erweiterte Fahrer-Verwaltung (optional scope)
+**Depends on**: Phase 17
+**Research**: Unlikely (internal patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 18-01: TBD
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -70,3 +116,7 @@ Verbesserte Versand-Seite mit Google Maps, interaktiver Karte und Inline-KPIs.
 | 12. Kartenansicht | v1.1 | 1/1 | Complete | 2026-01-16 |
 | 13. Google Maps Migration | v1.2 | 1/1 | Complete | 2026-01-16 |
 | 14. Desktop + KPIs + Interaktion | v1.2 | 1/1 | Complete | 2026-01-16 |
+| 15. Routenplanung-Basis | v1.3 | 0/? | Not started | - |
+| 16. Routenoptimierung | v1.3 | 0/? | Not started | - |
+| 17. Export & Fahrer | v1.3 | 0/? | Not started | - |
+| 18. Fahrer-Management | v1.3 | 0/? | Not started | - |
