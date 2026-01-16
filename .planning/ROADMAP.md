@@ -61,12 +61,16 @@ Versand-Team Workflow mit PLZ-Sortierung und Geocoding-Grundlagen.
 Plans:
 - [x] 13-01: Google Maps Migration (install deps, rewrite component, remove Leaflet) — completed 2026-01-16
 
-#### Phase 14: Karte-Liste Interaktion
+#### Phase 14: Karte-Liste Interaktion + Desktop Layout
 
-**Goal**: Bidirektionale Interaktion zwischen Liste und Karte
+**Goal**: Desktop Split-View Layout und bidirektionale Interaktion zwischen Liste und Karte
 **Depends on**: Phase 13
 **Research**: Unlikely (internal patterns)
 **Plans**: 1
+
+Layout:
+- Desktop (≥768px): Split-View mit Liste links, Karte rechts (immer sichtbar)
+- Mobile (<768px): Toggle-basierte Karte (bestehendes Verhalten)
 
 Features:
 - Klick auf Order-Card → Karte zoomt zu diesem Punkt, Marker highlighted
@@ -74,7 +78,7 @@ Features:
 - Karte zeigt alle gefilterten Aufträge
 
 Plans:
-- [ ] 14-01: Bidirectional list↔map interaction
+- [ ] 14-01: Desktop split-view + bidirectional list↔map interaction
 
 #### Phase 15: Inline Versand-KPIs
 
