@@ -85,6 +85,9 @@ export interface Auftrag {
   istStatus: 'in_produktion' | 'fertig' | 'problem' | null;
   statusKommentar: string | null;
   statusUpdatedAt: string | null;
+  versandStatus: 'offen' | 'versandbereit' | 'versendet' | null;
+  versandKommentar: string | null;
+  versandUpdatedAt: string | null;
   xmlImportDatum: string;
   createdAt: string;
   updatedAt: string;
