@@ -6,7 +6,7 @@
 - ✅ **v1.1 Versand-Übersicht** — Phases 9-12 (shipped 2026-01-16)
 - ✅ **v1.2 Versand Pro** — Phases 13-14 (shipped 2026-01-16)
 - ✅ **v1.3 Routenplanung** — Phases 15-17 (shipped 2026-01-16)
-- 🚧 **v1.4 Reporting** — Phases 18-20 (in progress)
+- ✅ **v1.4 Reporting** — Phases 18-20 (shipped 2026-01-17)
 
 ## Completed Milestones
 
@@ -14,6 +14,7 @@
 - ✅ [v1.1 Versand-Übersicht](milestones/v1.1-ROADMAP.md) (Phases 9-12) — SHIPPED 2026-01-16
 - ✅ [v1.2 Versand Pro](milestones/v1.2-ROADMAP.md) (Phases 13-14) — SHIPPED 2026-01-16
 - ✅ [v1.3 Routenplanung](milestones/v1.3-ROADMAP.md) (Phases 15-17) — SHIPPED 2026-01-16
+- ✅ [v1.4 Reporting](milestones/v1.4-ROADMAP.md) (Phases 18-20) — SHIPPED 2026-01-17
 
 <details>
 <summary>✅ v1.0 Mobile Status-Update (Phases 1-8) — SHIPPED 2026-01-16</summary>
@@ -67,41 +68,16 @@ Routenplanung für Versand-Team mit Optimierung und Google Maps Navigation Expor
 
 </details>
 
-### 🚧 v1.4 Reporting (In Progress)
+<details>
+<summary>✅ v1.4 Reporting (Phases 18-20) — SHIPPED 2026-01-17</summary>
 
-**Milestone Goal:** Historische Daten und Analytics für Management-Übersicht mit Reports-Sektion.
+Historische Daten und Analytics für Management-Übersicht mit Reports-Sektion.
 
-#### Phase 18: Reports-Grundstruktur ✓
+- [x] Phase 18: Reports-Grundstruktur (1/1 plans) — completed 2026-01-16
+- [x] Phase 19: Zeitraum-Analysen (2/2 plans) — completed 2026-01-17
+- [x] Phase 20: Versand-Reports (2/2 plans) — completed 2026-01-17
 
-**Goal**: Neue /reports Route mit Sub-Navigation und Abgeschlossene Aufträge Tabelle
-**Depends on**: v1.3 complete
-**Research**: Unlikely (internal patterns, existing data models)
-**Plans**: 1/1 complete
-
-Plans:
-- [x] 18-01: Reports navigation + completed orders table — completed 2026-01-16
-
-#### Phase 19: Zeitraum-Analysen ✓
-
-**Goal**: /reports/analytics mit Zeitraum-Selector und Charts für Volumen-Trends
-**Depends on**: Phase 18
-**Research**: Complete — uses existing Recharts v3.6.0
-**Plans**: 2/2 complete
-
-Plans:
-- [x] 19-01: DateRangePicker component + analytics API — completed 2026-01-17
-- [x] 19-02: Analytics page with volume chart — completed 2026-01-17
-
-#### Phase 20: Versand-Reports
-
-**Goal**: /reports/versand mit Liefertreue-Metriken, Versandzeiten-Analyse und PLZ-Verteilung
-**Depends on**: Phase 19
-**Research**: Unlikely (uses charting from Phase 19)
-**Plans**: 1/2 complete
-
-Plans:
-- [x] 20-01: Versand reports API endpoint — completed 2026-01-17
-- [ ] 20-02: Versand reports UI page
+</details>
 
 ## Progress
 
@@ -126,4 +102,4 @@ Plans:
 | 17. Export & Fahrer | v1.3 | 1/1 | Complete | 2026-01-16 |
 | 18. Reports-Grundstruktur | v1.4 | 1/1 | Complete | 2026-01-16 |
 | 19. Zeitraum-Analysen | v1.4 | 2/2 | Complete | 2026-01-17 |
-| 20. Versand-Reports | v1.4 | 1/2 | In progress | - |
+| 20. Versand-Reports | v1.4 | 2/2 | Complete | 2026-01-17 |
