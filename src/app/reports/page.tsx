@@ -1,14 +1,23 @@
 'use client';
 
+import { useState } from 'react';
 import { MainLayout } from '@/components/layout';
-import { CompletedOrdersTable } from '@/components/reports';
+import { CompletedOrdersTable, AnalyticsView } from '@/components/reports';
 import { FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const tabs = [
-  { id: 'abgeschlossene', name: 'Abgeschlossene', active: true, disabled: false },
-  { id: 'zeitraum', name: 'Zeitraum-Analysen', active: false, disabled: true },
-  { id: 'versand', name: 'Versand-Reports', active: false, disabled: true },
+type TabId = 'abgeschlossene' | 'zeitraum' | 'versand';
+
+interface Tab {
+  id: TabId;
+  name: string;
+  disabled: boolean;
+}
+
+const tabs: Tab[] = [
+  { id: 'abgeschlossene', name: 'Abgeschlossene', disabled: false },
+  { id: 'zeitraum', name: 'Zeitraum-Analysen', disabled: false },
+  { id: 'versand', name: 'Versand-Reports', disabled: true },
 ];
 
 /**
@@ -16,10 +25,12 @@ const tabs = [
  *
  * Sub-navigation tabs:
  * - Abgeschlossene: Completed orders (istStatus='fertig' OR versandStatus='versendet')
- * - Zeitraum-Analysen: Time-period analysis (Phase 19)
+ * - Zeitraum-Analysen: Time-period analysis with volume charts
  * - Versand-Reports: Shipping reports (Phase 20)
  */
 export default function ReportsPage() {
+  const [activeTab, setActiveTab] = useState<TabId>('abgeschlossene');
+
   return (
     <MainLayout
       headerRight={
@@ -43,10 +54,11 @@ export default function ReportsPage() {
           {tabs.map((tab) => (
             <button
               key={tab.id}
+              onClick={() => !tab.disabled && setActiveTab(tab.id)}
               disabled={tab.disabled}
               className={cn(
                 "px-4 py-2 text-sm font-medium transition-colors rounded-t-md",
-                tab.active
+                activeTab === tab.id
                   ? "bg-ghl-blue/10 text-ghl-blue"
                   : tab.disabled
                   ? "text-neutral-400 cursor-not-allowed"
@@ -62,7 +74,13 @@ export default function ReportsPage() {
         </div>
 
         {/* Content Area */}
-        <CompletedOrdersTable />
+        {activeTab === 'abgeschlossene' && <CompletedOrdersTable />}
+        {activeTab === 'zeitraum' && <AnalyticsView />}
+        {activeTab === 'versand' && (
+          <div className="text-center py-12 text-neutral-500">
+            Versand-Reports - Demnachst verfugbar (Phase 20)
+          </div>
+        )}
       </div>
     </MainLayout>
   );
