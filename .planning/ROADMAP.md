@@ -59,7 +59,7 @@ Versand-Team Workflow mit PLZ-Sortierung und Geocoding-Grundlagen.
 **Plans**: 1
 
 Plans:
-- [ ] 13-01: Google Maps Migration (install deps, rewrite component, remove Leaflet)
+- [x] 13-01: Google Maps Migration (install deps, rewrite component, remove Leaflet) — completed 2026-01-16
 
 #### Phase 14: Karte-Liste Interaktion
 
@@ -106,6 +106,6 @@ Plans:
 | 10. Versand-API & Liste | v1.1 | 1/1 | Complete | 2026-01-15 |
 | 11. Versand-UI Seite | v1.1 | 1/1 | Complete | 2026-01-15 |
 | 12. Kartenansicht | v1.1 | 1/1 | Complete | 2026-01-16 |
-| 13. Google Maps Migration | v1.2 | 0/1 | Not started | - |
+| 13. Google Maps Migration | v1.2 | 1/1 | Complete | 2026-01-16 |
 | 14. Karte-Liste Interaktion | v1.2 | 0/? | Not started | - |
 | 15. Inline Versand-KPIs | v1.2 | 0/? | Not started | - |
