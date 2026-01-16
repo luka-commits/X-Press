@@ -24,7 +24,7 @@ const tabs: Tab[] = [
  * Reports Page - Historical data and analytics
  *
  * Sub-navigation tabs:
- * - Abgeschlossene: Completed orders (istStatus='fertig' OR versandStatus='versendet')
+ * - Abgeschlossene: Shipped orders (versandStatus='versendet')
  * - Zeitraum-Analysen: Time-period analysis with volume charts
  * - Versand-Reports: Shipping reports (Phase 20)
  */
