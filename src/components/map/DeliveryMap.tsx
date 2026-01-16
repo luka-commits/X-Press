@@ -64,6 +64,7 @@ export default function DeliveryMap({
 }: DeliveryMapProps) {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
+    libraries: ["geometry"], // Required for decoding polylines
   });
 
   const mapRef = useRef<google.maps.Map | null>(null);
@@ -226,9 +227,6 @@ export default function DeliveryMap({
       polylineRef.current = null;
     }
 
-    // Build a set of route order IDs for quick lookup
-    const routeOrderIds = new Set(routeOrders.map((o) => o.auftragsnummer));
-
     if (routePlanningMode) {
       // Disable clusterer in route planning mode - show individual markers
       if (clustererRef.current) {
@@ -276,8 +274,24 @@ export default function DeliveryMap({
         }
       });
 
-      // Draw polyline connecting route stops
-      if (routeOrders.length >= 2) {
+      // Draw route polyline
+      if (encodedPolyline) {
+        // Optimized route: decode encoded polyline from Google Routes API
+        try {
+          const decodedPath = google.maps.geometry.encoding.decodePath(encodedPolyline);
+          polylineRef.current = new google.maps.Polyline({
+            path: decodedPath,
+            geodesic: true,
+            strokeColor: "#2563EB", // Darker blue for optimized route
+            strokeOpacity: 0.9,
+            strokeWeight: 4,
+            map: mapRef.current,
+          });
+        } catch (error) {
+          console.error("Failed to decode polyline:", error);
+        }
+      } else if (routeOrders.length >= 2) {
+        // Fallback: straight lines between stops (before optimization)
         const path = routeOrders
           .filter((o) => o.lieferLat !== null && o.lieferLng !== null)
           .map((o) => ({ lat: o.lieferLat!, lng: o.lieferLng! }));
@@ -285,8 +299,8 @@ export default function DeliveryMap({
         polylineRef.current = new google.maps.Polyline({
           path,
           geodesic: true,
-          strokeColor: "#3B82F6", // Blue
-          strokeOpacity: 1.0,
+          strokeColor: "#3B82F6", // Lighter blue for straight-line fallback
+          strokeOpacity: 0.7,
           strokeWeight: 3,
           map: mapRef.current,
         });
@@ -305,7 +319,7 @@ export default function DeliveryMap({
         clustererRef.current.addMarkers(markersRef.current);
       }
     }
-  }, [routePlanningMode, routeOrders]);
+  }, [routePlanningMode, routeOrders, encodedPolyline]);
 
   // Error state - API key missing or invalid
   if (loadError) {
