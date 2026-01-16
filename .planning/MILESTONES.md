@@ -52,3 +52,30 @@
 **Archive:** [v1.1-ROADMAP.md](milestones/v1.1-ROADMAP.md)
 
 ---
+
+## v1.2 Versand Pro (Shipped: 2026-01-16)
+
+**Delivered:** Verbesserte Versand-Seite mit Google Maps, Desktop Split-View Layout, KPIs und bidirektionaler Karte-Liste Interaktion.
+
+**Phases completed:** 13-14 (2 plans total)
+
+**Key accomplishments:**
+
+- Google Maps Migration: Leaflet durch Google Maps API ersetzt mit MarkerClusterer
+- VersandKPIs Komponente: Offen/Versandbereit/Versendet/Überfällig auf einen Blick
+- Responsive Desktop Split-View: Liste links, Karte rechts (≥768px)
+- Bidirektionale Interaktion: Klick auf Card → Marker highlighted, Klick auf Marker → Card scrollt in View
+- InfoWindow bei Marker-Klick mit Auftragdetails
+
+**Stats:**
+
+- 16 files modified (+1,188 / -386 lines)
+- 7,424 LOC TypeScript total
+- 2 phases, 2 plans
+- Same day (2026-01-16, ~45 min execution)
+
+**Git range:** `efb505f` (feat(13)) → `7398b99` (feat(14-01))
+
+**Archive:** [v1.2-ROADMAP.md](milestones/v1.2-ROADMAP.md)
+
+---

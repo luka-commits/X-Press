@@ -5,49 +5,43 @@
 See: .planning/PROJECT.md (updated 2026-01-16)
 
 **Core value:** Mitarbeiter können mit 3 Klicks den Auftragsstatus vom Handy aus updaten.
-**Current focus:** v1.2 Versand Pro — Google Maps, Split-View, Dashboard-KPIs
+**Current focus:** Planning next milestone
 
 ## Current Position
 
-Phase: 14 of 14 (Desktop + KPIs + Interaktion)
-Plan: 14-01 complete
-Status: Milestone Complete
-Last activity: 2026-01-16 — Phase 14 completed, v1.2 milestone done
+Phase: 14 of 14 — All phases complete
+Plan: All complete
+Status: v1.2 Milestone shipped
+Last activity: 2026-01-16 — v1.2 Versand Pro shipped
 
-Progress: ██████████ 100% (2/2 phases in v1.2)
+Progress: ██████████ 100% (14/14 phases complete)
 
-**Phase 14 completed:** KPIs, desktop split-view, bidirectional interaction verified and approved
+## Milestones
+
+- ✅ v1.0 Mobile Status-Update (Phases 1-8) — SHIPPED 2026-01-16
+- ✅ v1.1 Versand-Übersicht (Phases 9-12) — SHIPPED 2026-01-16
+- ✅ v1.2 Versand Pro (Phases 13-14) — SHIPPED 2026-01-16
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 13
-- Average duration: 2.6 min
-- Total execution time: 34 min
+- Total plans completed: 15
+- Average duration: ~2.5 min
+- Total execution time: ~45 min
 
-**By Phase (v1.0):**
+**By Milestone:**
 
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| 01-database-schema | 1 | 3 min | 3 min |
-| 02-status-api | 1 | 2 min | 2 min |
-| 03-mobile-layout | 1 | 3 min | 3 min |
-| 04-order-search | 2 | 6 min | 3 min |
-| 05-order-selection | 1 | 1 min | 1 min |
-| 06-status-update-ui | 2 | 5 min | 2.5 min |
-| 07-dashboard-status-column | 1 | 4 min | 4 min |
-| 08-dashboard-problem-features | 2 | 6 min | 3 min |
+| Milestone | Phases | Plans | Duration |
+|-----------|--------|-------|----------|
+| v1.0 Mobile Status-Update | 8 | 11 | 6 days |
+| v1.1 Versand-Übersicht | 4 | 4 | 1 day |
+| v1.2 Versand Pro | 2 | 2 | ~45 min |
 
 ## Accumulated Context
 
 ### Decisions
 
 See PROJECT.md Key Decisions table for full history.
-
-**Phase 13 decisions:**
-- Google Maps API chosen over Leaflet for better UX and future route planning capability
-- MarkerClusterer used for marker grouping
-- Dynamic import kept for client-side rendering
 
 ### Pending Todos
 
@@ -59,13 +53,13 @@ None currently.
 
 ### Roadmap Evolution
 
-- Milestone v1.1 created: Versand-Übersicht, 4 phases (Phase 9-12)
-- Milestone v1.1 shipped: 2026-01-16 (12-02 replaced by v1.2)
-- Milestone v1.2 created: Versand Pro, 3 phases (Phase 13-15)
+- v1.0 shipped: 2026-01-16 (8 phases, 11 plans)
+- v1.1 shipped: 2026-01-16 (4 phases, 4 plans)
+- v1.2 shipped: 2026-01-16 (2 phases, 2 plans)
 
 ## Session Continuity
 
 Last session: 2026-01-16
-Stopped at: v1.2 Milestone completed
+Stopped at: v1.2 Milestone completed and archived
 Resume file: None
-Next: /gsd:complete-milestone to archive v1.2
+Next: `/gsd:discuss-milestone` or `/gsd:new-milestone` for v1.3+

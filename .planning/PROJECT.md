@@ -19,6 +19,13 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 - ✓ Datenbank-Erweiterung (istStatus, statusKommentar, statusUpdatedAt) — v1.0
 - ✓ API-Endpoint für Status-Updates (PATCH /api/orders/[id]/status) — v1.0
 - ✓ Dashboard-Integration (IST-Status-Spalte, Problem-Zähler, Filter) — v1.0
+- ✓ Versand-Datenmodell (VersandStatus, Lieferadresse, Geocoding) — v1.1
+- ✓ Versand-API & Liste mit PLZ-Sortierung — v1.1
+- ✓ /versand Seite mit Status-Buttons — v1.1
+- ✓ Google Maps Integration mit MarkerClusterer — v1.2
+- ✓ Desktop Split-View Layout (Liste + Karte) — v1.2
+- ✓ VersandKPIs (Offen/Versandbereit/Versendet/Überfällig) — v1.2
+- ✓ Bidirektionale Karte-Liste Interaktion — v1.2
 
 ### Active
 
@@ -34,16 +41,19 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 
 ## Context
 
-**Shipped v1.0:**
-- 5,914 LOC TypeScript
-- Tech stack: Next.js 14, Supabase, Prisma, Tailwind CSS
+**Shipped v1.2:**
+- 7,424 LOC TypeScript
+- Tech stack: Next.js 14, Supabase, Prisma, Tailwind CSS, Google Maps API
 - Mobile-first /status page for shopfloor workers
+- /versand page for shipping team with map and KPIs
 - Dashboard integration with IST-Status visibility
 
 **Production State:**
 - Produktionsmitarbeiter können Auftragsstatus updaten
 - Dashboard zeigt IST-Zustand vom Shopfloor
 - Problem-Aufträge sind sofort sichtbar
+- Versand-Team hat Überblick über Lieferungen mit Kartenansicht
+- KPIs zeigen offene/versandbereite/versendete Aufträge
 
 ## Constraints
 
@@ -64,6 +74,11 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 | Prisma db push statt migrate dev | Database hatte Drift (Tables ohne Migration History) | ✓ Good |
 | IstStatus separat von status Feld | IST-Zustand vom Shopfloor, nicht Order Lifecycle | ✓ Good |
 | Amber für in_produktion | Visuelle Unterscheidung von grün (fertig) und rot (problem) | ✓ Good |
+| PLZ-Sortierung für Versand | Geografische Gruppierung für effiziente Lieferungen | ✓ Good |
+| Google Maps statt Leaflet | Bessere UX, Zukunft: Routenplanung | ✓ Good |
+| Desktop Split-View (≥768px) | Karte immer sichtbar auf Desktop für schnellen Überblick | ✓ Good |
+| Inline KPIs | Schneller Überblick ohne separaten Tab | ✓ Good |
+| Bidirektionale Interaktion | Karte nützlich machen durch Card↔Marker Verknüpfung | ✓ Good |
 
 ---
-*Last updated: 2026-01-16 after v1.0 milestone*
+*Last updated: 2026-01-16 after v1.2 milestone*
