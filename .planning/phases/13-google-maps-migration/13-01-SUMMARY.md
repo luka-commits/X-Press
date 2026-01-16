@@ -1,6 +1,6 @@
 # Plan 13-01 Summary: Google Maps Migration
 
-## Status: CHECKPOINT (awaiting user verification)
+## Status: COMPLETE
 
 ## What Was Built
 
@@ -47,17 +47,12 @@ Replaced Leaflet map implementation with Google Maps JavaScript API on the /vers
 - [x] No Leaflet imports in codebase
 - [x] Google Maps packages installed
 - [x] Environment variable template added
-- [ ] User verification pending (checkpoint Task 4)
+- [x] User verification passed (2026-01-16)
 
-## Checkpoint Details
+## Notes
 
-**Blocking on:** User must verify Google Maps renders correctly
-
-**How to verify:**
-1. Add Google Maps API key to `.env`: `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_key`
-2. Run: `npm run dev`
-3. Visit: http://localhost:3000/versand
-4. Click "Karte anzeigen" toggle button
-5. Verify map renders, markers appear, clustering works, InfoWindow shows on click
-
-**Resume signal:** Type "approved" to complete the plan
+User verified Google Maps integration working correctly with:
+- Map renders (centered on Berlin)
+- Markers appear for orders with coordinates
+- Markers cluster when zoomed out
+- Clicking marker shows InfoWindow with order details
