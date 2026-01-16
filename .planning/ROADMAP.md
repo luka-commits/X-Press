@@ -97,10 +97,11 @@ Plans:
 **Goal**: /reports/versand mit Liefertreue-Metriken, Versandzeiten-Analyse und PLZ-Verteilung
 **Depends on**: Phase 19
 **Research**: Unlikely (uses charting from Phase 19)
-**Plans**: TBD
+**Plans**: 1/2 complete
 
 Plans:
-- [ ] 20-01: TBD
+- [x] 20-01: Versand reports API endpoint — completed 2026-01-17
+- [ ] 20-02: Versand reports UI page
 
 ## Progress
 
@@ -125,4 +126,4 @@ Plans:
 | 17. Export & Fahrer | v1.3 | 1/1 | Complete | 2026-01-16 |
 | 18. Reports-Grundstruktur | v1.4 | 1/1 | Complete | 2026-01-16 |
 | 19. Zeitraum-Analysen | v1.4 | 2/2 | Complete | 2026-01-17 |
-| 20. Versand-Reports | v1.4 | 0/? | Not started | - |
+| 20. Versand-Reports | v1.4 | 1/2 | In progress | - |
