@@ -27,6 +27,10 @@ interface DeliveryMapProps {
   onOrderSelect?: (orderId: string) => void;
   /** Externally controlled selected order - map will pan to and highlight this marker */
   selectedOrderId?: string | null;
+  /** Route planning mode - when true, shows numbered markers and route line */
+  routePlanningMode?: boolean;
+  /** Ordered list of orders selected for route (in route sequence) */
+  routeOrders?: MapOrder[];
 }
 
 // Berlin center (X-Press location area)
@@ -52,6 +56,8 @@ export default function DeliveryMap({
   className,
   onOrderSelect,
   selectedOrderId,
+  routePlanningMode = false,
+  routeOrders = [],
 }: DeliveryMapProps) {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
@@ -63,6 +69,8 @@ export default function DeliveryMap({
   // Map of orderId -> marker for quick lookup
   const markerMapRef = useRef<Map<string, google.maps.Marker>>(new Map());
   const [selectedOrder, setSelectedOrder] = useState<MapOrder | null>(null);
+  // Route polyline ref
+  const polylineRef = useRef<google.maps.Polyline | null>(null);
 
   // Filter orders with valid coordinates
   const mappableOrders = orders.filter(
@@ -199,8 +207,102 @@ export default function DeliveryMap({
       if (clustererRef.current) {
         clustererRef.current.clearMarkers();
       }
+      if (polylineRef.current) {
+        polylineRef.current.setMap(null);
+      }
     };
   }, []);
+
+  // Route planning mode effect - update markers and polyline
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    // Clear existing polyline
+    if (polylineRef.current) {
+      polylineRef.current.setMap(null);
+      polylineRef.current = null;
+    }
+
+    // Build a set of route order IDs for quick lookup
+    const routeOrderIds = new Set(routeOrders.map((o) => o.auftragsnummer));
+
+    if (routePlanningMode) {
+      // Disable clusterer in route planning mode - show individual markers
+      if (clustererRef.current) {
+        clustererRef.current.clearMarkers();
+      }
+
+      // Update all markers based on route selection
+      markerMapRef.current.forEach((marker, orderId) => {
+        const routeIndex = routeOrders.findIndex((o) => o.auftragsnummer === orderId);
+        const isInRoute = routeIndex >= 0;
+
+        // Show marker directly on map (not through clusterer)
+        marker.setMap(mapRef.current);
+
+        if (isInRoute) {
+          // Numbered marker for route stops
+          const position = routeIndex + 1;
+          marker.setIcon({
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 14,
+            fillColor: "#3B82F6", // Blue
+            fillOpacity: 1,
+            strokeColor: "#ffffff",
+            strokeWeight: 2,
+          });
+          marker.setLabel({
+            text: String(position),
+            color: "#ffffff",
+            fontSize: "12px",
+            fontWeight: "bold",
+          });
+          marker.setZIndex(1000 + position); // Route markers on top
+        } else {
+          // Semi-transparent gray marker for non-route orders
+          marker.setIcon({
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 8,
+            fillColor: "#9CA3AF", // Gray
+            fillOpacity: 0.5,
+            strokeColor: "#ffffff",
+            strokeWeight: 1,
+          });
+          marker.setLabel(null);
+          marker.setZIndex(100);
+        }
+      });
+
+      // Draw polyline connecting route stops
+      if (routeOrders.length >= 2) {
+        const path = routeOrders
+          .filter((o) => o.lieferLat !== null && o.lieferLng !== null)
+          .map((o) => ({ lat: o.lieferLat!, lng: o.lieferLng! }));
+
+        polylineRef.current = new google.maps.Polyline({
+          path,
+          geodesic: true,
+          strokeColor: "#3B82F6", // Blue
+          strokeOpacity: 1.0,
+          strokeWeight: 3,
+          map: mapRef.current,
+        });
+      }
+    } else {
+      // Normal mode - restore clustered view
+      markerMapRef.current.forEach((marker) => {
+        marker.setMap(null); // Remove from direct map
+        marker.setIcon(null); // Reset to default icon
+        marker.setLabel(null);
+        marker.setZIndex(undefined);
+      });
+
+      // Re-add markers to clusterer
+      if (clustererRef.current) {
+        clustererRef.current.addMarkers(markersRef.current);
+      }
+    }
+  }, [routePlanningMode, routeOrders]);
 
   // Error state - API key missing or invalid
   if (loadError) {
