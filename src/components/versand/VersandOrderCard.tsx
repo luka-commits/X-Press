@@ -31,6 +31,12 @@ interface VersandOrderCardProps {
   order: VersandOrder;
   isSelected: boolean;
   onSelect: (order: VersandOrder) => void;
+  /** Route planning mode - shows checkbox and disables normal selection */
+  routePlanningMode?: boolean;
+  /** Position in route (1-based), null if not selected for route */
+  routePosition?: number | null;
+  /** Callback to toggle this order in/out of the route */
+  onRouteToggle?: () => void;
 }
 
 /**
@@ -78,6 +84,9 @@ export function VersandOrderCard({
   order,
   isSelected,
   onSelect,
+  routePlanningMode = false,
+  routePosition = null,
+  onRouteToggle,
 }: VersandOrderCardProps) {
   const formattedDate = order.liefertermin
     ? format(new Date(order.liefertermin), "dd.MM.yyyy", { locale: de })
@@ -85,18 +94,81 @@ export function VersandOrderCard({
 
   const customerName = order.kunde?.firma || order.kunde?.name || "Unbekannt";
 
+  // Handle click based on mode
+  const handleClick = () => {
+    if (routePlanningMode) {
+      // In route planning mode, toggle route selection
+      onRouteToggle?.();
+    } else {
+      // Normal mode, expand/collapse
+      onSelect(order);
+    }
+  };
+
+  // Determine if this card is selected for route
+  const isInRoute = routePosition !== null;
+
   return (
     <button
       id={`order-card-${order.auftragsnummer}`}
-      onClick={() => onSelect(order)}
+      onClick={handleClick}
       className={cn(
         "w-full text-left p-4 rounded-lg border transition-all duration-200 shadow-sm",
         "bg-white border-ghl-border",
-        isSelected
+        // Route planning mode styling
+        routePlanningMode && isInRoute
+          ? "ring-2 ring-blue-400 border-blue-400 shadow-md border-l-4 border-l-blue-500"
+          : routePlanningMode
+          ? "hover:shadow-md hover:border-blue-200"
+          : // Normal mode styling
+          isSelected
           ? "ring-2 ring-blue-400 border-blue-400 shadow-md"
           : "hover:shadow-md hover:border-blue-200"
       )}
     >
+      {/* Route Planning Mode: Checkbox and Position Badge */}
+      {routePlanningMode && (
+        <div className="flex items-center gap-3 mb-3">
+          {/* Checkbox */}
+          <div
+            className={cn(
+              "w-5 h-5 rounded border-2 flex items-center justify-center transition-colors",
+              isInRoute
+                ? "bg-blue-500 border-blue-500"
+                : "border-neutral-300 bg-white"
+            )}
+          >
+            {isInRoute && (
+              <svg
+                className="w-3 h-3 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={3}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            )}
+          </div>
+
+          {/* Route Position Badge */}
+          {isInRoute && (
+            <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-500 text-white text-sm font-bold">
+              {routePosition}
+            </span>
+          )}
+
+          {/* Label */}
+          <span className="text-sm text-neutral-500">
+            {isInRoute ? `Stopp ${routePosition}` : "Zur Route hinzufügen"}
+          </span>
+        </div>
+      )}
+
       {/* Header: Auftragsnummer + Status Badge */}
       <div className="flex items-center justify-between mb-2">
         <span className="font-semibold text-ghl-text">
