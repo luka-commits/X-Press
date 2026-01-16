@@ -5,13 +5,14 @@
 - ✅ **v1.0 Mobile Status-Update** — Phases 1-8 (shipped 2026-01-16)
 - ✅ **v1.1 Versand-Übersicht** — Phases 9-12 (shipped 2026-01-16)
 - ✅ **v1.2 Versand Pro** — Phases 13-14 (shipped 2026-01-16)
-- 🚧 **v1.3 Routenplanung** — Phases 15-18 (in progress)
+- ✅ **v1.3 Routenplanung** — Phases 15-17 (shipped 2026-01-16)
 
 ## Completed Milestones
 
 - ✅ [v1.0 Mobile Status-Update](milestones/v1.0-ROADMAP.md) (Phases 1-8) — SHIPPED 2026-01-16
 - ✅ [v1.1 Versand-Übersicht](milestones/v1.1-ROADMAP.md) (Phases 9-12) — SHIPPED 2026-01-16
 - ✅ [v1.2 Versand Pro](milestones/v1.2-ROADMAP.md) (Phases 13-14) — SHIPPED 2026-01-16
+- ✅ [v1.3 Routenplanung](milestones/v1.3-ROADMAP.md) (Phases 15-17) — SHIPPED 2026-01-16
 
 <details>
 <summary>✅ v1.0 Mobile Status-Update (Phases 1-8) — SHIPPED 2026-01-16</summary>
@@ -53,49 +54,17 @@ Verbesserte Versand-Seite mit Google Maps, interaktiver Karte und Inline-KPIs.
 
 </details>
 
-### 🚧 v1.3 Routenplanung (In Progress)
+<details>
+<summary>✅ v1.3 Routenplanung (Phases 15-17) — SHIPPED 2026-01-16</summary>
 
-**Milestone Goal:** Routenplanung für Versand-Team mit Optimierung und Multi-Fahrer Support
+Routenplanung für Versand-Team mit Optimierung und Google Maps Navigation Export.
 
-#### Phase 15: Routenplanung-Basis ✅
+- [x] Phase 15: Routenplanung-Basis (1/1 plans) — completed 2026-01-16
+- [x] Phase 16: Routenoptimierung (1/1 plans) — completed 2026-01-16
+- [x] Phase 17: Export & Fahrer (1/1 plans) — completed 2026-01-16
+  - Note: Phase 18 (Fahrer-Management) removed — Link-Export sufficient for now
 
-**Goal**: Modus-Toggle, Auftragsauswahl, Route auf Karte visualisieren
-**Depends on**: v1.2 complete
-**Research**: None needed
-**Plans**: 1 plan (complete)
-
-Plans:
-- [x] 15-01: Route mode toggle + order selection + map visualization
-
-#### Phase 16: Routenoptimierung ✅
-
-**Goal**: Google Routes API Integration, optimale Reihenfolge berechnen
-**Depends on**: Phase 15
-**Research**: Complete (16-RESEARCH.md)
-**Plans**: 1 plan (complete)
-
-Plans:
-- [x] 16-01: Google Routes API + Optimieren Button + Road Polyline
-
-#### Phase 17: Export & Fahrer ✅
-
-**Goal**: Navigation-Export (Deep Links), Fahrer-Zuweisung Basis
-**Depends on**: Phase 16
-**Research**: Complete (17-RESEARCH.md)
-**Plans**: 1 plan (complete)
-
-Plans:
-- [x] 17-01: Google Maps navigation link export with copy-to-clipboard
-
-#### Phase 18: Fahrer-Management
-
-**Goal**: Erweiterte Fahrer-Verwaltung (optional scope)
-**Depends on**: Phase 17
-**Research**: Unlikely (internal patterns)
-**Plans**: TBD
-
-Plans:
-- [ ] 18-01: TBD
+</details>
 
 ## Progress
 
@@ -118,4 +87,3 @@ Plans:
 | 15. Routenplanung-Basis | v1.3 | 1/1 | Complete | 2026-01-16 |
 | 16. Routenoptimierung | v1.3 | 1/1 | Complete | 2026-01-16 |
 | 17. Export & Fahrer | v1.3 | 1/1 | Complete | 2026-01-16 |
-| 18. Fahrer-Management | v1.3 | 0/? | Not started | - |
