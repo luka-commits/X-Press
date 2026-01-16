@@ -3,11 +3,13 @@
 ## Milestones
 
 - ✅ **v1.0 Mobile Status-Update** — Phases 1-8 (shipped 2026-01-16)
-- 🚧 **v1.1 Versand-Übersicht** — Phases 9-12 (in progress)
+- ✅ **v1.1 Versand-Übersicht** — Phases 9-12 (shipped 2026-01-16)
+- 🚧 **v1.2 Versand Pro** — Phases 13-15 (in progress)
 
 ## Completed Milestones
 
 - ✅ [v1.0 Mobile Status-Update](milestones/v1.0-ROADMAP.md) (Phases 1-8) — SHIPPED 2026-01-16
+- ✅ [v1.1 Versand-Übersicht](milestones/v1.1-ROADMAP.md) (Phases 9-12) — SHIPPED 2026-01-16
 
 <details>
 <summary>✅ v1.0 Mobile Status-Update (Phases 1-8) — SHIPPED 2026-01-16</summary>
@@ -25,50 +27,52 @@ Erweiterung des XOS Dashboards um mobile Status-Update-Funktionalität. Produkti
 
 </details>
 
-### 🚧 v1.1 Versand-Übersicht (In Progress)
+<details>
+<summary>✅ v1.1 Versand-Übersicht (Phases 9-12) — SHIPPED 2026-01-16</summary>
 
-**Milestone Goal:** Versand-Team kann sehen welche Aufträge wann wohin müssen, optimiert durch PLZ-Sortierung und Kartenansicht
+Versand-Team Workflow mit PLZ-Sortierung und Geocoding-Grundlagen.
 
-#### Phase 9: Versand-Datenmodell
+- [x] Phase 9: Versand-Datenmodell (1/1 plans) — completed 2026-01-15
+- [x] Phase 10: Versand-API & Liste (1/1 plans) — completed 2026-01-15
+- [x] Phase 11: Versand-UI Seite (1/1 plans) — completed 2026-01-15
+- [x] Phase 12: Kartenansicht (1/2 plans) — completed 2026-01-16
+  - Note: 12-02 (Leaflet Map) replaced by v1.2 Google Maps integration
 
-**Goal**: VersandStatus Enum und Adress-Parsing aus XML erweitern
-**Depends on**: v1.0 complete
-**Research**: Unlikely (extending existing schema patterns)
-**Plans**: 1
+</details>
 
-Plans:
-- [x] 09-01: Versand-Datenmodell (VersandStatus enum, address fields)
+### 🚧 v1.2 Versand Pro (In Progress)
 
-#### Phase 10: Versand-API & Liste
+**Milestone Goal:** Professionelle Versand-Übersicht mit Google Maps, Split-View Layout und Dashboard-KPIs
 
-**Goal**: Endpunkte für Versandfertig-Markierung, Liste mit Liefertermin-Filter
-**Depends on**: Phase 9
-**Research**: Unlikely (similar to Phase 2 Status API)
-**Plans**: 1
+#### Phase 13: Google Maps Setup
 
-Plans:
-- [x] 10-01: Versand-API (PATCH status, GET orders with PLZ sorting)
-
-#### Phase 11: Versand-UI Seite
-
-**Goal**: /versand Route mit PLZ-Sortierung, Versandfertig-Button
-**Depends on**: Phase 10
-**Research**: Unlikely (similar to Phase 3/6 mobile UI patterns)
-**Plans**: 1
+**Goal**: Leaflet durch Google Maps ersetzen, API-Key konfigurieren
+**Depends on**: v1.1 complete
+**Research**: Unlikely (well-documented API)
+**Plans**: TBD
 
 Plans:
-- [x] 11-01: Versand-UI (page, order list, status buttons)
+- [ ] 13-01: TBD (run /gsd:plan-phase 13 to break down)
 
-#### Phase 12: Kartenansicht
+#### Phase 14: Split-View Layout
 
-**Goal**: Map-Integration mit Lieferadressen, PLZ-Cluster-Visualisierung
-**Depends on**: Phase 11
-**Research**: Complete (12-RESEARCH.md)
-**Plans**: 2
+**Goal**: Desktop-optimiertes Layout mit Liste links, Karte rechts
+**Depends on**: Phase 13
+**Research**: Unlikely (internal patterns)
+**Plans**: TBD
 
 Plans:
-- [x] 12-01: Geocoding Setup (DB fields, PLZ lookup utility, API coordinates)
-- [ ] 12-02: Map Component (Leaflet integration, marker clustering)
+- [ ] 14-01: TBD
+
+#### Phase 15: Dashboard Versand-KPIs
+
+**Goal**: Versand-Kennzahlen ins Executive Dashboard integrieren
+**Depends on**: Phase 14
+**Research**: Unlikely (existing dashboard patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 15-01: TBD
 
 ## Progress
 
@@ -85,4 +89,7 @@ Plans:
 | 9. Versand-Datenmodell | v1.1 | 1/1 | Complete | 2026-01-15 |
 | 10. Versand-API & Liste | v1.1 | 1/1 | Complete | 2026-01-15 |
 | 11. Versand-UI Seite | v1.1 | 1/1 | Complete | 2026-01-15 |
-| 12. Kartenansicht | v1.1 | 1/2 | In progress | - |
+| 12. Kartenansicht | v1.1 | 1/1 | Complete | 2026-01-16 |
+| 13. Google Maps Setup | v1.2 | 0/? | Not started | - |
+| 14. Split-View Layout | v1.2 | 0/? | Not started | - |
+| 15. Dashboard Versand-KPIs | v1.2 | 0/? | Not started | - |

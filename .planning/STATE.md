@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-16)
 
 **Core value:** Mitarbeiter können mit 3 Klicks den Auftragsstatus vom Handy aus updaten.
-**Current focus:** v1.1 Versand-Übersicht — Versand-Team Workflow
+**Current focus:** v1.2 Versand Pro — Google Maps, Split-View, Dashboard-KPIs
 
 ## Current Position
 
-Phase: 12 of 12 (Kartenansicht)
-Plan: 1 of 2 in current phase
-Status: In progress
-Last activity: 2026-01-16 — Completed 12-01-PLAN.md
+Phase: 13 of 15 (Google Maps Setup)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-01-16 — Milestone v1.2 created
 
-Progress: ████░░░░░░ 50% (4/8 plans in v1.1)
+Progress: ░░░░░░░░░░ 0% (0/? plans in v1.2)
 
 ## Performance Metrics
 
@@ -53,10 +53,12 @@ None.
 ### Roadmap Evolution
 
 - Milestone v1.1 created: Versand-Übersicht, 4 phases (Phase 9-12)
+- Milestone v1.1 shipped: 2026-01-16 (12-02 replaced by v1.2)
+- Milestone v1.2 created: Versand Pro, 3 phases (Phase 13-15)
 
 ## Session Continuity
 
 Last session: 2026-01-16
-Stopped at: Completed 12-01-PLAN.md
+Stopped at: Milestone v1.2 initialization
 Resume file: None
-Next: /gsd:execute-plan 12-02
+Next: /gsd:plan-phase 13
