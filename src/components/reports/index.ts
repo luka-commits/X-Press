@@ -1,0 +1,1 @@
+export { CompletedOrdersTable } from './CompletedOrdersTable';
