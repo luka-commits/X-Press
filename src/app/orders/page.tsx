@@ -17,6 +17,7 @@ interface OrdersPageProps {
     search?: string;
     status?: string;
     istStatus?: string;
+    versandStatus?: string;
     deadline?: string;
     produkttyp?: string;
     sachbearbeiter?: string;
@@ -36,6 +37,7 @@ async function getOrders(searchParams: OrdersPageProps['searchParams']) {
   const search = params.search || '';
   const status = params.status || 'all';
   const istStatus = params.istStatus || 'all';
+  const versandStatus = params.versandStatus || 'all';
   const deadline = params.deadline || 'all';
   const produkttyp = params.produkttyp || '';
   const sachbearbeiter = params.sachbearbeiter || '';
@@ -104,6 +106,11 @@ async function getOrders(searchParams: OrdersPageProps['searchParams']) {
     query = query.eq('istStatus', istStatus);
   }
 
+  // VersandStatus filter
+  if (versandStatus && versandStatus !== 'all') {
+    query = query.eq('versandStatus', versandStatus);
+  }
+
   // Volltext-Suche (OR-Bedingung) - jetzt inkl. Kunde
   if (search) {
     // Baue OR-Bedingung: Auftragsnummer, Produkttyp, oder Kunde-ID
@@ -147,6 +154,7 @@ async function getOrders(searchParams: OrdersPageProps['searchParams']) {
       status: order.status,
       computedStatus,
       istStatus: order.istStatus,
+      versandStatus: order.versandStatus,
       kunde: order.Kunde ? {
         id: order.Kunde.id,
         name: order.Kunde.name,
