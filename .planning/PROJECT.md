@@ -26,6 +26,14 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 - ✓ Desktop Split-View Layout (Liste + Karte) — v1.2
 - ✓ VersandKPIs (Offen/Versandbereit/Versendet/Überfällig) — v1.2
 - ✓ Bidirektionale Karte-Liste Interaktion — v1.2
+- ✓ Routenplanung mit manueller Sortierung — v1.3
+- ✓ Nearest-Neighbor Routenoptimierung — v1.3
+- ✓ Google Maps Navigation Export (Einzel + Multi-Stop) — v1.3
+- ✓ Reports-Seite mit Sub-Navigation — v1.4
+- ✓ Abgeschlossene Aufträge Tabelle mit Pagination — v1.4
+- ✓ DateRangePicker mit deutschen Presets — v1.4
+- ✓ Zeitraum-Analysen mit VolumeChart — v1.4
+- ✓ Versand-Reports mit Liefermetriken und PLZ-Verteilung — v1.4
 
 ### Active
 
@@ -41,19 +49,20 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 
 ## Context
 
-**Shipped v1.2:**
-- 7,424 LOC TypeScript
-- Tech stack: Next.js 14, Supabase, Prisma, Tailwind CSS, Google Maps API
+**Shipped v1.4:**
+- 9,759 LOC TypeScript
+- Tech stack: Next.js 14, Supabase, Prisma, Tailwind CSS, Google Maps API, Recharts
 - Mobile-first /status page for shopfloor workers
-- /versand page for shipping team with map and KPIs
+- /versand page with routing optimization and navigation export
+- /reports page with completed orders, analytics, and shipping reports
 - Dashboard integration with IST-Status visibility
 
 **Production State:**
 - Produktionsmitarbeiter können Auftragsstatus updaten
 - Dashboard zeigt IST-Zustand vom Shopfloor
 - Problem-Aufträge sind sofort sichtbar
-- Versand-Team hat Überblick über Lieferungen mit Kartenansicht
-- KPIs zeigen offene/versandbereite/versendete Aufträge
+- Versand-Team hat Routenplanung mit Optimierung und Google Maps Export
+- Management hat Reports mit historischen Daten und Analytics
 
 ## Constraints
 
@@ -79,6 +88,11 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 | Desktop Split-View (≥768px) | Karte immer sichtbar auf Desktop für schnellen Überblick | ✓ Good |
 | Inline KPIs | Schneller Überblick ohne separaten Tab | ✓ Good |
 | Bidirektionale Interaktion | Karte nützlich machen durch Card↔Marker Verknüpfung | ✓ Good |
+| Link-Export statt Fahrer-Management | MVP-scope halten, Link reicht für Navigation | ✓ Good |
+| Nearest-Neighbor Optimierung | Einfach zu implementieren, gute Ergebnisse für <20 Stops | ✓ Good |
+| Inline tabs für Reports | Einfacher als layout.tsx für single-page reports section | ✓ Good |
+| Supabase REST für Read Queries | Konsistent mit dashboard-queries pattern | ✓ Good |
+| PLZ 2-Digit Gruppierung | Deutsche PLZ-Struktur erlaubt regionale Analyse | ✓ Good |
 
 ---
-*Last updated: 2026-01-16 after v1.2 milestone*
+*Last updated: 2026-01-17 after v1.4 milestone*
