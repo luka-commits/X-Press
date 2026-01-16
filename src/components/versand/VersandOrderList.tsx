@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { Check, X, Map, ChevronDown, ChevronUp, Calendar, Package, Route, Sparkles, Clock, MapPin, Loader2 } from "lucide-react";
+import { Check, X, Map, ChevronDown, ChevronUp, Calendar, Package, Route, Sparkles, Clock, MapPin, Loader2, Link2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { VersandOrderCard, type VersandOrder } from "./VersandOrderCard";
 import { VersandStatusButtons, type VersandStatusType } from "./VersandStatusButtons";
 import { VersandKPIs, type VersandStatusFilter } from "./VersandKPIs";
 import { DeliveryMap, type MapOrder } from "@/components/map";
 import type { OptimizeRouteResponse } from "@/types/route";
+import { generateGoogleMapsUrl, copyToClipboard, validateRouteUrl } from "@/lib/route-utils";
 
 /**
  * Deadline filter options
@@ -257,6 +258,46 @@ export function VersandOrderList() {
     }
   };
 
+  // Handle copy route link to clipboard
+  const handleCopyRouteLink = async () => {
+    if (routeOrdersForMap.length === 0) return;
+
+    // Extract valid coordinates (routeOrdersForMap already filters for non-null coords)
+    const ordersWithCoords = routeOrdersForMap
+      .filter((o): o is MapOrder & { lieferLat: number; lieferLng: number } =>
+        o.lieferLat != null && o.lieferLng != null
+      );
+
+    if (ordersWithCoords.length === 0) return;
+
+    // Generate Google Maps URL
+    const url = generateGoogleMapsUrl(ordersWithCoords);
+
+    // Validate URL length
+    const validation = validateRouteUrl(url);
+    if (!validation.valid) {
+      setFeedback({
+        type: "error",
+        message: validation.message || "URL konnte nicht erstellt werden",
+      });
+      return;
+    }
+
+    // Copy to clipboard
+    const success = await copyToClipboard(url);
+    if (success) {
+      setFeedback({
+        type: "success",
+        message: "Navigationslink kopiert",
+      });
+    } else {
+      setFeedback({
+        type: "error",
+        message: "Link konnte nicht kopiert werden",
+      });
+    }
+  };
+
   // Format duration string (e.g., "3600s" -> "1 Std 0 Min")
   const formatDuration = (duration: string): string => {
     // Parse seconds from string like "3600s"
@@ -413,6 +454,14 @@ export function VersandOrderList() {
             <span className="text-blue-600 text-xs">
               {routeOrdersForMap.length} Stopps
             </span>
+            {/* Link kopieren button - right aligned */}
+            <button
+              onClick={handleCopyRouteLink}
+              className="ml-auto flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-green-500 text-white hover:bg-green-600"
+            >
+              <Link2 className="w-4 h-4" />
+              Link kopieren
+            </button>
           </div>
         </div>
       )}
