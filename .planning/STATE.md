@@ -28,9 +28,9 @@ Progress: ██████████ 100% (v1.5)
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 25
+- Total plans completed: 27
 - Average duration: ~2.5 min
-- Total execution time: ~88 min
+- Total execution time: ~93 min
 
 **By Milestone:**
 
@@ -41,6 +41,7 @@ Progress: ██████████ 100% (v1.5)
 | v1.2 Versand Pro | 2 | 2 | ~45 min |
 | v1.3 Routenplanung | 3 | 3 | ~22 min |
 | v1.4 Reporting | 3 | 5 | ~12 min |
+| v1.5 System-Konsolidierung | 2 | 2 | ~5 min |
 
 ## Accumulated Context
 
@@ -63,11 +64,11 @@ None currently.
 - v1.2 shipped: 2026-01-16 (2 phases, 2 plans)
 - v1.3 shipped: 2026-01-16 (3 phases, 3 plans)
 - v1.4 shipped: 2026-01-17 (3 phases, 5 plans)
-- v1.5 created: 2026-01-17 (System-Konsolidierung, 2 phases: 21-22)
+- v1.5 shipped: 2026-01-17 (2 phases, 2 plans)
 
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Completed 22-01-PLAN.md (v1.5 milestone complete)
+Stopped at: v1.5 milestone archived
 Resume file: None
-Next: `/gsd:complete-milestone` or `/gsd:new-milestone`
+Next: `/gsd:discuss-milestone` or `/gsd:new-milestone`
