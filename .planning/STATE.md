@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-17)
 ## Current Position
 
 Phase: 21 of 22 (Aufträge Pipeline-View)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-01-17 — Milestone v1.5 created
+Plan: 1/1 complete
+Status: Phase complete
+Last activity: 2026-01-17 — Completed 21-01-PLAN.md
 
-Progress: ░░░░░░░░░░ 0% (v1.5)
+Progress: █████░░░░░ 50% (v1.5)
 
 ## Milestones
 
@@ -68,6 +68,6 @@ None currently.
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Milestone v1.5 System-Konsolidierung created
+Stopped at: Completed 21-01-PLAN.md
 Resume file: None
-Next: `/gsd:plan-phase 21` to plan first phase
+Next: `/gsd:plan-phase 22` (or execute if planned)

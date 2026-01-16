@@ -92,7 +92,7 @@ Historische Daten und Analytics für Management-Übersicht mit Reports-Sektion.
 **Plans**: TBD
 
 Plans:
-- [ ] 21-01: TBD (run /gsd:plan-phase 21 to break down)
+- [x] 21-01: Pipeline-Status Column + VersandStatus Filter — completed 2026-01-16
 
 #### Phase 22: Reports & Navigation
 
@@ -128,5 +128,5 @@ Plans:
 | 18. Reports-Grundstruktur | v1.4 | 1/1 | Complete | 2026-01-16 |
 | 19. Zeitraum-Analysen | v1.4 | 2/2 | Complete | 2026-01-17 |
 | 20. Versand-Reports | v1.4 | 2/2 | Complete | 2026-01-17 |
-| 21. Aufträge Pipeline-View | v1.5 | 0/? | Not started | - |
+| 21. Aufträge Pipeline-View | v1.5 | 1/1 | Complete | 2026-01-16 |
 | 22. Reports & Navigation | v1.5 | 0/? | Not started | - |
