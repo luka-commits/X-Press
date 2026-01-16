@@ -34,17 +34,17 @@ interface VersandOrderCardProps {
 }
 
 /**
- * Status badge color mapping
+ * Status badge color mapping - light theme style
  */
 function getStatusColor(status: VersandStatusType | null): string {
   switch (status) {
     case "versandbereit":
-      return "bg-amber-500/20 text-amber-400 border-amber-500/30";
+      return "bg-amber-50 text-amber-700 border-amber-200";
     case "versendet":
-      return "bg-green-500/20 text-green-400 border-green-500/30";
+      return "bg-green-50 text-green-700 border-green-200";
     case "offen":
     default:
-      return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+      return "bg-neutral-100 text-neutral-600 border-neutral-200";
   }
 }
 
@@ -90,16 +90,16 @@ export function VersandOrderCard({
       id={`order-card-${order.auftragsnummer}`}
       onClick={() => onSelect(order)}
       className={cn(
-        "w-full text-left p-4 rounded-lg border transition-colors",
-        "bg-ghl-card border-ghl-border",
+        "w-full text-left p-4 rounded-lg border transition-all duration-200 shadow-sm",
+        "bg-white border-ghl-border",
         isSelected
-          ? "ring-2 ring-blue-500 border-blue-500"
-          : "hover:border-gray-600"
+          ? "ring-2 ring-blue-400 border-blue-400 shadow-md"
+          : "hover:shadow-md hover:border-blue-200"
       )}
     >
       {/* Header: Auftragsnummer + Status Badge */}
       <div className="flex items-center justify-between mb-2">
-        <span className="font-semibold text-white">
+        <span className="font-semibold text-ghl-text">
           {order.auftragsnummer}
         </span>
         <span
@@ -113,23 +113,23 @@ export function VersandOrderCard({
       </div>
 
       {/* Customer */}
-      <div className="text-sm text-gray-300 mb-2">{customerName}</div>
+      <div className="text-sm text-neutral-700 mb-1">{customerName}</div>
 
       {/* Product Type */}
       {order.produkttyp && (
-        <div className="text-xs text-gray-400 mb-3">{order.produkttyp}</div>
+        <div className="text-xs text-neutral-500 mb-3">{order.produkttyp}</div>
       )}
 
       {/* Address - PLZ emphasized for sorting visibility */}
-      <div className="bg-ghl-bg/50 rounded-md p-2 mb-2">
+      <div className="bg-neutral-50 rounded-md p-2.5 mb-3 border border-neutral-100">
         {order.lieferStrasse && (
-          <div className="text-sm text-gray-300">{order.lieferStrasse}</div>
+          <div className="text-sm text-neutral-600">{order.lieferStrasse}</div>
         )}
-        <div className="flex items-baseline gap-1.5">
-          <span className="font-semibold text-white text-lg">
+        <div className="flex items-baseline gap-1.5 mt-0.5">
+          <span className="font-semibold text-ghl-text text-lg">
             {order.lieferPlz || "—"}
           </span>
-          <span className="text-sm text-gray-300">
+          <span className="text-sm text-neutral-600">
             {order.lieferOrt || "Unbekannt"}
           </span>
         </div>
@@ -137,8 +137,8 @@ export function VersandOrderCard({
 
       {/* Delivery Date */}
       <div className="flex items-center justify-between text-xs">
-        <span className="text-gray-400">Liefertermin</span>
-        <span className="text-gray-300 font-medium">{formattedDate}</span>
+        <span className="text-neutral-500">Liefertermin</span>
+        <span className="text-neutral-700 font-medium">{formattedDate}</span>
       </div>
     </button>
   );

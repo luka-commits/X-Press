@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Check, X, Map, ChevronDown, ChevronUp } from "lucide-react";
+import { Check, X, Map, ChevronDown, ChevronUp, Calendar, Package } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { VersandOrderCard, type VersandOrder } from "./VersandOrderCard";
 import { VersandStatusButtons, type VersandStatusType } from "./VersandStatusButtons";
@@ -31,6 +31,12 @@ interface Feedback {
   message: string;
 }
 
+const deadlineLabels: Record<DeadlineFilter, string> = {
+  today: "Heute",
+  week: "Diese Woche",
+  all: "Alle Termine",
+};
+
 /**
  * VersandOrderList Component - Order List for Versand-Team
  *
@@ -53,8 +59,8 @@ export function VersandOrderList() {
   const [feedback, setFeedback] = useState<Feedback | null>(null);
 
   // Filters
-  const [deadlineFilter, setDeadlineFilter] = useState<DeadlineFilter>("today");
-  const [statusFilter, setStatusFilter] = useState<VersandStatusFilter>("offen");
+  const [deadlineFilter, setDeadlineFilter] = useState<DeadlineFilter>("all");
+  const [statusFilter, setStatusFilter] = useState<VersandStatusFilter>("all");
 
   // Map toggle (mobile only)
   const [showMap, setShowMap] = useState(false);
@@ -179,199 +185,191 @@ export function VersandOrderList() {
   };
 
   return (
-    <div className="md:grid md:grid-cols-2 md:gap-6 md:h-[calc(100vh-200px)]">
-      {/* Left Column: KPIs + Filters + Order List */}
-      <div className="md:overflow-y-auto md:pr-2 space-y-4">
-        {/* KPIs - always visible, shows counts from all orders in deadline scope */}
-        <VersandKPIs orders={allOrders} onFilterClick={setStatusFilter} />
+    <div className="space-y-6">
+      {/* KPIs - Card-based, matching dashboard style */}
+      <VersandKPIs orders={allOrders} onFilterClick={setStatusFilter} activeFilter={statusFilter} />
 
-        {/* Filters */}
-        <div className="space-y-3">
+      {/* Filter Bar - Clean horizontal layout */}
+      <div className="bg-white rounded-lg border border-ghl-border p-4 shadow-sm">
+        <div className="flex flex-wrap items-center gap-4">
           {/* Deadline Filter */}
-          <div className="flex flex-wrap gap-2">
-            <FilterPill
-              active={deadlineFilter === "today"}
-              onClick={() => setDeadlineFilter("today")}
-            >
-              Heute
-            </FilterPill>
-            <FilterPill
-              active={deadlineFilter === "week"}
-              onClick={() => setDeadlineFilter("week")}
-            >
-              Diese Woche
-            </FilterPill>
-            <FilterPill
-              active={deadlineFilter === "all"}
-              onClick={() => setDeadlineFilter("all")}
-            >
-              Alle
-            </FilterPill>
-          </div>
-
-          {/* VersandStatus Filter */}
-          <div className="flex flex-wrap gap-2">
-            <FilterPill
-              active={statusFilter === "all"}
-              onClick={() => setStatusFilter("all")}
-            >
-              Alle Status
-            </FilterPill>
-            <FilterPill
-              active={statusFilter === "offen"}
-              onClick={() => setStatusFilter("offen")}
-            >
-              Offen
-            </FilterPill>
-            <FilterPill
-              active={statusFilter === "versandbereit"}
-              onClick={() => setStatusFilter("versandbereit")}
-            >
-              Versandbereit
-            </FilterPill>
-          </div>
-        </div>
-
-        {/* Map Toggle Button - mobile only */}
-        <div className="md:hidden">
-          <button
-            onClick={() => setShowMap(!showMap)}
-            className={cn(
-              "w-full flex items-center justify-between p-3 rounded-lg border transition-colors",
-              showMap
-                ? "bg-blue-500/10 border-blue-500/30 text-blue-400"
-                : "bg-ghl-card border-ghl-border text-gray-300 hover:border-gray-500"
-            )}
-          >
-            <div className="flex items-center gap-2">
-              <Map className="w-5 h-5" />
-              <span className="font-medium">Karte anzeigen</span>
+          <div className="flex items-center gap-2">
+            <Calendar className="w-4 h-4 text-neutral-400" />
+            <span className="text-sm text-neutral-500">Zeitraum:</span>
+            <div className="flex gap-1">
+              {(["today", "week", "all"] as DeadlineFilter[]).map((filter) => (
+                <FilterChip
+                  key={filter}
+                  active={deadlineFilter === filter}
+                  onClick={() => setDeadlineFilter(filter)}
+                >
+                  {deadlineLabels[filter]}
+                </FilterChip>
+              ))}
             </div>
-            {showMap ? (
-              <ChevronUp className="w-5 h-5" />
-            ) : (
-              <ChevronDown className="w-5 h-5" />
-            )}
-          </button>
+          </div>
+
+          {/* Divider */}
+          <div className="hidden sm:block w-px h-6 bg-neutral-200" />
+
+          {/* Map Toggle - mobile only, inline */}
+          <div className="md:hidden ml-auto">
+            <button
+              onClick={() => setShowMap(!showMap)}
+              className={cn(
+                "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
+                showMap
+                  ? "bg-blue-50 text-blue-600 border border-blue-200"
+                  : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
+              )}
+            >
+              <Map className="w-4 h-4" />
+              Karte
+              {showMap ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+            </button>
+          </div>
         </div>
-
-        {/* Mobile Map (collapsible) */}
-        {showMap && (
-          <div className="md:hidden overflow-hidden rounded-lg">
-            <DeliveryMap
-              orders={orders}
-              className="h-[400px]"
-              selectedOrderId={selectedOrder?.auftragsnummer ?? null}
-              onOrderSelect={handleMapOrderSelect}
-            />
-          </div>
-        )}
-
-        {/* Feedback Banner */}
-        {feedback && (
-          <div
-            className={cn(
-              "flex items-center gap-3 p-4 rounded-lg border",
-              "transition-all duration-300 animate-in fade-in slide-in-from-top-2",
-              feedback.type === "success"
-                ? "bg-green-500/10 border-green-500/30 text-green-400"
-                : "bg-red-500/10 border-red-500/30 text-red-400"
-            )}
-            role="alert"
-            aria-live="polite"
-          >
-            {feedback.type === "success" ? (
-              <Check className="w-5 h-5 flex-shrink-0" />
-            ) : (
-              <X className="w-5 h-5 flex-shrink-0" />
-            )}
-            <span className="font-medium">{feedback.message}</span>
-          </div>
-        )}
-
-        {/* Loading State */}
-        {loading && (
-          <div className="space-y-3">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="h-36 rounded-lg bg-ghl-card border border-ghl-border animate-pulse"
-              />
-            ))}
-          </div>
-        )}
-
-        {/* Error State */}
-        {error && !loading && (
-          <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400">
-            {error}
-          </div>
-        )}
-
-        {/* Empty State */}
-        {!loading && !error && orders.length === 0 && (
-          <div className="p-8 text-center text-gray-400">
-            Keine Aufträge gefunden
-          </div>
-        )}
-
-        {/* Order List */}
-        {!loading && !error && orders.length > 0 && (
-          <div className="space-y-3">
-            {orders.map((order) => (
-              <div key={order.auftragsnummer} className="space-y-3">
-                <VersandOrderCard
-                  order={order}
-                  isSelected={selectedOrder?.auftragsnummer === order.auftragsnummer}
-                  onSelect={handleOrderSelect}
-                />
-
-                {/* Status Buttons (shown when order is selected) */}
-                {selectedOrder?.auftragsnummer === order.auftragsnummer && (
-                  <VersandStatusButtons
-                    orderId={order.auftragsnummer}
-                    onStatusChange={handleStatusChange}
-                    loadingStatus={loadingStatus}
-                    disabled={loadingStatus !== null}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-        )}
       </div>
 
-      {/* Right Column: Map - always visible on desktop */}
-      <div className="hidden md:block md:sticky md:top-0 md:h-[calc(100vh-200px)]">
-        <DeliveryMap
-          orders={orders}
-          className="h-full rounded-lg"
-          selectedOrderId={selectedOrder?.auftragsnummer ?? null}
-          onOrderSelect={handleMapOrderSelect}
-        />
+      {/* Feedback Banner */}
+      {feedback && (
+        <div
+          className={cn(
+            "flex items-center gap-3 p-4 rounded-lg border shadow-sm",
+            "transition-all duration-300 animate-in fade-in slide-in-from-top-2",
+            feedback.type === "success"
+              ? "bg-green-50 border-green-200 text-green-700"
+              : "bg-red-50 border-red-200 text-red-700"
+          )}
+          role="alert"
+          aria-live="polite"
+        >
+          {feedback.type === "success" ? (
+            <Check className="w-5 h-5 flex-shrink-0" />
+          ) : (
+            <X className="w-5 h-5 flex-shrink-0" />
+          )}
+          <span className="font-medium">{feedback.message}</span>
+        </div>
+      )}
+
+      {/* Main Content: List + Map Grid */}
+      <div className="md:grid md:grid-cols-5 md:gap-6">
+        {/* Left Column: Order List (3 cols on desktop) */}
+        <div className="md:col-span-3 space-y-4">
+          {/* Mobile Map (collapsible) */}
+          {showMap && (
+            <div className="md:hidden overflow-hidden rounded-lg border border-ghl-border shadow-sm">
+              <DeliveryMap
+                orders={orders}
+                className="h-[350px]"
+                selectedOrderId={selectedOrder?.auftragsnummer ?? null}
+                onOrderSelect={handleMapOrderSelect}
+              />
+            </div>
+          )}
+
+          {/* Order Count Header */}
+          {!loading && !error && (
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-medium text-neutral-500">
+                {orders.length} {orders.length === 1 ? "Auftrag" : "Aufträge"}
+              </h2>
+            </div>
+          )}
+
+          {/* Loading State */}
+          {loading && (
+            <div className="space-y-3">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="h-32 rounded-lg bg-white border border-ghl-border animate-pulse shadow-sm"
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Error State */}
+          {error && !loading && (
+            <div className="p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 shadow-sm">
+              {error}
+            </div>
+          )}
+
+          {/* Empty State */}
+          {!loading && !error && orders.length === 0 && (
+            <div className="p-12 text-center bg-white rounded-lg border border-ghl-border shadow-sm">
+              <Package className="w-12 h-12 text-neutral-300 mx-auto mb-3" />
+              <p className="text-neutral-500">Keine Aufträge gefunden</p>
+              <p className="text-sm text-neutral-400 mt-1">
+                Versuche einen anderen Filter
+              </p>
+            </div>
+          )}
+
+          {/* Order List */}
+          {!loading && !error && orders.length > 0 && (
+            <div className="space-y-3">
+              {orders.map((order) => (
+                <div key={order.auftragsnummer} className="space-y-2">
+                  <VersandOrderCard
+                    order={order}
+                    isSelected={selectedOrder?.auftragsnummer === order.auftragsnummer}
+                    onSelect={handleOrderSelect}
+                  />
+
+                  {/* Status Buttons (shown when order is selected) */}
+                  {selectedOrder?.auftragsnummer === order.auftragsnummer && (
+                    <VersandStatusButtons
+                      orderId={order.auftragsnummer}
+                      onStatusChange={handleStatusChange}
+                      loadingStatus={loadingStatus}
+                      disabled={loadingStatus !== null}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Right Column: Map (2 cols on desktop) - always visible */}
+        <div className="hidden md:block md:col-span-2">
+          <div className="sticky top-6">
+            <div className="rounded-lg border border-ghl-border overflow-hidden shadow-sm">
+              <DeliveryMap
+                orders={orders}
+                className="h-[calc(100vh-280px)]"
+                selectedOrderId={selectedOrder?.auftragsnummer ?? null}
+                onOrderSelect={handleMapOrderSelect}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
 /**
- * FilterPill Component - Rounded pill button for filters
+ * FilterChip Component - Small chip button for filters (dashboard style)
  */
-interface FilterPillProps {
+interface FilterChipProps {
   active: boolean;
   onClick: () => void;
   children: React.ReactNode;
 }
 
-function FilterPill({ active, onClick, children }: FilterPillProps) {
+function FilterChip({ active, onClick, children }: FilterChipProps) {
   return (
     <button
       onClick={onClick}
       className={cn(
-        "px-4 py-2 rounded-full text-sm font-medium transition-colors",
+        "px-3 py-1 rounded-md text-sm font-medium transition-colors",
         active
           ? "bg-blue-500 text-white"
-          : "bg-ghl-card border border-ghl-border text-gray-300 hover:border-gray-500"
+          : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
       )}
     >
       {children}

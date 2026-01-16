@@ -10,13 +10,13 @@ See: .planning/PROJECT.md (updated 2026-01-16)
 ## Current Position
 
 Phase: 14 of 14 (Desktop + KPIs + Interaktion)
-Plan: 14-01 ready for execution
-Status: Ready
-Last activity: 2026-01-16 — Phase 13 completed, KPIs integrated into Phase 14
+Plan: 14-01 complete
+Status: Milestone Complete
+Last activity: 2026-01-16 — Phase 14 completed, v1.2 milestone done
 
-Progress: █████░░░░░ 50% (1/2 phases in v1.2)
+Progress: ██████████ 100% (2/2 phases in v1.2)
 
-**Phase 13 completed:** Google Maps integration verified and approved
+**Phase 14 completed:** KPIs, desktop split-view, bidirectional interaction verified and approved
 
 ## Performance Metrics
 
@@ -66,6 +66,6 @@ None currently.
 ## Session Continuity
 
 Last session: 2026-01-16
-Stopped at: Phase 13 completed
+Stopped at: v1.2 Milestone completed
 Resume file: None
-Next: Execute Phase 14 Plan 01 (Karte-Liste Interaktion)
+Next: /gsd:complete-milestone to archive v1.2
