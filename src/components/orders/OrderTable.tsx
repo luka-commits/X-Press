@@ -28,7 +28,8 @@ interface Order {
   liefertermin: string | null;
   status: string;
   computedStatus: string;
-  istStatus: string | null;
+  istStatus: 'in_produktion' | 'fertig' | 'problem' | null;
+  versandStatus: 'offen' | 'versandbereit' | 'versendet' | null;
   _count: {
     arbeitsgaenge: number;
   };
@@ -89,55 +90,56 @@ export function OrderTable({ orders, total, page, totalPages }: OrderTableProps)
     return kunde.firma || kunde.name || '–';
   };
 
-  const getStatusBadge = (status: string) => {
-    const isActive = status === 'aktiv';
-    return (
-      <span
-        className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${isActive
-            ? 'bg-capacity-green/10 text-capacity-green'
-            : 'bg-neutral-100 text-neutral-500'
-          }`}
-      >
-        {isActive ? 'Aktiv' : 'Abgeschlossen'}
-      </span>
-    );
-  };
-
-  const getIstStatusBadge = (istStatus: string | null) => {
-    if (!istStatus) {
+  const getPipelineStatusBadge = (order: Order) => {
+    // Problem always takes priority (shown prominently)
+    if (order.istStatus === 'problem') {
       return (
-        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-400">
-          –
+        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-capacity-red/10 text-capacity-red">
+          ⚠ Problem
         </span>
       );
     }
 
-    switch (istStatus) {
-      case 'in_produktion':
-        return (
-          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
-            In Produktion
-          </span>
-        );
-      case 'fertig':
-        return (
-          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-capacity-green/10 text-capacity-green">
-            Fertig
-          </span>
-        );
-      case 'problem':
-        return (
-          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-capacity-red/10 text-capacity-red">
-            Problem
-          </span>
-        );
-      default:
-        return (
-          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-400">
-            –
-          </span>
-        );
+    // Check versandStatus first (later stages in pipeline)
+    if (order.versandStatus === 'versendet') {
+      return (
+        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+          ✓ Versendet
+        </span>
+      );
     }
+
+    if (order.versandStatus === 'versandbereit') {
+      return (
+        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-700">
+          Versandbereit
+        </span>
+      );
+    }
+
+    // Check production status
+    if (order.istStatus === 'fertig') {
+      return (
+        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-capacity-green/10 text-capacity-green">
+          Fertig
+        </span>
+      );
+    }
+
+    if (order.istStatus === 'in_produktion') {
+      return (
+        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
+          In Produktion
+        </span>
+      );
+    }
+
+    // Default: No status yet
+    return (
+      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-400">
+        –
+      </span>
+    );
   };
 
   return (
@@ -171,15 +173,9 @@ export function OrderTable({ orders, total, page, totalPages }: OrderTableProps)
             </TableHead>
             <TableHead
               className="cursor-pointer hover:bg-neutral-50"
-              onClick={() => handleSort('status')}
-            >
-              Status <SortIcon column="status" />
-            </TableHead>
-            <TableHead
-              className="cursor-pointer hover:bg-neutral-50"
               onClick={() => handleSort('istStatus')}
             >
-              IST-Status <SortIcon column="istStatus" />
+              Pipeline-Status <SortIcon column="istStatus" />
             </TableHead>
             <TableHead className="text-right">Aktion</TableHead>
           </TableRow>
@@ -187,7 +183,7 @@ export function OrderTable({ orders, total, page, totalPages }: OrderTableProps)
         <TableBody>
           {orders.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={7} className="text-center py-8 text-neutral-500">
+              <TableCell colSpan={6} className="text-center py-8 text-neutral-500">
                 Keine Aufträge gefunden
               </TableCell>
             </TableRow>
@@ -198,8 +194,7 @@ export function OrderTable({ orders, total, page, totalPages }: OrderTableProps)
                 <TableCell>{getKundenName(order.kunde)}</TableCell>
                 <TableCell>{order.produkttyp || '–'}</TableCell>
                 <TableCell>{formatDate(order.liefertermin)}</TableCell>
-                <TableCell>{getStatusBadge(order.computedStatus)}</TableCell>
-                <TableCell>{getIstStatusBadge(order.istStatus)}</TableCell>
+                <TableCell>{getPipelineStatusBadge(order)}</TableCell>
                 <TableCell className="text-right">
                   <Link href={`/orders/${order.auftragsnummer}`}>
                     <Button variant="ghost" size="sm" className="text-ghl-blue hover:text-ghl-blue-hover">
