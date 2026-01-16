@@ -17,6 +17,7 @@ interface MapOrder {
 
 interface DeliveryMapProps {
   orders: MapOrder[];
+  className?: string;
 }
 
 /**

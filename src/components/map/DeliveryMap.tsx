@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { GoogleMap, useLoadScript, InfoWindowF } from "@react-google-maps/api";
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
+import { cn } from "@/lib/utils";
 
 /**
  * Order data structure for map markers
@@ -21,15 +22,16 @@ interface MapOrder {
 
 interface DeliveryMapProps {
   orders: MapOrder[];
+  className?: string;
 }
 
 // Berlin center (X-Press location area)
 const BERLIN_CENTER = { lat: 52.52, lng: 13.405 };
 
-// Map container style
+// Map container style - uses 100% to fill parent container
 const containerStyle = {
   width: "100%",
-  height: "400px",
+  height: "100%",
 };
 
 /**
@@ -41,7 +43,7 @@ const containerStyle = {
  * - Marker clustering for PLZ-grouped orders
  * - InfoWindow with order details on marker click
  */
-export default function DeliveryMap({ orders }: DeliveryMapProps) {
+export default function DeliveryMap({ orders, className }: DeliveryMapProps) {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
   });
@@ -142,7 +144,7 @@ export default function DeliveryMap({ orders }: DeliveryMapProps) {
   // Error state - API key missing or invalid
   if (loadError) {
     return (
-      <div className="h-[400px] w-full rounded-lg bg-ghl-card border border-ghl-border flex items-center justify-center">
+      <div className={cn("h-[400px] w-full rounded-lg bg-ghl-card border border-ghl-border flex items-center justify-center", className)}>
         <div className="text-center text-gray-400">
           <p>Google Maps konnte nicht geladen werden.</p>
           <p className="text-sm mt-1">Bitte API-Key prüfen.</p>
@@ -154,7 +156,7 @@ export default function DeliveryMap({ orders }: DeliveryMapProps) {
   // Loading state
   if (!isLoaded) {
     return (
-      <div className="h-[400px] w-full rounded-lg bg-ghl-card border border-ghl-border flex items-center justify-center">
+      <div className={cn("h-[400px] w-full rounded-lg bg-ghl-card border border-ghl-border flex items-center justify-center", className)}>
         <span className="text-gray-400">Karte wird geladen...</span>
       </div>
     );
@@ -163,7 +165,7 @@ export default function DeliveryMap({ orders }: DeliveryMapProps) {
   // Check if API key is missing
   if (!process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY) {
     return (
-      <div className="h-[400px] w-full rounded-lg bg-ghl-card border border-ghl-border flex items-center justify-center">
+      <div className={cn("h-[400px] w-full rounded-lg bg-ghl-card border border-ghl-border flex items-center justify-center", className)}>
         <div className="text-center text-gray-400">
           <p>Google Maps API-Key fehlt.</p>
           <p className="text-sm mt-1">
@@ -175,7 +177,7 @@ export default function DeliveryMap({ orders }: DeliveryMapProps) {
   }
 
   return (
-    <div className="h-[400px] w-full rounded-lg overflow-hidden">
+    <div className={cn("h-[400px] w-full rounded-lg overflow-hidden", className)}>
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={BERLIN_CENTER}
