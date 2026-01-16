@@ -3,8 +3,8 @@
  *
  * GET /api/reports/completed - Liste abgeschlossener Aufträge
  *
- * Returns orders where istStatus='fertig' OR versandStatus='versendet'
- * Sorted by completion date (most recent first)
+ * Returns orders where versandStatus='versendet' (shipped orders only)
+ * Sorted by versandUpdatedAt (most recent first)
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     // Calculate offset for pagination
     const offset = (page - 1) * pageSize;
 
-    // Query completed orders: istStatus = 'fertig' OR versandStatus = 'versendet'
+    // Query shipped orders: versandStatus = 'versendet'
     const { data: orders, error, count } = await supabase
       .from('Auftrag')
       .select(`
@@ -36,9 +36,8 @@ export async function GET(request: NextRequest) {
         versandUpdatedAt,
         Kunde(name, firma)
       `, { count: 'exact' })
-      .or('istStatus.eq.fertig,versandStatus.eq.versendet')
+      .eq('versandStatus', 'versendet')
       .order('versandUpdatedAt', { ascending: false, nullsFirst: false })
-      .order('statusUpdatedAt', { ascending: false, nullsFirst: false })
       .range(offset, offset + pageSize - 1);
 
     if (error) {
@@ -56,14 +55,7 @@ export async function GET(request: NextRequest) {
       const rawKunde = order.Kunde as any;
       const kunde = Array.isArray(rawKunde) ? rawKunde[0] : rawKunde;
 
-      // Determine completion date (prefer versandUpdatedAt if shipped)
-      let completedAt: string | null = null;
-      if (order.versandStatus === 'versendet' && order.versandUpdatedAt) {
-        completedAt = order.versandUpdatedAt;
-      } else if (order.statusUpdatedAt) {
-        completedAt = order.statusUpdatedAt;
-      }
-
+      // All orders are shipped, so completedAt is versandUpdatedAt
       return {
         auftragsnummer: order.auftragsnummer,
         kunde: kunde ? { name: kunde.name, firma: kunde.firma } : null,
@@ -71,15 +63,8 @@ export async function GET(request: NextRequest) {
         liefertermin: order.liefertermin,
         istStatus: order.istStatus,
         versandStatus: order.versandStatus,
-        completedAt: completedAt || order.statusUpdatedAt || order.versandUpdatedAt,
+        completedAt: order.versandUpdatedAt,
       };
-    });
-
-    // Sort by completedAt (most recent first) - client-side since we have mixed dates
-    transformedOrders.sort((a, b) => {
-      const dateA = a.completedAt ? new Date(a.completedAt).getTime() : 0;
-      const dateB = b.completedAt ? new Date(b.completedAt).getTime() : 0;
-      return dateB - dateA;
     });
 
     const total = count || 0;
