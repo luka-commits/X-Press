@@ -8,6 +8,9 @@ const navigation = [
   { name: "Dashboard", href: "/" },
   { name: "Aufträge", href: "/orders" },
   { name: "Kalender", href: "/calendar" },
+  { name: "Versand", href: "/versand" },
+  { name: "Auftragsupdates", href: "/status" },
+  { name: "Reports", href: "/reports" },
 ];
 
 interface HeaderProps {
