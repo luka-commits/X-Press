@@ -67,25 +67,25 @@ Verbesserte Versand-Seite mit Google Maps, interaktiver Karte und Inline-KPIs.
 Plans:
 - [x] 15-01: Route mode toggle + order selection + map visualization
 
-#### Phase 16: Routenoptimierung
+#### Phase 16: Routenoptimierung ✅
 
 **Goal**: Google Routes API Integration, optimale Reihenfolge berechnen
 **Depends on**: Phase 15
 **Research**: Complete (16-RESEARCH.md)
-**Plans**: 1 plan
+**Plans**: 1 plan (complete)
 
 Plans:
-- [ ] 16-01: Google Routes API + Optimieren Button + Road Polyline
+- [x] 16-01: Google Routes API + Optimieren Button + Road Polyline
 
-#### Phase 17: Export & Fahrer
+#### Phase 17: Export & Fahrer ✅
 
 **Goal**: Navigation-Export (Deep Links), Fahrer-Zuweisung Basis
 **Depends on**: Phase 16
-**Research**: Unlikely (standard patterns)
-**Plans**: TBD
+**Research**: Complete (17-RESEARCH.md)
+**Plans**: 1 plan (complete)
 
 Plans:
-- [ ] 17-01: TBD
+- [x] 17-01: Google Maps navigation link export with copy-to-clipboard
 
 #### Phase 18: Fahrer-Management
 
@@ -116,6 +116,6 @@ Plans:
 | 13. Google Maps Migration | v1.2 | 1/1 | Complete | 2026-01-16 |
 | 14. Desktop + KPIs + Interaktion | v1.2 | 1/1 | Complete | 2026-01-16 |
 | 15. Routenplanung-Basis | v1.3 | 1/1 | Complete | 2026-01-16 |
-| 16. Routenoptimierung | v1.3 | 0/1 | Planned | - |
-| 17. Export & Fahrer | v1.3 | 0/? | Not started | - |
+| 16. Routenoptimierung | v1.3 | 1/1 | Complete | 2026-01-16 |
+| 17. Export & Fahrer | v1.3 | 1/1 | Complete | 2026-01-16 |
 | 18. Fahrer-Management | v1.3 | 0/? | Not started | - |
