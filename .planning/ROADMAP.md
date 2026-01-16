@@ -57,26 +57,25 @@ Verbesserte Versand-Seite mit Google Maps, interaktiver Karte und Inline-KPIs.
 
 **Milestone Goal:** Routenplanung für Versand-Team mit Optimierung und Multi-Fahrer Support
 
-#### Phase 15: Routenplanung-Basis
+#### Phase 15: Routenplanung-Basis ✅
 
 **Goal**: Modus-Toggle, Auftragsauswahl, Route auf Karte visualisieren
 **Depends on**: v1.2 complete
-**Research**: Unlikely (internal patterns, existing /versand page)
-**Plans**: TBD
+**Research**: None needed
+**Plans**: 1 plan (complete)
 
 Plans:
-- [ ] 15-01: TBD (run /gsd:plan-phase 15 to break down)
+- [x] 15-01: Route mode toggle + order selection + map visualization
 
 #### Phase 16: Routenoptimierung
 
 **Goal**: Google Routes API Integration, optimale Reihenfolge berechnen
 **Depends on**: Phase 15
-**Research**: Likely (external API integration)
-**Research topics**: Google Routes API, Directions API vs Routes API, waypoint optimization
-**Plans**: TBD
+**Research**: Complete (16-RESEARCH.md)
+**Plans**: 1 plan
 
 Plans:
-- [ ] 16-01: TBD
+- [ ] 16-01: Google Routes API + Optimieren Button + Road Polyline
 
 #### Phase 17: Export & Fahrer
 
@@ -116,7 +115,7 @@ Plans:
 | 12. Kartenansicht | v1.1 | 1/1 | Complete | 2026-01-16 |
 | 13. Google Maps Migration | v1.2 | 1/1 | Complete | 2026-01-16 |
 | 14. Desktop + KPIs + Interaktion | v1.2 | 1/1 | Complete | 2026-01-16 |
-| 15. Routenplanung-Basis | v1.3 | 0/? | Not started | - |
-| 16. Routenoptimierung | v1.3 | 0/? | Not started | - |
+| 15. Routenplanung-Basis | v1.3 | 1/1 | Complete | 2026-01-16 |
+| 16. Routenoptimierung | v1.3 | 0/1 | Planned | - |
 | 17. Export & Fahrer | v1.3 | 0/? | Not started | - |
 | 18. Fahrer-Management | v1.3 | 0/? | Not started | - |
