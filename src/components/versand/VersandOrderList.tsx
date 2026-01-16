@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { Check, X, Map, ChevronDown, ChevronUp, Calendar, Package, Route } from "lucide-react";
+import { Check, X, Map, ChevronDown, ChevronUp, Calendar, Package, Route, Sparkles, Clock, MapPin, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { VersandOrderCard, type VersandOrder } from "./VersandOrderCard";
 import { VersandStatusButtons, type VersandStatusType } from "./VersandStatusButtons";
 import { VersandKPIs, type VersandStatusFilter } from "./VersandKPIs";
 import { DeliveryMap, type MapOrder } from "@/components/map";
+import type { OptimizeRouteResponse } from "@/types/route";
 
 /**
  * Deadline filter options
@@ -68,6 +69,11 @@ export function VersandOrderList() {
   // Route planning mode
   const [routePlanningMode, setRoutePlanningMode] = useState(false);
   const [routeOrders, setRouteOrders] = useState<string[]>([]);
+
+  // Route optimization state
+  const [optimizing, setOptimizing] = useState(false);
+  const [routeStats, setRouteStats] = useState<{ duration: string; distanceMeters: number } | null>(null);
+  const [routePolyline, setRoutePolyline] = useState<string | null>(null);
 
   // Auto-dismiss feedback after 3 seconds
   useEffect(() => {
@@ -152,8 +158,10 @@ export function VersandOrderList() {
   // Toggle route planning mode
   const handleRoutePlanningToggle = () => {
     if (routePlanningMode) {
-      // Exiting mode - clear selected route orders
+      // Exiting mode - clear selected route orders and optimization state
       setRouteOrders([]);
+      setRouteStats(null);
+      setRoutePolyline(null);
     }
     setRoutePlanningMode(!routePlanningMode);
     // Also clear selected order when entering/exiting route planning mode
@@ -162,6 +170,10 @@ export function VersandOrderList() {
 
   // Toggle an order in/out of the route
   const handleRouteOrderToggle = (orderId: string) => {
+    // Clear optimization results when route selection changes
+    setRouteStats(null);
+    setRoutePolyline(null);
+
     setRouteOrders((prev) => {
       if (prev.includes(orderId)) {
         // Remove from route
@@ -185,6 +197,86 @@ export function VersandOrderList() {
       .map((orderId) => orders.find((o) => o.auftragsnummer === orderId))
       .filter((o): o is VersandOrder => o !== undefined && o.lieferLat !== null && o.lieferLng !== null);
   }, [routeOrders, orders]);
+
+  // X-Press location (Nunsdorfer Ring 13, 12277 Berlin-Marienfelde)
+  const XPRESS_LOCATION = { lat: 52.4046, lng: 13.3718 };
+
+  // Handle route optimization
+  const handleOptimizeRoute = async () => {
+    if (routeOrdersForMap.length < 2) return;
+
+    setOptimizing(true);
+    setFeedback(null);
+
+    try {
+      const response = await fetch("/api/routes/optimize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          origin: XPRESS_LOCATION,
+          destination: XPRESS_LOCATION, // Round trip back to X-Press
+          waypoints: routeOrdersForMap.map((o) => ({
+            lat: o.lieferLat!,
+            lng: o.lieferLng!,
+            orderId: o.auftragsnummer,
+          })),
+        }),
+      });
+
+      if (response.ok) {
+        const data: OptimizeRouteResponse = await response.json();
+
+        // Reorder routeOrders based on optimized order
+        setRouteOrders(data.optimizedOrderIds);
+
+        // Set route stats and polyline
+        setRouteStats({
+          duration: data.duration,
+          distanceMeters: data.distanceMeters,
+        });
+        setRoutePolyline(data.encodedPolyline);
+
+        setFeedback({
+          type: "success",
+          message: "Route optimiert",
+        });
+      } else {
+        const errorData = await response.json();
+        setFeedback({
+          type: "error",
+          message: errorData.error || "Fehler bei der Routenoptimierung",
+        });
+      }
+    } catch {
+      setFeedback({
+        type: "error",
+        message: "Verbindungsfehler - bitte erneut versuchen",
+      });
+    } finally {
+      setOptimizing(false);
+    }
+  };
+
+  // Format duration string (e.g., "3600s" -> "1 Std 0 Min")
+  const formatDuration = (duration: string): string => {
+    // Parse seconds from string like "3600s"
+    const seconds = parseInt(duration.replace("s", ""), 10);
+    if (isNaN(seconds)) return duration;
+
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+
+    if (hours > 0) {
+      return `${hours} Std ${minutes} Min`;
+    }
+    return `${minutes} Min`;
+  };
+
+  // Format distance in km (e.g., 15000 -> "15.0 km")
+  const formatDistance = (meters: number): string => {
+    const km = meters / 1000;
+    return `${km.toFixed(1)} km`;
+  };
 
   // Handle status change
   const handleStatusChange = async (status: VersandStatusType, comment?: string) => {
@@ -267,6 +359,26 @@ export function VersandOrderList() {
             Routenplanung
           </button>
 
+          {/* Optimieren Button - only in route planning mode with 2+ orders */}
+          {routePlanningMode && routeOrdersForMap.length >= 2 && (
+            <button
+              onClick={handleOptimizeRoute}
+              disabled={optimizing}
+              className={cn(
+                "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
+                "bg-amber-500 text-white hover:bg-amber-600",
+                optimizing && "opacity-70 cursor-not-allowed"
+              )}
+            >
+              {optimizing ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Sparkles className="w-4 h-4" />
+              )}
+              Optimieren
+            </button>
+          )}
+
           {/* Map Toggle - mobile only, inline */}
           <div className="md:hidden ml-auto">
             <button
@@ -285,6 +397,25 @@ export function VersandOrderList() {
           </div>
         </div>
       </div>
+
+      {/* Route Stats Bar - shown after optimization */}
+      {routeStats && routePlanningMode && (
+        <div className="bg-blue-50 rounded-lg border border-blue-200 px-4 py-3 shadow-sm">
+          <div className="flex items-center gap-6 text-sm">
+            <div className="flex items-center gap-2 text-blue-700">
+              <Clock className="w-4 h-4" />
+              <span className="font-medium">{formatDuration(routeStats.duration)}</span>
+            </div>
+            <div className="flex items-center gap-2 text-blue-700">
+              <MapPin className="w-4 h-4" />
+              <span className="font-medium">{formatDistance(routeStats.distanceMeters)}</span>
+            </div>
+            <span className="text-blue-600 text-xs">
+              {routeOrdersForMap.length} Stopps
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Feedback Banner */}
       {feedback && (
@@ -322,6 +453,7 @@ export function VersandOrderList() {
                 onOrderSelect={handleMapOrderSelect}
                 routePlanningMode={routePlanningMode}
                 routeOrders={routeOrdersForMap}
+                encodedPolyline={routePolyline}
               />
             </div>
           )}
@@ -405,6 +537,7 @@ export function VersandOrderList() {
                 onOrderSelect={handleMapOrderSelect}
                 routePlanningMode={routePlanningMode}
                 routeOrders={routeOrdersForMap}
+                encodedPolyline={routePolyline}
               />
             </div>
           </div>

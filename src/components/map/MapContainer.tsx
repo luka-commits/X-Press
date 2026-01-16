@@ -26,6 +26,8 @@ interface DeliveryMapProps {
   routePlanningMode?: boolean;
   /** Ordered list of orders selected for route (in route sequence) */
   routeOrders?: MapOrder[];
+  /** Encoded polyline from Google Routes API for optimized route rendering */
+  encodedPolyline?: string | null;
 }
 
 /**
