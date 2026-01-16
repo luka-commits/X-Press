@@ -4,12 +4,13 @@
 
 - ✅ **v1.0 Mobile Status-Update** — Phases 1-8 (shipped 2026-01-16)
 - ✅ **v1.1 Versand-Übersicht** — Phases 9-12 (shipped 2026-01-16)
-- 🚧 **v1.2 Versand Pro** — Phases 13-15 (in progress)
+- ✅ **v1.2 Versand Pro** — Phases 13-14 (shipped 2026-01-16)
 
 ## Completed Milestones
 
 - ✅ [v1.0 Mobile Status-Update](milestones/v1.0-ROADMAP.md) (Phases 1-8) — SHIPPED 2026-01-16
 - ✅ [v1.1 Versand-Übersicht](milestones/v1.1-ROADMAP.md) (Phases 9-12) — SHIPPED 2026-01-16
+- ✅ [v1.2 Versand Pro](milestones/v1.2-ROADMAP.md) (Phases 13-14) — SHIPPED 2026-01-16
 
 <details>
 <summary>✅ v1.0 Mobile Status-Update (Phases 1-8) — SHIPPED 2026-01-16</summary>
@@ -40,50 +41,16 @@ Versand-Team Workflow mit PLZ-Sortierung und Geocoding-Grundlagen.
 
 </details>
 
-### 🚧 v1.2 Versand Pro (In Progress)
+<details>
+<summary>✅ v1.2 Versand Pro (Phases 13-14) — SHIPPED 2026-01-16</summary>
 
-**Milestone Goal:** Verbesserte Versand-Seite mit Google Maps, interaktiver Karte und Inline-KPIs
+Verbesserte Versand-Seite mit Google Maps, interaktiver Karte und Inline-KPIs.
 
-**Design-Entscheidung (2026-01-16):**
-- ❌ Kein Split-View (Karte nimmt unnötig Platz weg)
-- ✅ Karte bleibt Toggle (opt-in, volle Breite wenn aktiv)
-- ✅ Bidirektionale Interaktion Liste↔Karte
-- ✅ Inline-KPIs auf Versandseite (nicht im Dashboard)
-- 🔮 Routenplanung/Multi-Select → später wenn validiert
+- [x] Phase 13: Google Maps Migration (1/1 plans) — completed 2026-01-16
+- [x] Phase 14: Desktop Layout + KPIs + Karte-Liste Interaktion (1/1 plans) — completed 2026-01-16
+  - Note: Phase 15 (KPIs) integrated into Phase 14
 
-#### Phase 13: Google Maps Migration
-
-**Goal**: Leaflet durch Google Maps ersetzen, API-Key konfigurieren, Clustering beibehalten
-**Depends on**: v1.1 complete
-**Research**: Unlikely (well-documented API)
-**Plans**: 1
-
-Plans:
-- [x] 13-01: Google Maps Migration (install deps, rewrite component, remove Leaflet) — completed 2026-01-16
-
-#### Phase 14: Desktop Layout + KPIs + Karte-Liste Interaktion
-
-**Goal**: Komplette Versand-Seite mit KPIs, Desktop Split-View und bidirektionaler Interaktion
-**Depends on**: Phase 13
-**Research**: Unlikely (internal patterns)
-**Plans**: 1
-
-KPIs (für Geschäftsführer):
-- Kompakte KPI-Leiste: "12 Offen · 5 Versandbereit · 3 Versendet · 2 Überfällig"
-- Sofortiger Überblick ohne Scrollen
-
-Layout:
-- Desktop (≥768px): Split-View mit Liste links, Karte rechts (immer sichtbar)
-- Mobile (<768px): Toggle-basierte Karte (bestehendes Verhalten)
-
-Interaktion:
-- Klick auf Order-Card → Karte zoomt zu diesem Punkt, Marker highlighted
-- Klick auf Marker → Order-Card scrollt in View, wird hervorgehoben
-
-Plans:
-- [ ] 14-01: KPIs + desktop split-view + bidirectional list↔map interaction
-
-#### ~~Phase 15: Inline Versand-KPIs~~ (integriert in Phase 14)
+</details>
 
 ## Progress
 
@@ -102,4 +69,4 @@ Plans:
 | 11. Versand-UI Seite | v1.1 | 1/1 | Complete | 2026-01-15 |
 | 12. Kartenansicht | v1.1 | 1/1 | Complete | 2026-01-16 |
 | 13. Google Maps Migration | v1.2 | 1/1 | Complete | 2026-01-16 |
-| 14. Desktop + KPIs + Interaktion | v1.2 | 0/1 | Not started | - |
+| 14. Desktop + KPIs + Interaktion | v1.2 | 1/1 | Complete | 2026-01-16 |

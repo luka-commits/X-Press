@@ -1,21 +1,30 @@
 'use client';
 
-import { MobileLayout } from '@/components/layout';
+import { MainLayout } from '@/components/layout';
 import { VersandOrderList } from '@/components/versand';
+import { Truck } from 'lucide-react';
 
 /**
  * Versand Page - Shipping Team Order View
  *
- * Mobile-optimized page for shipping team to:
+ * Desktop & mobile page for shipping team to:
  * - View orders sorted by PLZ for route optimization
  * - Filter by deadline (today/week/all)
  * - Filter by versandStatus (offen/versandbereit)
  * - Mark orders as versandbereit or versendet
+ * - View orders on map with bidirectional interaction
  */
 export default function VersandPage() {
   return (
-    <MobileLayout title="Versand" showBack={true}>
+    <MainLayout
+      headerRight={
+        <div className="flex items-center gap-2 text-sm text-neutral-500">
+          <Truck className="w-4 h-4" />
+          <span>Versand-Übersicht</span>
+        </div>
+      }
+    >
       <VersandOrderList />
-    </MobileLayout>
+    </MainLayout>
   );
 }
