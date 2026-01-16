@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 /**
  * Order data structure for map markers
  */
-interface MapOrder {
+export interface MapOrder {
   auftragsnummer: string;
   kunde?: {
     firma: string | null;
@@ -22,6 +22,10 @@ interface DeliveryMapProps {
   onOrderSelect?: (orderId: string) => void;
   /** Externally controlled selected order - map will pan to and highlight this marker */
   selectedOrderId?: string | null;
+  /** Route planning mode - when true, shows numbered markers and route line */
+  routePlanningMode?: boolean;
+  /** Ordered list of orders selected for route (in route sequence) */
+  routeOrders?: MapOrder[];
 }
 
 /**
