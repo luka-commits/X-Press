@@ -24,14 +24,6 @@ const XPRESS_LOCATION = { lat: 52.4046, lng: 13.3718 };
 const MAX_URL_LENGTH = 2048;
 
 /**
- * Order with delivery coordinates
- */
-interface RouteOrder {
-  lieferLat: number;
-  lieferLng: number;
-}
-
-/**
  * Generates a Google Maps navigation URL for a multi-stop delivery route.
  *
  * The URL:
