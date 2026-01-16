@@ -22,8 +22,9 @@ interface DeliveryMapProps {
 /**
  * Dynamic import wrapper for DeliveryMap
  *
- * CRITICAL: Leaflet requires window object, which doesn't exist during SSR.
- * Using next/dynamic with ssr: false to disable server-side rendering.
+ * While Google Maps handles its own script loading via useLoadScript,
+ * we still use dynamic import to prevent hydration mismatches and
+ * ensure the component only renders on the client.
  */
 const DeliveryMap = dynamic<DeliveryMapProps>(
   () => import("./DeliveryMap"),
