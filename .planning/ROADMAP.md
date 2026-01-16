@@ -7,6 +7,7 @@
 - ✅ **v1.2 Versand Pro** — Phases 13-14 (shipped 2026-01-16)
 - ✅ **v1.3 Routenplanung** — Phases 15-17 (shipped 2026-01-16)
 - ✅ **v1.4 Reporting** — Phases 18-20 (shipped 2026-01-17)
+- 🚧 **v1.5 System-Konsolidierung** — Phases 21-22 (in progress)
 
 ## Completed Milestones
 
@@ -79,6 +80,30 @@ Historische Daten und Analytics für Management-Übersicht mit Reports-Sektion.
 
 </details>
 
+### 🚧 v1.5 System-Konsolidierung (In Progress)
+
+**Milestone Goal:** Kohäsives System aus User-Sicht: klare Pipeline-Logik, klare Tab-Verantwortlichkeiten, keine gemischten Daten
+
+#### Phase 21: Aufträge Pipeline-View
+
+**Goal**: Kombinierte Status-Spalte zeigt volle Pipeline (In Produktion → Fertig → Versandbereit → Versendet + Problem), VersandStatus-Filter hinzufügen
+**Depends on**: Phase 20 (v1.4 complete)
+**Research**: Unlikely (internal patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 21-01: TBD (run /gsd:plan-phase 21 to break down)
+
+#### Phase 22: Reports & Navigation
+
+**Goal**: Abgeschlossene-Tab zeigt nur versandStatus='versendet', Reports in Sidebar-Navigation aufnehmen
+**Depends on**: Phase 21
+**Research**: Unlikely (internal patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 22-01: TBD (run /gsd:plan-phase 22 to break down)
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -103,3 +128,5 @@ Historische Daten und Analytics für Management-Übersicht mit Reports-Sektion.
 | 18. Reports-Grundstruktur | v1.4 | 1/1 | Complete | 2026-01-16 |
 | 19. Zeitraum-Analysen | v1.4 | 2/2 | Complete | 2026-01-17 |
 | 20. Versand-Reports | v1.4 | 2/2 | Complete | 2026-01-17 |
+| 21. Aufträge Pipeline-View | v1.5 | 0/? | Not started | - |
+| 22. Reports & Navigation | v1.5 | 0/? | Not started | - |
