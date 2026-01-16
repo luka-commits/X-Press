@@ -6,6 +6,7 @@
 - ✅ **v1.1 Versand-Übersicht** — Phases 9-12 (shipped 2026-01-16)
 - ✅ **v1.2 Versand Pro** — Phases 13-14 (shipped 2026-01-16)
 - ✅ **v1.3 Routenplanung** — Phases 15-17 (shipped 2026-01-16)
+- 🚧 **v1.4 Reporting** — Phases 18-20 (in progress)
 
 ## Completed Milestones
 
@@ -66,6 +67,41 @@ Routenplanung für Versand-Team mit Optimierung und Google Maps Navigation Expor
 
 </details>
 
+### 🚧 v1.4 Reporting (In Progress)
+
+**Milestone Goal:** Historische Daten und Analytics für Management-Übersicht mit Reports-Sektion.
+
+#### Phase 18: Reports-Grundstruktur
+
+**Goal**: Neue /reports Route mit Sub-Navigation und Abgeschlossene Aufträge Tabelle
+**Depends on**: v1.3 complete
+**Research**: Unlikely (internal patterns, existing data models)
+**Plans**: TBD
+
+Plans:
+- [ ] 18-01: TBD (run /gsd:plan-phase 18 to break down)
+
+#### Phase 19: Zeitraum-Analysen
+
+**Goal**: /reports/analytics mit Zeitraum-Selector und Charts für Volumen-Trends
+**Depends on**: Phase 18
+**Research**: Likely (charting library selection)
+**Research topics**: Recharts vs Chart.js vs other React charting libraries
+**Plans**: TBD
+
+Plans:
+- [ ] 19-01: TBD
+
+#### Phase 20: Versand-Reports
+
+**Goal**: /reports/versand mit Liefertreue-Metriken, Versandzeiten-Analyse und PLZ-Verteilung
+**Depends on**: Phase 19
+**Research**: Unlikely (uses charting from Phase 19)
+**Plans**: TBD
+
+Plans:
+- [ ] 20-01: TBD
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -87,3 +123,6 @@ Routenplanung für Versand-Team mit Optimierung und Google Maps Navigation Expor
 | 15. Routenplanung-Basis | v1.3 | 1/1 | Complete | 2026-01-16 |
 | 16. Routenoptimierung | v1.3 | 1/1 | Complete | 2026-01-16 |
 | 17. Export & Fahrer | v1.3 | 1/1 | Complete | 2026-01-16 |
+| 18. Reports-Grundstruktur | v1.4 | 0/? | Not started | - |
+| 19. Zeitraum-Analysen | v1.4 | 0/? | Not started | - |
+| 20. Versand-Reports | v1.4 | 0/? | Not started | - |
