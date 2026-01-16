@@ -71,15 +71,15 @@ Routenplanung für Versand-Team mit Optimierung und Google Maps Navigation Expor
 
 **Milestone Goal:** Historische Daten und Analytics für Management-Übersicht mit Reports-Sektion.
 
-#### Phase 18: Reports-Grundstruktur
+#### Phase 18: Reports-Grundstruktur ✓
 
 **Goal**: Neue /reports Route mit Sub-Navigation und Abgeschlossene Aufträge Tabelle
 **Depends on**: v1.3 complete
 **Research**: Unlikely (internal patterns, existing data models)
-**Plans**: TBD
+**Plans**: 1/1 complete
 
 Plans:
-- [ ] 18-01: TBD (run /gsd:plan-phase 18 to break down)
+- [x] 18-01: Reports navigation + completed orders table — completed 2026-01-16
 
 #### Phase 19: Zeitraum-Analysen
 
@@ -123,6 +123,6 @@ Plans:
 | 15. Routenplanung-Basis | v1.3 | 1/1 | Complete | 2026-01-16 |
 | 16. Routenoptimierung | v1.3 | 1/1 | Complete | 2026-01-16 |
 | 17. Export & Fahrer | v1.3 | 1/1 | Complete | 2026-01-16 |
-| 18. Reports-Grundstruktur | v1.4 | 0/? | Not started | - |
+| 18. Reports-Grundstruktur | v1.4 | 1/1 | Complete | 2026-01-16 |
 | 19. Zeitraum-Analysen | v1.4 | 0/? | Not started | - |
 | 20. Versand-Reports | v1.4 | 0/? | Not started | - |
