@@ -81,16 +81,16 @@ Routenplanung für Versand-Team mit Optimierung und Google Maps Navigation Expor
 Plans:
 - [x] 18-01: Reports navigation + completed orders table — completed 2026-01-16
 
-#### Phase 19: Zeitraum-Analysen
+#### Phase 19: Zeitraum-Analysen ✓
 
 **Goal**: /reports/analytics mit Zeitraum-Selector und Charts für Volumen-Trends
 **Depends on**: Phase 18
 **Research**: Complete — uses existing Recharts v3.6.0
-**Plans**: 1/2 complete
+**Plans**: 2/2 complete
 
 Plans:
 - [x] 19-01: DateRangePicker component + analytics API — completed 2026-01-17
-- [ ] 19-02: Analytics page with volume chart
+- [x] 19-02: Analytics page with volume chart — completed 2026-01-17
 
 #### Phase 20: Versand-Reports
 
@@ -124,5 +124,5 @@ Plans:
 | 16. Routenoptimierung | v1.3 | 1/1 | Complete | 2026-01-16 |
 | 17. Export & Fahrer | v1.3 | 1/1 | Complete | 2026-01-16 |
 | 18. Reports-Grundstruktur | v1.4 | 1/1 | Complete | 2026-01-16 |
-| 19. Zeitraum-Analysen | v1.4 | 1/2 | In progress | - |
+| 19. Zeitraum-Analysen | v1.4 | 2/2 | Complete | 2026-01-17 |
 | 20. Versand-Reports | v1.4 | 0/? | Not started | - |
