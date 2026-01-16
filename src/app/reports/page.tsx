@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { MainLayout } from '@/components/layout';
-import { CompletedOrdersTable, AnalyticsView } from '@/components/reports';
+import { CompletedOrdersTable, AnalyticsView, VersandView } from '@/components/reports';
 import { FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -17,7 +17,7 @@ interface Tab {
 const tabs: Tab[] = [
   { id: 'abgeschlossene', name: 'Abgeschlossene', disabled: false },
   { id: 'zeitraum', name: 'Zeitraum-Analysen', disabled: false },
-  { id: 'versand', name: 'Versand-Reports', disabled: true },
+  { id: 'versand', name: 'Versand-Reports', disabled: false },
 ];
 
 /**
@@ -76,11 +76,7 @@ export default function ReportsPage() {
         {/* Content Area */}
         {activeTab === 'abgeschlossene' && <CompletedOrdersTable />}
         {activeTab === 'zeitraum' && <AnalyticsView />}
-        {activeTab === 'versand' && (
-          <div className="text-center py-12 text-neutral-500">
-            Versand-Reports - Demnachst verfugbar (Phase 20)
-          </div>
-        )}
+        {activeTab === 'versand' && <VersandView />}
       </div>
     </MainLayout>
   );
