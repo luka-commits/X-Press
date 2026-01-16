@@ -18,6 +18,10 @@ interface MapOrder {
 interface DeliveryMapProps {
   orders: MapOrder[];
   className?: string;
+  /** Callback when a marker is clicked - emits order's auftragsnummer */
+  onOrderSelect?: (orderId: string) => void;
+  /** Externally controlled selected order - map will pan to and highlight this marker */
+  selectedOrderId?: string | null;
 }
 
 /**

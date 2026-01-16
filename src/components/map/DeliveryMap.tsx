@@ -23,6 +23,10 @@ interface MapOrder {
 interface DeliveryMapProps {
   orders: MapOrder[];
   className?: string;
+  /** Callback when a marker is clicked - emits order's auftragsnummer */
+  onOrderSelect?: (orderId: string) => void;
+  /** Externally controlled selected order - map will pan to and highlight this marker */
+  selectedOrderId?: string | null;
 }
 
 // Berlin center (X-Press location area)
@@ -43,7 +47,12 @@ const containerStyle = {
  * - Marker clustering for PLZ-grouped orders
  * - InfoWindow with order details on marker click
  */
-export default function DeliveryMap({ orders, className }: DeliveryMapProps) {
+export default function DeliveryMap({
+  orders,
+  className,
+  onOrderSelect,
+  selectedOrderId,
+}: DeliveryMapProps) {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
   });
@@ -51,6 +60,8 @@ export default function DeliveryMap({ orders, className }: DeliveryMapProps) {
   const mapRef = useRef<google.maps.Map | null>(null);
   const clustererRef = useRef<MarkerClusterer | null>(null);
   const markersRef = useRef<google.maps.Marker[]>([]);
+  // Map of orderId -> marker for quick lookup
+  const markerMapRef = useRef<Map<string, google.maps.Marker>>(new Map());
   const [selectedOrder, setSelectedOrder] = useState<MapOrder | null>(null);
 
   // Filter orders with valid coordinates
@@ -70,6 +81,7 @@ export default function DeliveryMap({ orders, className }: DeliveryMapProps) {
       // Clear existing markers
       markersRef.current.forEach((marker) => marker.setMap(null));
       markersRef.current = [];
+      markerMapRef.current.clear();
 
       // Create markers for each order
       const markers = mappableOrders.map((order) => {
@@ -78,9 +90,13 @@ export default function DeliveryMap({ orders, className }: DeliveryMapProps) {
           map: null, // Will be managed by clusterer
         });
 
-        // Click handler to show InfoWindow
+        // Store in marker map for quick lookup
+        markerMapRef.current.set(order.auftragsnummer, marker);
+
+        // Click handler to show InfoWindow and emit callback
         marker.addListener("click", () => {
           setSelectedOrder(order);
+          onOrderSelect?.(order.auftragsnummer);
         });
 
         return marker;
@@ -97,7 +113,7 @@ export default function DeliveryMap({ orders, className }: DeliveryMapProps) {
         markers,
       });
     },
-    [mappableOrders]
+    [mappableOrders, onOrderSelect]
   );
 
   // Update markers when orders change
@@ -107,6 +123,7 @@ export default function DeliveryMap({ orders, className }: DeliveryMapProps) {
     // Clear existing markers
     markersRef.current.forEach((marker) => marker.setMap(null));
     markersRef.current = [];
+    markerMapRef.current.clear();
 
     // Create new markers
     const markers = mappableOrders.map((order) => {
@@ -115,8 +132,12 @@ export default function DeliveryMap({ orders, className }: DeliveryMapProps) {
         map: null,
       });
 
+      // Store in marker map for quick lookup
+      markerMapRef.current.set(order.auftragsnummer, marker);
+
       marker.addListener("click", () => {
         setSelectedOrder(order);
+        onOrderSelect?.(order.auftragsnummer);
       });
 
       return marker;
@@ -129,7 +150,47 @@ export default function DeliveryMap({ orders, className }: DeliveryMapProps) {
       clustererRef.current.clearMarkers();
       clustererRef.current.addMarkers(markers);
     }
-  }, [mappableOrders]);
+  }, [mappableOrders, onOrderSelect]);
+
+  // React to external selectedOrderId changes - pan to marker and highlight
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    // Reset all markers to default icon
+    markerMapRef.current.forEach((marker) => {
+      marker.setIcon(null); // Use default icon
+    });
+
+    if (!selectedOrderId) {
+      setSelectedOrder(null);
+      return;
+    }
+
+    // Find the order and marker
+    const order = mappableOrders.find((o) => o.auftragsnummer === selectedOrderId);
+    const marker = markerMapRef.current.get(selectedOrderId);
+
+    if (order && marker) {
+      // Pan to marker position
+      const position = marker.getPosition();
+      if (position) {
+        mapRef.current.panTo(position);
+      }
+
+      // Highlight selected marker with red circle
+      marker.setIcon({
+        path: google.maps.SymbolPath.CIRCLE,
+        scale: 12,
+        fillColor: "#EF4444",
+        fillOpacity: 1,
+        strokeColor: "#ffffff",
+        strokeWeight: 2,
+      });
+
+      // Set selected order to show InfoWindow
+      setSelectedOrder(order);
+    }
+  }, [selectedOrderId, mappableOrders]);
 
   // Cleanup on unmount
   useEffect(() => {
