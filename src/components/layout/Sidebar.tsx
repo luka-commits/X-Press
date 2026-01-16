@@ -9,6 +9,7 @@ const navigation = [
   { name: "Aufträge", href: "/orders" },
   { name: "Kalender", href: "/calendar" },
   { name: "Versand", href: "/versand" },
+  { name: "Reports", href: "/reports" },
 ];
 
 export function Sidebar() {
