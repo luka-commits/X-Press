@@ -87,6 +87,7 @@ export function VersandOrderCard({
 
   return (
     <button
+      id={`order-card-${order.auftragsnummer}`}
       onClick={() => onSelect(order)}
       className={cn(
         "w-full text-left p-4 rounded-lg border transition-colors",
