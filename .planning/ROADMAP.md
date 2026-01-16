@@ -42,34 +42,50 @@ Versand-Team Workflow mit PLZ-Sortierung und Geocoding-Grundlagen.
 
 ### 🚧 v1.2 Versand Pro (In Progress)
 
-**Milestone Goal:** Professionelle Versand-Übersicht mit Google Maps, Split-View Layout und Dashboard-KPIs
+**Milestone Goal:** Verbesserte Versand-Seite mit Google Maps, interaktiver Karte und Inline-KPIs
 
-#### Phase 13: Google Maps Setup
+**Design-Entscheidung (2026-01-16):**
+- ❌ Kein Split-View (Karte nimmt unnötig Platz weg)
+- ✅ Karte bleibt Toggle (opt-in, volle Breite wenn aktiv)
+- ✅ Bidirektionale Interaktion Liste↔Karte
+- ✅ Inline-KPIs auf Versandseite (nicht im Dashboard)
+- 🔮 Routenplanung/Multi-Select → später wenn validiert
 
-**Goal**: Leaflet durch Google Maps ersetzen, API-Key konfigurieren
+#### Phase 13: Google Maps Migration
+
+**Goal**: Leaflet durch Google Maps ersetzen, API-Key konfigurieren, Clustering beibehalten
 **Depends on**: v1.1 complete
 **Research**: Unlikely (well-documented API)
-**Plans**: TBD
+**Plans**: 1
 
 Plans:
-- [ ] 13-01: TBD (run /gsd:plan-phase 13 to break down)
+- [ ] 13-01: Google Maps Migration (install deps, rewrite component, remove Leaflet)
 
-#### Phase 14: Split-View Layout
+#### Phase 14: Karte-Liste Interaktion
 
-**Goal**: Desktop-optimiertes Layout mit Liste links, Karte rechts
+**Goal**: Bidirektionale Interaktion zwischen Liste und Karte
 **Depends on**: Phase 13
 **Research**: Unlikely (internal patterns)
 **Plans**: TBD
 
+Features:
+- Klick auf Order-Card → Karte zoomt zu diesem Punkt, Marker highlighted
+- Klick auf Marker → Order-Card scrollt in View, wird hervorgehoben
+- Karte zeigt alle gefilterten Aufträge
+
 Plans:
 - [ ] 14-01: TBD
 
-#### Phase 15: Dashboard Versand-KPIs
+#### Phase 15: Inline Versand-KPIs
 
-**Goal**: Versand-Kennzahlen ins Executive Dashboard integrieren
+**Goal**: Schnelle Übersichtszahlen direkt auf der Versandseite
 **Depends on**: Phase 14
-**Research**: Unlikely (existing dashboard patterns)
+**Research**: Unlikely (existing patterns)
 **Plans**: TBD
+
+Features:
+- Kompakte KPI-Leiste: "12 Offen · 5 Versandbereit · 3 Versendet"
+- Klickbar als Filter-Shortcut
 
 Plans:
 - [ ] 15-01: TBD
@@ -90,6 +106,6 @@ Plans:
 | 10. Versand-API & Liste | v1.1 | 1/1 | Complete | 2026-01-15 |
 | 11. Versand-UI Seite | v1.1 | 1/1 | Complete | 2026-01-15 |
 | 12. Kartenansicht | v1.1 | 1/1 | Complete | 2026-01-16 |
-| 13. Google Maps Setup | v1.2 | 0/? | Not started | - |
-| 14. Split-View Layout | v1.2 | 0/? | Not started | - |
-| 15. Dashboard Versand-KPIs | v1.2 | 0/? | Not started | - |
+| 13. Google Maps Migration | v1.2 | 0/1 | Not started | - |
+| 14. Karte-Liste Interaktion | v1.2 | 0/? | Not started | - |
+| 15. Inline Versand-KPIs | v1.2 | 0/? | Not started | - |
