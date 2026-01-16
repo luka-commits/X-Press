@@ -27,3 +27,28 @@
 **Archive:** [v1.0-ROADMAP.md](milestones/v1.0-ROADMAP.md)
 
 ---
+
+## v1.1 Versand-Übersicht (Shipped: 2026-01-16)
+
+**Delivered:** Versand-Team Workflow mit VersandStatus-Tracking, PLZ-Sortierung und Geocoding-Grundlagen.
+
+**Phases completed:** 9-12 (4 plans total)
+
+**Key accomplishments:**
+
+- VersandStatus enum (offen, versandbereit, versendet) with tracking fields
+- Delivery address parsing from XML (street, PLZ, city, country)
+- PATCH /api/orders/[id]/versand endpoint for status updates
+- GET /api/versand/orders with PLZ sorting and deadline filters
+- /versand page with order list and status buttons
+- Geocoding setup with lat/lng fields and PLZ lookup utility
+- Note: Leaflet map component (12-02) replaced by v1.2 Google Maps integration
+
+**Stats:**
+
+- 4 phases, 4 plans
+- 1 day (2026-01-15 → 2026-01-16)
+
+**Archive:** [v1.1-ROADMAP.md](milestones/v1.1-ROADMAP.md)
+
+---
