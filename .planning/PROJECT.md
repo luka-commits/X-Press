@@ -38,6 +38,9 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 - ✓ VersandStatus filter auf Aufträge-Seite — v1.5
 - ✓ Reports in Sidebar-Navigation — v1.5
 - ✓ Abgeschlossene tab zeigt nur versendete Aufträge — v1.5
+- ✓ Pipeline Analytics Dashboard mit Funnel und KPIs — v1.6
+- ✓ ThroughputChart Zeitreihen (Eingang vs Versendet) — v1.6
+- ✓ Dashboard auf 4 KPIs reduziert (Problem-KPI in Reports) — v1.6
 
 ### Active
 
@@ -53,21 +56,21 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 
 ## Context
 
-**Shipped v1.5:**
-- 9,777 LOC TypeScript
+**Shipped v1.6:**
+- ~10,000 LOC TypeScript
 - Tech stack: Next.js 14, Supabase, Prisma, Tailwind CSS, Google Maps API, Recharts
 - Mobile-first /status page for shopfloor workers
 - /versand page with routing optimization and navigation export
-- /reports page with completed orders, analytics, and shipping reports
-- Dashboard integration with combined Pipeline-Status visibility
+- /reports page with consolidated PipelineDashboard (Funnel, KPIs, Charts)
+- Dashboard with 4 KPIs (streamlined from 5)
 
 **Production State:**
 - Produktionsmitarbeiter können Auftragsstatus updaten
-- Dashboard zeigt IST-Zustand vom Shopfloor mit Pipeline-Status
-- Problem-Aufträge sind sofort sichtbar
+- Dashboard zeigt IST-Zustand vom Shopfloor mit Pipeline-Status (4 KPIs)
+- Problem-Aufträge sichtbar in Reports SnapshotKPIs
 - Versand-Team hat Routenplanung mit Optimierung und Google Maps Export
-- Management hat Reports mit historischen Daten und Analytics
-- Klare Tab-Verantwortlichkeiten: Aufträge = in Bearbeitung, Reports = versendet
+- Management hat konsolidiertes Pipeline-Dashboard mit Zeitreihen
+- Klare Tab-Verantwortlichkeiten: Aufträge = in Bearbeitung, Reports = Analytics + Shipped
 
 ## Constraints
 
@@ -102,4 +105,4 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 | Abgeschlossene = nur versendet | Klare Trennung: Aufträge = in Bearbeitung, Reports = shipped | ✓ Good |
 
 ---
-*Last updated: 2026-01-17 after v1.5 milestone*
+*Last updated: 2026-01-17 after v1.6 milestone*
