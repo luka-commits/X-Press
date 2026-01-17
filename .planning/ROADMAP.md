@@ -8,7 +8,7 @@
 - ✅ **v1.3 Routenplanung** — Phases 15-17 (shipped 2026-01-16)
 - ✅ **v1.4 Reporting** — Phases 18-20 (shipped 2026-01-17)
 - ✅ **v1.5 System-Konsolidierung** — Phases 21-22 (shipped 2026-01-17)
-- 🚧 **v1.6 Pipeline-Analytics** — Phases 23-24 (in progress)
+- ✅ **v1.6 Pipeline-Analytics** — Phases 23-24 (shipped 2026-01-17)
 
 ## Completed Milestones
 
@@ -18,6 +18,7 @@
 - ✅ [v1.3 Routenplanung](milestones/v1.3-ROADMAP.md) (Phases 15-17) — SHIPPED 2026-01-16
 - ✅ [v1.4 Reporting](milestones/v1.4-ROADMAP.md) (Phases 18-20) — SHIPPED 2026-01-17
 - ✅ [v1.5 System-Konsolidierung](milestones/v1.5-ROADMAP.md) (Phases 21-22) — SHIPPED 2026-01-17
+- ✅ [v1.6 Pipeline-Analytics](milestones/v1.6-ROADMAP.md) (Phases 23-24) — SHIPPED 2026-01-17
 
 <details>
 <summary>✅ v1.0 Mobile Status-Update (Phases 1-8) — SHIPPED 2026-01-16</summary>
@@ -92,29 +93,15 @@ Kohäsives System aus User-Sicht: klare Pipeline-Logik, klare Tab-Verantwortlich
 
 </details>
 
-### 🚧 v1.6 Pipeline-Analytics (In Progress)
+<details>
+<summary>✅ v1.6 Pipeline-Analytics (Phases 23-24) — SHIPPED 2026-01-17</summary>
 
-**Milestone Goal:** Reports zu einem fokussierten Pipeline-Dashboard konsolidieren, Dashboard entschlacken
+Reports zu einem fokussierten Pipeline-Dashboard konsolidieren, Dashboard entschlacken.
 
-#### Phase 23: Reports neu
+- [x] Phase 23: Reports neu (1/1 plans) — completed 2026-01-17
+- [x] Phase 24: Reports Zeitreihen + Dashboard (1/1 plans) — completed 2026-01-17
 
-**Goal**: KPI-Karten, Pipeline-Funnel, Versand-Metriken als neue konsolidierte Reports-Seite
-**Depends on**: Phase 22
-**Research**: Unlikely (internal patterns, existing data models)
-**Plans**: TBD
-
-Plans:
-- [ ] 23-01: TBD (run /gsd:plan-phase 23 to break down)
-
-#### Phase 24: Reports Zeitreihen + Dashboard
-
-**Goal**: Zeitreihen-Chart (Eingang vs. Versand) und Dashboard-Anpassung (Problem-KPI entfernen)
-**Depends on**: Phase 23
-**Research**: Unlikely (internal patterns, existing chart patterns)
-**Plans**: TBD
-
-Plans:
-- [ ] 24-01: TBD
+</details>
 
 ## Progress
 
@@ -142,5 +129,5 @@ Plans:
 | 20. Versand-Reports | v1.4 | 2/2 | Complete | 2026-01-17 |
 | 21. Aufträge Pipeline-View | v1.5 | 1/1 | Complete | 2026-01-16 |
 | 22. Reports & Navigation | v1.5 | 1/1 | Complete | 2026-01-17 |
-| 23. Reports neu | v1.6 | 0/? | Not started | - |
-| 24. Reports Zeitreihen + Dashboard | v1.6 | 0/? | Not started | - |
+| 23. Reports neu | v1.6 | 1/1 | Complete | 2026-01-17 |
+| 24. Reports Zeitreihen + Dashboard | v1.6 | 1/1 | Complete | 2026-01-17 |

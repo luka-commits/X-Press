@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-17)
 
 **Core value:** Mitarbeiter können mit 3 Klicks den Auftragsstatus vom Handy aus updaten.
-**Current focus:** Phase 23 Reports neu - Pipeline Analytics
+**Current focus:** v1.6 Pipeline-Analytics COMPLETE
 
 ## Current Position
 
-Phase: 23 of 24 (Reports neu)
-Plan: 01 COMPLETE
-Status: Ready for Phase 24
-Last activity: 2026-01-17 — Phase 23-01 completed
+Phase: 24 of 24 (Reports Zeitreihen + Dashboard)
+Plan: 1 of 1 in current phase
+Status: Milestone complete
+Last activity: 2026-01-17 — Completed 24-01-PLAN.md
 
-Progress: █████░░░░░ 50% (v1.6)
+Progress: ██████████ 100% (v1.6)
 
 ## Milestones
 
@@ -24,14 +24,14 @@ Progress: █████░░░░░ 50% (v1.6)
 - ✅ v1.3 Routenplanung (Phases 15-17) — SHIPPED 2026-01-16
 - ✅ v1.4 Reporting (Phases 18-20) — SHIPPED 2026-01-17
 - ✅ v1.5 System-Konsolidierung (Phases 21-22) — SHIPPED 2026-01-17
-- 🚧 v1.6 Pipeline-Analytics (Phases 23-24) — in progress
+- ✅ v1.6 Pipeline-Analytics (Phases 23-24) — COMPLETE 2026-01-17
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 28
-- Average duration: ~2.5 min
-- Total execution time: ~101 min
+- Total plans completed: 29
+- Average duration: ~4 min
+- Total execution time: ~109 min
 
 **By Milestone:**
 
@@ -43,7 +43,7 @@ Progress: █████░░░░░ 50% (v1.6)
 | v1.3 Routenplanung | 3 | 3 | ~22 min |
 | v1.4 Reporting | 3 | 5 | ~12 min |
 | v1.5 System-Konsolidierung | 2 | 2 | ~5 min |
-| v1.6 Pipeline-Analytics | 1/2 | 1 | ~8 min |
+| v1.6 Pipeline-Analytics | 2 | 2 | ~16 min |
 
 ## Accumulated Context
 
@@ -72,6 +72,6 @@ None currently.
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Phase 23-01 complete
+Stopped at: v1.6 Pipeline-Analytics milestone complete
 Resume file: None
-Next: Plan/execute Phase 24
+Next: /gsd:complete-milestone
