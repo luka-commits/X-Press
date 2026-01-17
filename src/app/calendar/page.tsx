@@ -1,14 +1,11 @@
-import { MainLayout } from '@/components/layout';
-import { WeekNavigation, MachineCalendarGrid } from '@/components/calendar';
-import {
-  getMachineCapacityForWeek,
-  getWeekInfo,
-  getWeekStart,
-} from '@/lib/calendar-queries';
 import { startOfWeek } from 'date-fns';
 
-// Disable caching - always fetch fresh data
-export const dynamic = 'force-dynamic';
+import { WeekNavigation, MachineCalendarGrid } from '@/components/calendar';
+import { MainLayout } from '@/components/layout';
+import { getMachineCapacityForWeek, getWeekInfo, getWeekStart } from '@/lib/calendar-queries';
+
+// Revalidate every 60 seconds for near-real-time capacity data
+export const revalidate = 60;
 
 interface CalendarPageProps {
   searchParams: Promise<{

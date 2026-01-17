@@ -1,14 +1,15 @@
-import { Suspense } from 'react';
-import { MainLayout } from '@/components/layout';
-import { OrderTable } from '@/components/orders/OrderTable';
-import { OrderSearch } from '@/components/orders/OrderSearch';
-import { OrderFilters } from '@/components/orders/OrderFilters';
-import { supabase, type Auftrag, type Kunde } from '@/lib/supabase';
 import { startOfDay, endOfDay, startOfWeek, endOfWeek } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
+import { Suspense } from 'react';
 
-// Disable caching - always fetch fresh data
-export const dynamic = 'force-dynamic';
+import { MainLayout } from '@/components/layout';
+import { OrderFilters } from '@/components/orders/OrderFilters';
+import { OrderSearch } from '@/components/orders/OrderSearch';
+import { OrderTable } from '@/components/orders/OrderTable';
+import { supabase, type Auftrag, type Kunde } from '@/lib/supabase';
+
+// Revalidate every 30 seconds for responsive order updates
+export const revalidate = 30;
 
 const TIMEZONE = 'Europe/Berlin';
 
@@ -63,9 +64,7 @@ async function getOrders(searchParams: OrdersPageProps['searchParams']) {
   }
 
   // Basis-Query mit Kunde-Relation
-  let query = supabase
-    .from('Auftrag')
-    .select('*, Kunde(id, name, firma)', { count: 'exact' });
+  let query = supabase.from('Auftrag').select('*, Kunde(id, name, firma)', { count: 'exact' });
 
   // Status-Filter
   if (status === 'aktiv') {
@@ -84,9 +83,7 @@ async function getOrders(searchParams: OrdersPageProps['searchParams']) {
       .gte('liefertermin', weekStart.toISOString())
       .lte('liefertermin', weekEnd.toISOString());
   } else if (deadline === 'overdue') {
-    query = query
-      .lt('liefertermin', todayStart.toISOString())
-      .eq('status', 'aktiv');
+    query = query.lt('liefertermin', todayStart.toISOString()).eq('status', 'aktiv');
   }
 
   // Produkttyp-Filter
@@ -111,9 +108,7 @@ async function getOrders(searchParams: OrdersPageProps['searchParams']) {
         break;
       case 'fertig':
         // Produktion fertig, aber noch nicht versandbereit/versendet
-        query = query
-          .eq('istStatus', 'fertig')
-          .or('versandStatus.is.null,versandStatus.eq.offen');
+        query = query.eq('istStatus', 'fertig').or('versandStatus.is.null,versandStatus.eq.offen');
         break;
       case 'versandbereit':
         query = query.eq('versandStatus', 'versandbereit');
@@ -158,9 +153,13 @@ async function getOrders(searchParams: OrdersPageProps['searchParams']) {
   }
 
   // Automatischer Status-Wechsel + Format für Client
-  const ordersWithStatus = (orders as OrderWithKunde[] || []).map((order) => {
+  const ordersWithStatus = ((orders as OrderWithKunde[]) || []).map((order) => {
     let computedStatus = order.status;
-    if (order.liefertermin && new Date(order.liefertermin) < todayStart && order.status === 'aktiv') {
+    if (
+      order.liefertermin &&
+      new Date(order.liefertermin) < todayStart &&
+      order.status === 'aktiv'
+    ) {
       computedStatus = 'abgeschlossen';
     }
     return {
@@ -171,11 +170,13 @@ async function getOrders(searchParams: OrdersPageProps['searchParams']) {
       computedStatus,
       istStatus: order.istStatus,
       versandStatus: order.versandStatus,
-      kunde: order.Kunde ? {
-        id: order.Kunde.id,
-        name: order.Kunde.name,
-        firma: order.Kunde.firma,
-      } : null,
+      kunde: order.Kunde
+        ? {
+            id: order.Kunde.id,
+            name: order.Kunde.name,
+            firma: order.Kunde.firma,
+          }
+        : null,
       _count: { arbeitsgaenge: 0 }, // Wird nicht mehr benötigt
     };
   });

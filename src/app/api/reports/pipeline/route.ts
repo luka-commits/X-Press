@@ -14,9 +14,10 @@
  * - prevPeriodKpis: Same metrics for the equal length period before
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
 import { parseISO, isValid, differenceInDays, addDays, differenceInCalendarDays } from 'date-fns';
+import { NextRequest, NextResponse } from 'next/server';
+
+import { supabase } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
 
@@ -88,19 +89,14 @@ export async function GET(request: NextRequest) {
     const prevToParam = prevToDate.toISOString().split('T')[0];
 
     // Fetch all data in parallel
-    const [
-      throughputData,
-      prevThroughputData,
-      snapshotData,
-      periodKpisData,
-      prevPeriodKpisData,
-    ] = await Promise.all([
-      fetchThroughput(fromParam, toParam),
-      fetchThroughput(prevFromParam, prevToParam),
-      fetchSnapshot(),
-      fetchPeriodKpis(fromParam, toParam),
-      fetchPeriodKpis(prevFromParam, prevToParam),
-    ]);
+    const [throughputData, prevThroughputData, snapshotData, periodKpisData, prevPeriodKpisData] =
+      await Promise.all([
+        fetchThroughput(fromParam, toParam),
+        fetchThroughput(prevFromParam, prevToParam),
+        fetchSnapshot(),
+        fetchPeriodKpis(fromParam, toParam),
+        fetchPeriodKpis(prevFromParam, prevToParam),
+      ]);
 
     // Combine throughput with comparison
     const throughput: ThroughputData = {
@@ -117,7 +113,10 @@ export async function GET(request: NextRequest) {
       versandbereit: {
         count: throughputData.versandbereit,
         prevCount: prevThroughputData.versandbereit,
-        changePercent: calcChangePercent(throughputData.versandbereit, prevThroughputData.versandbereit),
+        changePercent: calcChangePercent(
+          throughputData.versandbereit,
+          prevThroughputData.versandbereit
+        ),
       },
       versendet: {
         count: throughputData.versendet,
@@ -138,10 +137,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(response);
   } catch (error) {
     console.error('Pipeline Reports API Error:', error);
-    return NextResponse.json(
-      { error: 'Fehler beim Laden der Pipeline-Daten' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Fehler beim Laden der Pipeline-Daten' }, { status: 500 });
   }
 }
 
@@ -159,7 +155,10 @@ function calcChangePercent(current: number, previous: number): number {
  * Fetch throughput data for a date range
  * Throughput = orders that MOVED through each stage in the period
  */
-async function fetchThroughput(from: string, to: string): Promise<{
+async function fetchThroughput(
+  from: string,
+  to: string
+): Promise<{
   eingang: number;
   produktion: number;
   versandbereit: number;
@@ -169,38 +168,42 @@ async function fetchThroughput(from: string, to: string): Promise<{
   const fromWithTime = `${from}T00:00:00`;
   const toWithTime = `${to}T23:59:59`;
 
-  const [eingangResult, produktionResult, versandbereitResult, versendetResult] = await Promise.all([
-    // Eingang: Orders created in period
-    supabase
-      .from('Auftrag')
-      .select('*', { count: 'exact', head: true })
-      .gte('createdAt', fromWithTime)
-      .lte('createdAt', toWithTime),
+  const [eingangResult, produktionResult, versandbereitResult, versendetResult] = await Promise.all(
+    [
+      // Eingang: Orders created in period
+      supabase
+        .from('Auftrag')
+        .select('*', { count: 'exact', head: true })
+        .gte('createdAt', fromWithTime)
+        .lte('createdAt', toWithTime),
 
-    // Produktion: Orders with statusUpdatedAt in period AND istStatus='in_produktion'
-    supabase
-      .from('Auftrag')
-      .select('*', { count: 'exact', head: true })
-      .eq('istStatus', 'in_produktion')
-      .gte('statusUpdatedAt', fromWithTime)
-      .lte('statusUpdatedAt', toWithTime),
+      // Produktion: Orders with statusUpdatedAt in period AND istStatus='in_produktion'
+      supabase
+        .from('Auftrag')
+        .select('*', { count: 'exact', head: true })
+        .eq('istStatus', 'in_produktion')
+        .gte('statusUpdatedAt', fromWithTime)
+        .lte('statusUpdatedAt', toWithTime),
 
-    // Versandbereit: Orders with statusUpdatedAt in period AND (istStatus='fertig' OR versandStatus='bereit')
-    // Note: We count fertig OR bereit - using two queries and combining
-    supabase
-      .from('Auftrag')
-      .select('*', { count: 'exact', head: true })
-      .or('istStatus.eq.fertig,versandStatus.eq.bereit')
-      .gte('statusUpdatedAt', fromWithTime)
-      .lte('statusUpdatedAt', toWithTime),
+      // Versandbereit: Orders with statusUpdatedAt in period AND (istStatus='fertig' OR versandStatus='versandbereit')
+      // Note: We count fertig OR versandbereit - using two queries and combining
+      supabase
+        .from('Auftrag')
+        .select('*', { count: 'exact', head: true })
+        .or('istStatus.eq.fertig,versandStatus.eq.versandbereit')
+        .gte('statusUpdatedAt', fromWithTime)
+        .lte('statusUpdatedAt', toWithTime),
 
-    // Versendet: Orders shipped in period (or all shipped if versandUpdatedAt is NULL)
-    supabase
-      .from('Auftrag')
-      .select('*', { count: 'exact', head: true })
-      .eq('versandStatus', 'versendet')
-      .or(`and(versandUpdatedAt.gte.${fromWithTime},versandUpdatedAt.lte.${toWithTime}),versandUpdatedAt.is.null`),
-  ]);
+      // Versendet: Orders shipped in period (or all shipped if versandUpdatedAt is NULL)
+      supabase
+        .from('Auftrag')
+        .select('*', { count: 'exact', head: true })
+        .eq('versandStatus', 'versendet')
+        .or(
+          `and(versandUpdatedAt.gte.${fromWithTime},versandUpdatedAt.lte.${toWithTime}),versandUpdatedAt.is.null`
+        ),
+    ]
+  );
 
   return {
     eingang: eingangResult.count || 0,
@@ -280,7 +283,9 @@ async function fetchPeriodKpis(from: string, to: string): Promise<PeriodKpis> {
     .from('Auftrag')
     .select('createdAt, liefertermin, versandUpdatedAt')
     .eq('versandStatus', 'versendet')
-    .or(`and(versandUpdatedAt.gte.${fromWithTime},versandUpdatedAt.lte.${toWithTime}),versandUpdatedAt.is.null`);
+    .or(
+      `and(versandUpdatedAt.gte.${fromWithTime},versandUpdatedAt.lte.${toWithTime}),versandUpdatedAt.is.null`
+    );
 
   if (error || !orders) {
     console.error('Period KPIs fetch error:', error);
@@ -334,13 +339,11 @@ async function fetchPeriodKpis(from: string, to: string): Promise<PeriodKpis> {
     }
   }
 
-  const avgDaysToShip = validShipDaysCount > 0
-    ? Math.round((totalDaysToShip / validShipDaysCount) * 10) / 10
-    : null;
+  const avgDaysToShip =
+    validShipDaysCount > 0 ? Math.round((totalDaysToShip / validShipDaysCount) * 10) / 10 : null;
 
-  const onTimePercent = ordersWithLiefertermin > 0
-    ? Math.round((onTimeCount / ordersWithLiefertermin) * 100)
-    : 0;
+  const onTimePercent =
+    ordersWithLiefertermin > 0 ? Math.round((onTimeCount / ordersWithLiefertermin) * 100) : 0;
 
   return {
     avgDaysToShip,

@@ -5,7 +5,7 @@
  */
 
 import prisma from './prisma';
-import { ParsedAuftrag, ParsedArbeitsgang } from './xml-parser';
+import { ParsedAuftrag } from './xml-parser';
 
 export interface ImportResult {
   success: boolean;
@@ -113,89 +113,92 @@ export async function importAuftrag(parsed: ParsedAuftrag): Promise<ImportResult
 
     // 5. Auftrag und Arbeitsgänge in einer Transaction anlegen/aktualisieren
     // → Verhindert inkonsistente Daten bei Fehlern
-    await prisma.$transaction(async (tx) => {
-      if (isUpdate) {
-        // Alte Arbeitsgänge löschen
-        await tx.arbeitsgang.deleteMany({
-          where: { auftragId: parsed.auftragsnummer },
-        });
+    await prisma.$transaction(
+      async (tx) => {
+        if (isUpdate) {
+          // Alte Arbeitsgänge löschen
+          await tx.arbeitsgang.deleteMany({
+            where: { auftragId: parsed.auftragsnummer },
+          });
 
-        // Auftrag aktualisieren
-        await tx.auftrag.update({
-          where: { auftragsnummer: parsed.auftragsnummer },
-          data: {
-            kundeId,
-            produkttyp: parsed.produktart,
-            produktbeschreibung: parsed.produktbeschreibung,
-            sachbearbeiter: parsed.sachbearbeiter,
-            sachbearbeiterTelefon: parsed.sachbearbeiterTelefon,
-            sachbearbeiterEmail: parsed.sachbearbeiterEmail,
-            auflage: parsed.auflage,
-            liefertermin: parsed.liefertermin,
-            drucktermin: parsed.drucktermin,
-            wtvTermin: parsed.wtvTermin,
-            prioritaet: parsed.prioritaet,
-            xmlImportDatum: new Date(),
-            // Individual address fields (customer address as delivery address)
-            lieferStrasse: parsed.kunde?.strasse,
-            lieferPlz: parsed.kunde?.plz,
-            lieferOrt: parsed.kunde?.ort,
-            lieferLand: parsed.kunde?.land,
-          },
-        });
-      } else {
-        await tx.auftrag.create({
-          data: {
-            auftragsnummer: parsed.auftragsnummer,
-            kundeId,
-            produkttyp: parsed.produktart,
-            produktbeschreibung: parsed.produktbeschreibung,
-            sachbearbeiter: parsed.sachbearbeiter,
-            sachbearbeiterTelefon: parsed.sachbearbeiterTelefon,
-            sachbearbeiterEmail: parsed.sachbearbeiterEmail,
-            auflage: parsed.auflage,
-            liefertermin: parsed.liefertermin,
-            drucktermin: parsed.drucktermin,
-            wtvTermin: parsed.wtvTermin,
-            prioritaet: parsed.prioritaet,
-            status: 'aktiv',
-            // Individual address fields (customer address as delivery address)
-            lieferStrasse: parsed.kunde?.strasse,
-            lieferPlz: parsed.kunde?.plz,
-            lieferOrt: parsed.kunde?.ort,
-            lieferLand: parsed.kunde?.land,
-          },
-        });
-      }
-
-      // Arbeitsgänge als Batch anlegen (schneller, verhindert Transaction-Timeout)
-      const arbeitsgaengeData = parsed.arbeitsgaenge.map((ag) => {
-        // Bestimme geplantes Datum basierend auf Kostenstelle
-        // Druckmaschinen (42xx) → Drucktermin, WTV (5xxx) → WTV-Termin
-        let geplantDatum: Date | null = null;
-        if (ag.kostenstelle.startsWith('42')) {
-          geplantDatum = parsed.drucktermin;
-        } else if (ag.kostenstelle.startsWith('5') || ag.kostenstelle.startsWith('6')) {
-          geplantDatum = parsed.wtvTermin;
+          // Auftrag aktualisieren
+          await tx.auftrag.update({
+            where: { auftragsnummer: parsed.auftragsnummer },
+            data: {
+              kundeId,
+              produkttyp: parsed.produktart,
+              produktbeschreibung: parsed.produktbeschreibung,
+              sachbearbeiter: parsed.sachbearbeiter,
+              sachbearbeiterTelefon: parsed.sachbearbeiterTelefon,
+              sachbearbeiterEmail: parsed.sachbearbeiterEmail,
+              auflage: parsed.auflage,
+              liefertermin: parsed.liefertermin,
+              drucktermin: parsed.drucktermin,
+              wtvTermin: parsed.wtvTermin,
+              prioritaet: parsed.prioritaet,
+              xmlImportDatum: new Date(),
+              // Individual address fields (customer address as delivery address)
+              lieferStrasse: parsed.kunde?.strasse,
+              lieferPlz: parsed.kunde?.plz,
+              lieferOrt: parsed.kunde?.ort,
+              lieferLand: parsed.kunde?.land,
+            },
+          });
+        } else {
+          await tx.auftrag.create({
+            data: {
+              auftragsnummer: parsed.auftragsnummer,
+              kundeId,
+              produkttyp: parsed.produktart,
+              produktbeschreibung: parsed.produktbeschreibung,
+              sachbearbeiter: parsed.sachbearbeiter,
+              sachbearbeiterTelefon: parsed.sachbearbeiterTelefon,
+              sachbearbeiterEmail: parsed.sachbearbeiterEmail,
+              auflage: parsed.auflage,
+              liefertermin: parsed.liefertermin,
+              drucktermin: parsed.drucktermin,
+              wtvTermin: parsed.wtvTermin,
+              prioritaet: parsed.prioritaet,
+              status: 'aktiv',
+              // Individual address fields (customer address as delivery address)
+              lieferStrasse: parsed.kunde?.strasse,
+              lieferPlz: parsed.kunde?.plz,
+              lieferOrt: parsed.kunde?.ort,
+              lieferLand: parsed.kunde?.land,
+            },
+          });
         }
 
-        return {
-          auftragId: parsed.auftragsnummer,
-          maschineId: maschineMap.get(ag.kostenstelle) || null,
-          sortOrder: ag.sortOrder,
-          zeitMinuten: ag.zeitMinuten,
-          geplantDatum,
-          beschreibung: ag.beschreibung,
-          kostenstelle: ag.kostenstelle,
-        };
-      });
+        // Arbeitsgänge als Batch anlegen (schneller, verhindert Transaction-Timeout)
+        const arbeitsgaengeData = parsed.arbeitsgaenge.map((ag) => {
+          // Bestimme geplantes Datum basierend auf Kostenstelle
+          // Druckmaschinen (42xx) → Drucktermin, WTV (5xxx) → WTV-Termin
+          let geplantDatum: Date | null = null;
+          if (ag.kostenstelle.startsWith('42')) {
+            geplantDatum = parsed.drucktermin;
+          } else if (ag.kostenstelle.startsWith('5') || ag.kostenstelle.startsWith('6')) {
+            geplantDatum = parsed.wtvTermin;
+          }
 
-      await tx.arbeitsgang.createMany({
-        data: arbeitsgaengeData,
-      });
-    }, {
-      timeout: 30000, // 30 Sekunden Timeout für Transaction
-    });
+          return {
+            auftragId: parsed.auftragsnummer,
+            maschineId: maschineMap.get(ag.kostenstelle) || null,
+            sortOrder: ag.sortOrder,
+            zeitMinuten: ag.zeitMinuten,
+            geplantDatum,
+            beschreibung: ag.beschreibung,
+            kostenstelle: ag.kostenstelle,
+          };
+        });
+
+        await tx.arbeitsgang.createMany({
+          data: arbeitsgaengeData,
+        });
+      },
+      {
+        timeout: 30000, // 30 Sekunden Timeout für Transaction
+      }
+    );
 
     return {
       success: true,

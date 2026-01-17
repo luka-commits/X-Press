@@ -1,4 +1,6 @@
-import { MainLayout } from '@/components/layout';
+import { format, startOfWeek } from 'date-fns';
+import { de } from 'date-fns/locale';
+
 import {
   KPICardsGrid,
   MachineCards,
@@ -6,18 +8,17 @@ import {
   DashboardClient,
   WeekStatistics,
 } from '@/components/dashboard';
+import { MainLayout } from '@/components/layout';
+import { getWeekInfo } from '@/lib/calendar-queries';
 import {
   getDashboardKPIs,
   getMachineCapacityForDate,
   getCriticalOrders,
   getWeekStatistics,
 } from '@/lib/dashboard-queries';
-import { getWeekInfo } from '@/lib/calendar-queries';
-import { format, startOfWeek } from 'date-fns';
-import { de } from 'date-fns/locale';
 
-// Disable caching - always fetch fresh data
-export const dynamic = 'force-dynamic';
+// Revalidate every 60 seconds for near-real-time data
+export const revalidate = 60;
 
 export default async function DashboardPage() {
   // Always use today's date

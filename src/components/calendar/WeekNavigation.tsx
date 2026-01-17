@@ -6,18 +6,16 @@
  * Navigiert zwischen Kalenderwochen
  */
 
-import { useRouter } from 'next/navigation';
-import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
-import { WeekInfo, getWeekStart, getWeekInfo } from '@/lib/calendar-queries';
 import { addDays } from 'date-fns';
+import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
+
+import { WeekInfo, getWeekStart, getWeekInfo } from '@/lib/calendar-queries';
 
 interface WeekNavigationProps {
   currentWeek: WeekInfo;
 }
 
 export function WeekNavigation({ currentWeek }: WeekNavigationProps) {
-  const router = useRouter();
-
   const navigateToWeek = (direction: 'prev' | 'next' | 'today') => {
     if (direction === 'today') {
       // Force refresh to avoid stale cache
@@ -26,8 +24,7 @@ export function WeekNavigation({ currentWeek }: WeekNavigationProps) {
     }
 
     const weekStart = getWeekStart(currentWeek.year, currentWeek.weekNumber);
-    const newDate =
-      direction === 'prev' ? addDays(weekStart, -7) : addDays(weekStart, 7);
+    const newDate = direction === 'prev' ? addDays(weekStart, -7) : addDays(weekStart, 7);
     const newWeek = getWeekInfo(newDate);
 
     // Use window.location for reliable navigation without cache issues

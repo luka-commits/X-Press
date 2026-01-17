@@ -6,11 +6,13 @@
  * Fehlerhafte Dateien werden nach data/failed/ verschoben mit Error-Log.
  */
 
-import chokidar, { FSWatcher } from 'chokidar';
 import fs from 'fs/promises';
 import path from 'path';
-import { parseXML } from './xml-parser';
+
+import chokidar, { FSWatcher } from 'chokidar';
+
 import { importAuftrag } from './import-service';
+import { parseXML } from './xml-parser';
 
 // ============================================================
 // Configuration
@@ -20,9 +22,9 @@ const CONFIG = {
   HOTFOLDER_PATH: path.join(process.cwd(), 'data', 'hotfolder'),
   PROCESSED_PATH: path.join(process.cwd(), 'data', 'processed'),
   FAILED_PATH: path.join(process.cwd(), 'data', 'failed'),
-  FILE_STABLE_CHECKS: 3,        // 3x gleiche Größe = Datei ist stabil
+  FILE_STABLE_CHECKS: 3, // 3x gleiche Größe = Datei ist stabil
   FILE_STABLE_INTERVAL_MS: 100, // Prüfintervall in ms
-  FILE_STABLE_MAX_WAIT_MS: 5000 // Max. Wartezeit in ms
+  FILE_STABLE_MAX_WAIT_MS: 5000, // Max. Wartezeit in ms
 };
 
 // ============================================================
@@ -55,7 +57,7 @@ const state: WatcherState = {
   isProcessing: new Set(),
   processedCount: 0,
   failedCount: 0,
-  lastActivity: null
+  lastActivity: null,
 };
 
 // ============================================================
@@ -71,7 +73,7 @@ async function ensureDirectories(): Promise<void> {
   for (const dir of dirs) {
     try {
       await fs.mkdir(dir, { recursive: true });
-    } catch (error) {
+    } catch {
       // Ignoriere Fehler wenn Verzeichnis bereits existiert
     }
   }
@@ -105,7 +107,7 @@ async function waitForFileStable(filePath: string): Promise<void> {
       throw new Error(`Datei nicht mehr verfügbar: ${filePath}`);
     }
 
-    await new Promise(resolve => setTimeout(resolve, CONFIG.FILE_STABLE_INTERVAL_MS));
+    await new Promise((resolve) => setTimeout(resolve, CONFIG.FILE_STABLE_INTERVAL_MS));
     totalWait += CONFIG.FILE_STABLE_INTERVAL_MS;
   }
 
@@ -121,7 +123,7 @@ async function waitForFileStable(filePath: string): Promise<void> {
 /**
  * Verschiebt erfolgreich importierte Datei nach processed/
  */
-async function moveToProcessed(filePath: string, auftragsnummer: string): Promise<void> {
+async function moveToProcessed(filePath: string, _auftragsnummer: string): Promise<void> {
   const filename = path.basename(filePath, '.xml');
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
   const newFilename = `${filename}_${timestamp}.xml`;
@@ -137,7 +139,10 @@ async function moveToProcessed(filePath: string, auftragsnummer: string): Promis
 async function moveToFailed(filePath: string, error: string, stack?: string): Promise<void> {
   const filename = path.basename(filePath);
   const destPath = path.join(CONFIG.FAILED_PATH, filename);
-  const errorLogPath = path.join(CONFIG.FAILED_PATH, `${path.basename(filePath, '.xml')}.error.txt`);
+  const errorLogPath = path.join(
+    CONFIG.FAILED_PATH,
+    `${path.basename(filePath, '.xml')}.error.txt`
+  );
 
   // Fehlerlog erstellen
   const errorContent = [
@@ -145,7 +150,7 @@ async function moveToFailed(filePath: string, error: string, stack?: string): Pr
     `Zeitpunkt: ${new Date().toISOString()}`,
     `Fehler: ${error}`,
     '',
-    stack ? `Stack:\n${stack}` : ''
+    stack ? `Stack:\n${stack}` : '',
   ].join('\n');
 
   try {
@@ -210,11 +215,12 @@ async function processFile(filePath: string): Promise<void> {
     if (result.success) {
       await moveToProcessed(filePath, result.auftragsnummer);
       state.processedCount++;
-      console.log(`[Hotfolder] Erfolgreich importiert: ${result.auftragsnummer} (${result.isUpdate ? 'Update' : 'Neu'})`);
+      console.log(
+        `[Hotfolder] Erfolgreich importiert: ${result.auftragsnummer} (${result.isUpdate ? 'Update' : 'Neu'})`
+      );
     } else {
       throw new Error(result.error || 'Unbekannter Importfehler');
     }
-
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unbekannter Fehler';
     const errorStack = error instanceof Error ? error.stack : undefined;
@@ -222,7 +228,6 @@ async function processFile(filePath: string): Promise<void> {
     await moveToFailed(filePath, errorMessage, errorStack);
     state.failedCount++;
     console.error(`[Hotfolder] Import fehlgeschlagen für ${filename}: ${errorMessage}`);
-
   } finally {
     state.isProcessing.delete(filePath);
   }
@@ -249,12 +254,12 @@ export async function startHotfolderWatcher(): Promise<void> {
   // Watcher initialisieren
   state.watcher = chokidar.watch(CONFIG.HOTFOLDER_PATH, {
     persistent: true,
-    ignoreInitial: false,  // Auch bestehende Dateien verarbeiten
+    ignoreInitial: false, // Auch bestehende Dateien verarbeiten
     awaitWriteFinish: false, // Wir machen eigene Stabilitätsprüfung
-    depth: 0,  // Nur Hauptverzeichnis, keine Unterordner
+    depth: 0, // Nur Hauptverzeichnis, keine Unterordner
     ignored: [
       /(^|[\/\\])\../, // Versteckte Dateien ignorieren (außer .gitkeep wird separat geprüft)
-    ]
+    ],
   });
 
   // Event Handler
@@ -296,6 +301,6 @@ export function getWatcherStatus(): WatcherStatus {
     processedCount: state.processedCount,
     failedCount: state.failedCount,
     processingFiles: Array.from(state.isProcessing),
-    lastActivity: state.lastActivity
+    lastActivity: state.lastActivity,
   };
 }

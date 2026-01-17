@@ -1,8 +1,10 @@
-import { MainLayout } from '@/components/layout';
-import { ReportsDashboard } from '@/components/reports/ReportsDashboard';
 import { FileText } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
+import { MainLayout } from '@/components/layout';
+import { ReportsDashboard } from '@/components/reports/ReportsDashboard';
+
+// Revalidate every 120 seconds for analytics data
+export const revalidate = 120;
 
 export default function ReportsPage() {
   return (

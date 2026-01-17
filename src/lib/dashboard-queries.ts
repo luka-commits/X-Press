@@ -4,9 +4,18 @@
  * Supabase-basierte Abfragen für das Dashboard
  */
 
-import { supabase } from './supabase';
-import { startOfDay, endOfDay, addDays, differenceInDays, startOfWeek, endOfWeek, format } from 'date-fns';
+import {
+  startOfDay,
+  endOfDay,
+  addDays,
+  differenceInDays,
+  startOfWeek,
+  endOfWeek,
+  format,
+} from 'date-fns';
 import { de } from 'date-fns/locale';
+
+import { supabase } from './supabase';
 
 // ============================================================
 // Types
@@ -52,6 +61,34 @@ export interface CriticalOrder {
 
 // KPIOrderItem is an alias for CriticalOrder - same shape used for all KPI detail lists
 export type KPIOrderItem = CriticalOrder;
+
+// Raw order data from Supabase query with Kunde relation
+interface RawOrderWithKunde {
+  auftragsnummer: string;
+  produkttyp: string | null;
+  liefertermin: string | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Kunde: any;
+}
+
+/**
+ * Helper function to map raw Supabase order data to KPIOrderItem
+ * Reduces code duplication across order query functions
+ */
+function mapOrderToKPIItem(order: RawOrderWithKunde, referenceDate: Date): KPIOrderItem {
+  const rawKunde = order.Kunde;
+  const kunde = Array.isArray(rawKunde) ? rawKunde[0] : rawKunde;
+  const liefertermin = order.liefertermin ? new Date(order.liefertermin) : null;
+  const tageUebrig = liefertermin ? differenceInDays(liefertermin, startOfDay(referenceDate)) : 0;
+
+  return {
+    auftragsnummer: order.auftragsnummer,
+    kunde: kunde?.firma || kunde?.name || '–',
+    produkttyp: order.produkttyp,
+    liefertermin: order.liefertermin || '',
+    tageUebrig,
+  };
+}
 
 export interface WeekStatistics {
   auftraegeGesamt: number;
@@ -111,9 +148,10 @@ export async function getDashboardKPIs(date: Date = new Date()): Promise<Dashboa
       : 0;
 
   // Find engpass (machine with highest utilization)
-  const engpassMachine = machines.length > 0
-    ? machines.reduce((max, m) => m.auslastung > max.auslastung ? m : max, machines[0])
-    : null;
+  const engpassMachine =
+    machines.length > 0
+      ? machines.reduce((max, m) => (m.auslastung > max.auslastung ? m : max), machines[0])
+      : null;
 
   return {
     total: activeResult.count || 0,
@@ -121,10 +159,12 @@ export async function getDashboardKPIs(date: Date = new Date()): Promise<Dashboa
     overdue: overdueResult.count || 0,
     problem: problemResult.count || 0,
     avgCapacity,
-    engpass: engpassMachine ? {
-      name: engpassMachine.kurzname || engpassMachine.name,
-      auslastung: engpassMachine.auslastung,
-    } : null,
+    engpass: engpassMachine
+      ? {
+          name: engpassMachine.kurzname || engpassMachine.name,
+          auslastung: engpassMachine.auslastung,
+        }
+      : null,
   };
 }
 
@@ -136,7 +176,9 @@ export async function getDashboardKPIs(date: Date = new Date()): Promise<Dashboa
  * Lädt die Auslastung aller Leitmaschinen für ein Datum inkl. Auftragsdetails
  * @param date - Das Datum für die Abfrage (Default: heute)
  */
-export async function getMachineCapacityForDate(date: Date = new Date()): Promise<MachineCapacity[]> {
+export async function getMachineCapacityForDate(
+  date: Date = new Date()
+): Promise<MachineCapacity[]> {
   // Use date-only format for comparison (avoids timezone issues)
   // DB stores dates as "2026-01-10T00:00:00" without timezone
   const dateStr = format(date, 'yyyy-MM-dd');
@@ -194,9 +236,7 @@ export async function getMachineCapacityForDate(date: Date = new Date()): Promis
       if (!auftragData) continue;
 
       // Handle Kunde nested relation
-      const kundeData = Array.isArray(auftragData.Kunde)
-        ? auftragData.Kunde[0]
-        : auftragData.Kunde;
+      const kundeData = Array.isArray(auftragData.Kunde) ? auftragData.Kunde[0] : auftragData.Kunde;
 
       const key = auftragData.auftragsnummer;
       const existing = orderMap.get(key);
@@ -264,21 +304,7 @@ export async function getCriticalOrders(date: Date = new Date()): Promise<Critic
     return [];
   }
 
-  return data.map((order) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const rawKunde = order.Kunde as any;
-    const kunde = Array.isArray(rawKunde) ? rawKunde[0] : rawKunde;
-    const liefertermin = order.liefertermin ? new Date(order.liefertermin) : null;
-    const tageUebrig = liefertermin ? differenceInDays(liefertermin, dateStart) : 0;
-
-    return {
-      auftragsnummer: order.auftragsnummer,
-      kunde: kunde?.firma || kunde?.name || '–',
-      produkttyp: order.produkttyp,
-      liefertermin: order.liefertermin || '',
-      tageUebrig,
-    };
-  });
+  return data.map((order) => mapOrderToKPIItem(order as RawOrderWithKunde, referenceDate));
 }
 
 // ============================================================
@@ -291,7 +317,6 @@ export async function getCriticalOrders(date: Date = new Date()): Promise<Critic
  */
 export async function getOpenOrders(date: Date = new Date()): Promise<KPIOrderItem[]> {
   const referenceDate = date;
-  const dateStart = startOfDay(referenceDate);
 
   const { data, error } = await supabase
     .from('Auftrag')
@@ -311,21 +336,7 @@ export async function getOpenOrders(date: Date = new Date()): Promise<KPIOrderIt
     return [];
   }
 
-  return data.map((order) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const rawKunde = order.Kunde as any;
-    const kunde = Array.isArray(rawKunde) ? rawKunde[0] : rawKunde;
-    const liefertermin = order.liefertermin ? new Date(order.liefertermin) : null;
-    const tageUebrig = liefertermin ? differenceInDays(liefertermin, dateStart) : 0;
-
-    return {
-      auftragsnummer: order.auftragsnummer,
-      kunde: kunde?.firma || kunde?.name || '–',
-      produkttyp: order.produkttyp,
-      liefertermin: order.liefertermin || '',
-      tageUebrig,
-    };
-  });
+  return data.map((order) => mapOrderToKPIItem(order as RawOrderWithKunde, referenceDate));
 }
 
 // ============================================================
@@ -359,21 +370,7 @@ export async function getOverdueOrders(date: Date = new Date()): Promise<KPIOrde
     return [];
   }
 
-  return data.map((order) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const rawKunde = order.Kunde as any;
-    const kunde = Array.isArray(rawKunde) ? rawKunde[0] : rawKunde;
-    const liefertermin = order.liefertermin ? new Date(order.liefertermin) : null;
-    const tageUebrig = liefertermin ? differenceInDays(liefertermin, dateStart) : 0;
-
-    return {
-      auftragsnummer: order.auftragsnummer,
-      kunde: kunde?.firma || kunde?.name || '–',
-      produkttyp: order.produkttyp,
-      liefertermin: order.liefertermin || '',
-      tageUebrig,
-    };
-  });
+  return data.map((order) => mapOrderToKPIItem(order as RawOrderWithKunde, referenceDate));
 }
 
 // ============================================================
@@ -386,7 +383,6 @@ export async function getOverdueOrders(date: Date = new Date()): Promise<KPIOrde
  */
 export async function getProblemOrders(date: Date = new Date()): Promise<KPIOrderItem[]> {
   const referenceDate = date;
-  const dateStart = startOfDay(referenceDate);
 
   const { data, error } = await supabase
     .from('Auftrag')
@@ -407,21 +403,7 @@ export async function getProblemOrders(date: Date = new Date()): Promise<KPIOrde
     return [];
   }
 
-  return data.map((order) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const rawKunde = order.Kunde as any;
-    const kunde = Array.isArray(rawKunde) ? rawKunde[0] : rawKunde;
-    const liefertermin = order.liefertermin ? new Date(order.liefertermin) : null;
-    const tageUebrig = liefertermin ? differenceInDays(liefertermin, dateStart) : 0;
-
-    return {
-      auftragsnummer: order.auftragsnummer,
-      kunde: kunde?.firma || kunde?.name || '–',
-      produkttyp: order.produkttyp,
-      liefertermin: order.liefertermin || '',
-      tageUebrig,
-    };
-  });
+  return data.map((order) => mapOrderToKPIItem(order as RawOrderWithKunde, referenceDate));
 }
 
 // ============================================================
@@ -442,12 +424,14 @@ export async function getWeekStatistics(weekStartDate?: Date): Promise<WeekStati
     // Geplante Arbeitsgänge diese Woche (nur Leitmaschinen) - mit Auftrags-IDs
     supabase
       .from('Arbeitsgang')
-      .select(`
+      .select(
+        `
         zeitMinuten,
         geplantDatum,
         auftragId,
         Maschine!inner(istLeitmaschine)
-      `)
+      `
+      )
       .gte('geplantDatum', startOfDay(weekStart).toISOString())
       .lte('geplantDatum', endOfDay(weekEnd).toISOString())
       .eq('Maschine.istLeitmaschine', true),
@@ -464,14 +448,9 @@ export async function getWeekStatistics(weekStartDate?: Date): Promise<WeekStati
   const maschinenCount = maschinenResult.count;
 
   // Zähle eindeutige Aufträge basierend auf geplantDatum (nicht Liefertermin)
-  const uniqueAuftraege = new Set(
-    arbeitsgaenge?.map(ag => ag.auftragId).filter(Boolean) || []
-  );
+  const uniqueAuftraege = new Set(arbeitsgaenge?.map((ag) => ag.auftragId).filter(Boolean) || []);
 
-  const gesamtMinuten = arbeitsgaenge?.reduce(
-    (sum, ag) => sum + (ag.zeitMinuten || 0),
-    0
-  ) || 0;
+  const gesamtMinuten = arbeitsgaenge?.reduce((sum, ag) => sum + (ag.zeitMinuten || 0), 0) || 0;
 
   return {
     auftraegeGesamt: uniqueAuftraege.size,

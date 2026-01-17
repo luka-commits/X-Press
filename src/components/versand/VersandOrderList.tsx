@@ -1,19 +1,35 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { Check, X, Map, ChevronDown, ChevronUp, Calendar, Package, Route, Sparkles, Clock, MapPin, Loader2, Link2 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { VersandOrderCard, type VersandOrder } from "./VersandOrderCard";
-import { VersandStatusButtons, type VersandStatusType } from "./VersandStatusButtons";
-import { VersandKPIs, type VersandStatusFilter } from "./VersandKPIs";
-import { DeliveryMap, type MapOrder } from "@/components/map";
-import type { OptimizeRouteResponse } from "@/types/route";
-import { generateGoogleMapsUrl, copyToClipboard, validateRouteUrl } from "@/lib/route-utils";
+import {
+  Check,
+  X,
+  Map,
+  ChevronDown,
+  ChevronUp,
+  Calendar,
+  Package,
+  Route,
+  Sparkles,
+  Clock,
+  MapPin,
+  Loader2,
+  Link2,
+} from 'lucide-react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+
+import { DeliveryMap, type MapOrder } from '@/components/map';
+import { generateGoogleMapsUrl, copyToClipboard, validateRouteUrl } from '@/lib/route-utils';
+import { cn } from '@/lib/utils';
+import type { OptimizeRouteResponse } from '@/types/route';
+
+import { VersandKPIs, type VersandStatusFilter } from './VersandKPIs';
+import { VersandOrderCard, type VersandOrder } from './VersandOrderCard';
+import { VersandStatusButtons, type VersandStatusType } from './VersandStatusButtons';
 
 /**
  * Deadline filter options
  */
-type DeadlineFilter = "today" | "week" | "all";
+type DeadlineFilter = 'today' | 'week' | 'all';
 
 /**
  * API response structure from GET /api/versand/orders
@@ -29,14 +45,14 @@ interface VersandOrdersResponse {
  * Feedback state for success/error messages
  */
 interface Feedback {
-  type: "success" | "error";
+  type: 'success' | 'error';
   message: string;
 }
 
 const deadlineLabels: Record<DeadlineFilter, string> = {
-  today: "Heute",
-  week: "Diese Woche",
-  all: "Alle Termine",
+  today: 'Heute',
+  week: 'Diese Woche',
+  all: 'Alle Termine',
 };
 
 /**
@@ -61,8 +77,8 @@ export function VersandOrderList() {
   const [feedback, setFeedback] = useState<Feedback | null>(null);
 
   // Filters
-  const [deadlineFilter, setDeadlineFilter] = useState<DeadlineFilter>("all");
-  const [statusFilter, setStatusFilter] = useState<VersandStatusFilter>("all");
+  const [deadlineFilter, setDeadlineFilter] = useState<DeadlineFilter>('all');
+  const [statusFilter, setStatusFilter] = useState<VersandStatusFilter>('all');
 
   // Map toggle (mobile only)
   const [showMap, setShowMap] = useState(false);
@@ -73,7 +89,9 @@ export function VersandOrderList() {
 
   // Route optimization state
   const [optimizing, setOptimizing] = useState(false);
-  const [routeStats, setRouteStats] = useState<{ duration: string; distanceMeters: number } | null>(null);
+  const [routeStats, setRouteStats] = useState<{ duration: string; distanceMeters: number } | null>(
+    null
+  );
   const [routePolyline, setRoutePolyline] = useState<string | null>(null);
 
   // Auto-dismiss feedback after 3 seconds
@@ -87,46 +105,55 @@ export function VersandOrderList() {
   }, [feedback]);
 
   // Fetch orders (filtered for display) and all orders (for KPIs)
-  const fetchOrders = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+  const fetchOrders = useCallback(
+    async (signal?: AbortSignal) => {
+      setLoading(true);
+      setError(null);
 
-    try {
-      // Fetch filtered orders for display
-      const params = new URLSearchParams();
-      params.set("deadline", deadlineFilter);
-      if (statusFilter !== "all") {
-        params.set("versandStatus", statusFilter);
+      try {
+        // Fetch filtered orders for display
+        const params = new URLSearchParams();
+        params.set('deadline', deadlineFilter);
+        if (statusFilter !== 'all') {
+          params.set('versandStatus', statusFilter);
+        }
+
+        // Fetch all orders for KPIs (same deadline, no status filter)
+        const allParams = new URLSearchParams();
+        allParams.set('deadline', deadlineFilter);
+
+        const [filteredResponse, allResponse] = await Promise.all([
+          fetch(`/api/versand/orders?${params.toString()}`, { signal }),
+          fetch(`/api/versand/orders?${allParams.toString()}`, { signal }),
+        ]);
+
+        if (!filteredResponse.ok || !allResponse.ok) {
+          throw new Error('Fehler beim Laden der Aufträge');
+        }
+
+        const filteredData: VersandOrdersResponse = await filteredResponse.json();
+        const allData: VersandOrdersResponse = await allResponse.json();
+
+        setOrders(filteredData.orders);
+        setAllOrders(allData.orders);
+      } catch (err) {
+        // Ignore abort errors - component unmounted
+        if (err instanceof Error && err.name === 'AbortError') {
+          return;
+        }
+        setError(err instanceof Error ? err.message : 'Unbekannter Fehler');
+      } finally {
+        setLoading(false);
       }
+    },
+    [deadlineFilter, statusFilter]
+  );
 
-      // Fetch all orders for KPIs (same deadline, no status filter)
-      const allParams = new URLSearchParams();
-      allParams.set("deadline", deadlineFilter);
-
-      const [filteredResponse, allResponse] = await Promise.all([
-        fetch(`/api/versand/orders?${params.toString()}`),
-        fetch(`/api/versand/orders?${allParams.toString()}`),
-      ]);
-
-      if (!filteredResponse.ok || !allResponse.ok) {
-        throw new Error("Fehler beim Laden der Aufträge");
-      }
-
-      const filteredData: VersandOrdersResponse = await filteredResponse.json();
-      const allData: VersandOrdersResponse = await allResponse.json();
-
-      setOrders(filteredData.orders);
-      setAllOrders(allData.orders);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Unbekannter Fehler");
-    } finally {
-      setLoading(false);
-    }
-  }, [deadlineFilter, statusFilter]);
-
-  // Fetch on mount and filter change
+  // Fetch on mount and filter change with cleanup
   useEffect(() => {
-    fetchOrders();
+    const controller = new AbortController();
+    fetchOrders(controller.signal);
+    return () => controller.abort();
   }, [fetchOrders]);
 
   // Handle order selection from list
@@ -152,7 +179,7 @@ export function VersandOrderList() {
       setSelectedOrder(order);
       // Scroll to the order card in the list
       const element = document.getElementById(`order-card-${orderId}`);
-      element?.scrollIntoView({ behavior: "smooth", block: "center" });
+      element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
 
@@ -196,7 +223,9 @@ export function VersandOrderList() {
   const routeOrdersForMap: MapOrder[] = useMemo(() => {
     return routeOrders
       .map((orderId) => orders.find((o) => o.auftragsnummer === orderId))
-      .filter((o): o is VersandOrder => o !== undefined && o.lieferLat !== null && o.lieferLng !== null);
+      .filter(
+        (o): o is VersandOrder => o !== undefined && o.lieferLat !== null && o.lieferLng !== null
+      );
   }, [routeOrders, orders]);
 
   // X-Press location (Nunsdorfer Ring 13, 12277 Berlin-Marienfelde)
@@ -210,9 +239,9 @@ export function VersandOrderList() {
     setFeedback(null);
 
     try {
-      const response = await fetch("/api/routes/optimize", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/routes/optimize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           origin: XPRESS_LOCATION,
           destination: XPRESS_LOCATION, // Round trip back to X-Press
@@ -238,20 +267,20 @@ export function VersandOrderList() {
         setRoutePolyline(data.encodedPolyline);
 
         setFeedback({
-          type: "success",
-          message: "Route optimiert",
+          type: 'success',
+          message: 'Route optimiert',
         });
       } else {
         const errorData = await response.json();
         setFeedback({
-          type: "error",
-          message: errorData.error || "Fehler bei der Routenoptimierung",
+          type: 'error',
+          message: errorData.error || 'Fehler bei der Routenoptimierung',
         });
       }
     } catch {
       setFeedback({
-        type: "error",
-        message: "Verbindungsfehler - bitte erneut versuchen",
+        type: 'error',
+        message: 'Verbindungsfehler - bitte erneut versuchen',
       });
     } finally {
       setOptimizing(false);
@@ -263,10 +292,10 @@ export function VersandOrderList() {
     if (routeOrdersForMap.length === 0) return;
 
     // Extract valid coordinates (routeOrdersForMap already filters for non-null coords)
-    const ordersWithCoords = routeOrdersForMap
-      .filter((o): o is MapOrder & { lieferLat: number; lieferLng: number } =>
+    const ordersWithCoords = routeOrdersForMap.filter(
+      (o): o is MapOrder & { lieferLat: number; lieferLng: number } =>
         o.lieferLat != null && o.lieferLng != null
-      );
+    );
 
     if (ordersWithCoords.length === 0) return;
 
@@ -277,8 +306,8 @@ export function VersandOrderList() {
     const validation = validateRouteUrl(url);
     if (!validation.valid) {
       setFeedback({
-        type: "error",
-        message: validation.message || "URL konnte nicht erstellt werden",
+        type: 'error',
+        message: validation.message || 'URL konnte nicht erstellt werden',
       });
       return;
     }
@@ -287,13 +316,13 @@ export function VersandOrderList() {
     const success = await copyToClipboard(url);
     if (success) {
       setFeedback({
-        type: "success",
-        message: "Navigationslink kopiert",
+        type: 'success',
+        message: 'Navigationslink kopiert',
       });
     } else {
       setFeedback({
-        type: "error",
-        message: "Link konnte nicht kopiert werden",
+        type: 'error',
+        message: 'Link konnte nicht kopiert werden',
       });
     }
   };
@@ -301,7 +330,7 @@ export function VersandOrderList() {
   // Format duration string (e.g., "3600s" -> "1 Std 0 Min")
   const formatDuration = (duration: string): string => {
     // Parse seconds from string like "3600s"
-    const seconds = parseInt(duration.replace("s", ""), 10);
+    const seconds = parseInt(duration.replace('s', ''), 10);
     if (isNaN(seconds)) return duration;
 
     const hours = Math.floor(seconds / 3600);
@@ -328,15 +357,15 @@ export function VersandOrderList() {
 
     try {
       const response = await fetch(`/api/orders/${selectedOrder.auftragsnummer}/versand`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ versandStatus: status, versandKommentar: comment }),
       });
 
       if (response.ok) {
         setFeedback({
-          type: "success",
-          message: "Versandstatus aktualisiert",
+          type: 'success',
+          message: 'Versandstatus aktualisiert',
         });
         setSelectedOrder(null);
         // Re-fetch to reflect changes
@@ -344,14 +373,14 @@ export function VersandOrderList() {
       } else {
         const errorData = await response.json();
         setFeedback({
-          type: "error",
-          message: errorData.error || "Fehler beim Aktualisieren des Versandstatus",
+          type: 'error',
+          message: errorData.error || 'Fehler beim Aktualisieren des Versandstatus',
         });
       }
     } catch {
       setFeedback({
-        type: "error",
-        message: "Verbindungsfehler - bitte erneut versuchen",
+        type: 'error',
+        message: 'Verbindungsfehler - bitte erneut versuchen',
       });
     } finally {
       setLoadingStatus(null);
@@ -371,7 +400,7 @@ export function VersandOrderList() {
             <Calendar className="w-4 h-4 text-neutral-400" />
             <span className="text-sm text-neutral-500">Zeitraum:</span>
             <div className="flex gap-1">
-              {(["today", "week", "all"] as DeadlineFilter[]).map((filter) => (
+              {(['today', 'week', 'all'] as DeadlineFilter[]).map((filter) => (
                 <FilterChip
                   key={filter}
                   active={deadlineFilter === filter}
@@ -390,10 +419,10 @@ export function VersandOrderList() {
           <button
             onClick={handleRoutePlanningToggle}
             className={cn(
-              "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
+              'flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
               routePlanningMode
-                ? "bg-blue-500 text-white"
-                : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
+                ? 'bg-blue-500 text-white'
+                : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
             )}
           >
             <Route className="w-4 h-4" />
@@ -406,9 +435,9 @@ export function VersandOrderList() {
               onClick={handleOptimizeRoute}
               disabled={optimizing}
               className={cn(
-                "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
-                "bg-amber-500 text-white hover:bg-amber-600",
-                optimizing && "opacity-70 cursor-not-allowed"
+                'flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+                'bg-amber-500 text-white hover:bg-amber-600',
+                optimizing && 'opacity-70 cursor-not-allowed'
               )}
             >
               {optimizing ? (
@@ -425,10 +454,10 @@ export function VersandOrderList() {
             <button
               onClick={() => setShowMap(!showMap)}
               className={cn(
-                "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
+                'flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
                 showMap
-                  ? "bg-blue-50 text-blue-600 border border-blue-200"
-                  : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
+                  ? 'bg-blue-50 text-blue-600 border border-blue-200'
+                  : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
               )}
             >
               <Map className="w-4 h-4" />
@@ -451,9 +480,7 @@ export function VersandOrderList() {
               <MapPin className="w-4 h-4" />
               <span className="font-medium">{formatDistance(routeStats.distanceMeters)}</span>
             </div>
-            <span className="text-blue-600 text-xs">
-              {routeOrdersForMap.length} Stopps
-            </span>
+            <span className="text-blue-600 text-xs">{routeOrdersForMap.length} Stopps</span>
             {/* Link kopieren button - right aligned */}
             <button
               onClick={handleCopyRouteLink}
@@ -470,16 +497,16 @@ export function VersandOrderList() {
       {feedback && (
         <div
           className={cn(
-            "flex items-center gap-3 p-4 rounded-lg border shadow-sm",
-            "transition-all duration-300 animate-in fade-in slide-in-from-top-2",
-            feedback.type === "success"
-              ? "bg-green-50 border-green-200 text-green-700"
-              : "bg-red-50 border-red-200 text-red-700"
+            'flex items-center gap-3 p-4 rounded-lg border shadow-sm',
+            'transition-all duration-300 animate-in fade-in slide-in-from-top-2',
+            feedback.type === 'success'
+              ? 'bg-green-50 border-green-200 text-green-700'
+              : 'bg-red-50 border-red-200 text-red-700'
           )}
           role="alert"
           aria-live="polite"
         >
-          {feedback.type === "success" ? (
+          {feedback.type === 'success' ? (
             <Check className="w-5 h-5 flex-shrink-0" />
           ) : (
             <X className="w-5 h-5 flex-shrink-0" />
@@ -511,7 +538,7 @@ export function VersandOrderList() {
           {!loading && !error && (
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-medium text-neutral-500">
-                {orders.length} {orders.length === 1 ? "Auftrag" : "Aufträge"}
+                {orders.length} {orders.length === 1 ? 'Auftrag' : 'Aufträge'}
               </h2>
             </div>
           )}
@@ -540,9 +567,7 @@ export function VersandOrderList() {
             <div className="p-12 text-center bg-white rounded-lg border border-ghl-border shadow-sm">
               <Package className="w-12 h-12 text-neutral-300 mx-auto mb-3" />
               <p className="text-neutral-500">Keine Aufträge gefunden</p>
-              <p className="text-sm text-neutral-400 mt-1">
-                Versuche einen anderen Filter
-              </p>
+              <p className="text-sm text-neutral-400 mt-1">Versuche einen anderen Filter</p>
             </div>
           )}
 
@@ -610,10 +635,8 @@ function FilterChip({ active, onClick, children }: FilterChipProps) {
     <button
       onClick={onClick}
       className={cn(
-        "px-3 py-1 rounded-md text-sm font-medium transition-colors",
-        active
-          ? "bg-blue-500 text-white"
-          : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200"
+        'px-3 py-1 rounded-md text-sm font-medium transition-colors',
+        active ? 'bg-blue-500 text-white' : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
       )}
     >
       {children}

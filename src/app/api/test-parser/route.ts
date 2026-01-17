@@ -4,9 +4,11 @@
  * GET /api/test-parser - Testet XML-Parser mit Sample-Datei (ohne DB)
  */
 
-import { NextResponse } from 'next/server';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+
+import { NextResponse } from 'next/server';
+
 import { parseXML, summarizeAuftrag } from '@/lib/xml-parser';
 
 export async function GET() {
@@ -17,11 +19,8 @@ export async function GET() {
     let xmlContent: string;
     try {
       xmlContent = readFileSync(samplePath, 'utf-8');
-    } catch (e) {
-      return NextResponse.json(
-        { error: `Sample file not found: ${samplePath}` },
-        { status: 404 }
-      );
+    } catch {
+      return NextResponse.json({ error: `Sample file not found: ${samplePath}` }, { status: 404 });
     }
 
     // Parse

@@ -68,6 +68,13 @@ model Auftrag {
   updatedAt      DateTime @updatedAt
 
   arbeitsgaenge  Arbeitsgang[]
+
+  // Performance indexes for common query patterns
+  @@index([status])
+  @@index([liefertermin])
+  @@index([istStatus])
+  @@index([versandStatus])
+  @@index([status, liefertermin])
 }
 
 // Kunden
@@ -104,6 +111,11 @@ model Arbeitsgang {
 
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
+
+  // Performance indexes for FK lookups and date queries
+  @@index([auftragId])
+  @@index([maschineId])
+  @@index([geplantDatum])
 }
 
 // Maschinen (Leitmaschinen für Kapazitätsplanung)

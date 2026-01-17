@@ -4,17 +4,10 @@
  * Supabase-basierte Abfragen für den Maschinen-Kalender
  */
 
-import { supabase } from './supabase';
-import {
-  startOfDay,
-  endOfDay,
-  startOfWeek,
-  endOfWeek,
-  addDays,
-  format,
-  eachDayOfInterval,
-} from 'date-fns';
+import { startOfWeek, endOfWeek, addDays, format, eachDayOfInterval } from 'date-fns';
 import { de } from 'date-fns/locale';
+
+import { supabase } from './supabase';
 
 // ============================================================
 // Types
@@ -100,9 +93,7 @@ export function getWeekStart(year: number, weekNumber: number): Date {
 /**
  * Lädt die Auslastung aller Leitmaschinen für eine Woche
  */
-export async function getMachineCapacityForWeek(
-  weekStart: Date
-): Promise<MachineWeekCapacity[]> {
+export async function getMachineCapacityForWeek(weekStart: Date): Promise<MachineWeekCapacity[]> {
   const weekEnd = endOfWeek(weekStart, { weekStartsOn: 1 });
 
   // Get all days in the week
@@ -156,22 +147,23 @@ export async function getMachineCapacityForWeek(
       // Count unique orders
       const uniqueOrders = new Set(
         tagesArbeit
-          .map((ag: { Auftrag: { auftragsnummer: string } | { auftragsnummer: string }[] | null }) => {
-            const auftrag = ag.Auftrag;
-            if (!auftrag) return null;
-            // Handle both single object and array (Supabase may return either)
-            if (Array.isArray(auftrag)) {
-              return auftrag[0]?.auftragsnummer;
+          .map(
+            (ag: { Auftrag: { auftragsnummer: string } | { auftragsnummer: string }[] | null }) => {
+              const auftrag = ag.Auftrag;
+              if (!auftrag) return null;
+              // Handle both single object and array (Supabase may return either)
+              if (Array.isArray(auftrag)) {
+                return auftrag[0]?.auftragsnummer;
+              }
+              return auftrag.auftragsnummer;
             }
-            return auftrag.auftragsnummer;
-          })
+          )
           .filter(Boolean)
       );
 
       // Sum up time
       const gesamtZeit = tagesArbeit.reduce(
-        (sum: number, ag: { zeitMinuten: number | null }) =>
-          sum + (ag.zeitMinuten || 0),
+        (sum: number, ag: { zeitMinuten: number | null }) => sum + (ag.zeitMinuten || 0),
         0
       );
 
@@ -261,9 +253,7 @@ export async function getMachineOrdersForDay(
     if (!auftragData) continue;
 
     // Handle Kunde nested relation
-    const kundeData = Array.isArray(auftragData.Kunde)
-      ? auftragData.Kunde[0]
-      : auftragData.Kunde;
+    const kundeData = Array.isArray(auftragData.Kunde) ? auftragData.Kunde[0] : auftragData.Kunde;
 
     const key = auftragData.auftragsnummer;
     const existing = orderMap.get(key);

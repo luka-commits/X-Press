@@ -6,8 +6,9 @@
  * Einzelne Zelle im Kalender mit Auslastung und Ampel-Farbe
  */
 
-import Link from 'next/link';
 import { format } from 'date-fns';
+import Link from 'next/link';
+
 import { DayCapacity } from '@/lib/calendar-queries';
 
 interface CalendarCellProps {
@@ -45,7 +46,7 @@ function getStatusTextClass(auslastung: number): string {
   return 'text-capacity-green';
 }
 
-export function CalendarCell({ machineId, day, isToday }: CalendarCellProps) {
+export function CalendarCell({ machineId, day, isToday: _isToday }: CalendarCellProps) {
   const statusColor = getStatusColor(day.auslastung);
   const statusBgClass = getStatusBgClass(day.auslastung);
   const statusTextClass = getStatusTextClass(day.auslastung);
