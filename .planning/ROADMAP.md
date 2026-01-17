@@ -8,6 +8,7 @@
 - ✅ **v1.3 Routenplanung** — Phases 15-17 (shipped 2026-01-16)
 - ✅ **v1.4 Reporting** — Phases 18-20 (shipped 2026-01-17)
 - ✅ **v1.5 System-Konsolidierung** — Phases 21-22 (shipped 2026-01-17)
+- 🚧 **v1.6 Pipeline-Analytics** — Phases 23-24 (in progress)
 
 ## Completed Milestones
 
@@ -91,6 +92,30 @@ Kohäsives System aus User-Sicht: klare Pipeline-Logik, klare Tab-Verantwortlich
 
 </details>
 
+### 🚧 v1.6 Pipeline-Analytics (In Progress)
+
+**Milestone Goal:** Reports zu einem fokussierten Pipeline-Dashboard konsolidieren, Dashboard entschlacken
+
+#### Phase 23: Reports neu
+
+**Goal**: KPI-Karten, Pipeline-Funnel, Versand-Metriken als neue konsolidierte Reports-Seite
+**Depends on**: Phase 22
+**Research**: Unlikely (internal patterns, existing data models)
+**Plans**: TBD
+
+Plans:
+- [ ] 23-01: TBD (run /gsd:plan-phase 23 to break down)
+
+#### Phase 24: Reports Zeitreihen + Dashboard
+
+**Goal**: Zeitreihen-Chart (Eingang vs. Versand) und Dashboard-Anpassung (Problem-KPI entfernen)
+**Depends on**: Phase 23
+**Research**: Unlikely (internal patterns, existing chart patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 24-01: TBD
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -117,3 +142,5 @@ Kohäsives System aus User-Sicht: klare Pipeline-Logik, klare Tab-Verantwortlich
 | 20. Versand-Reports | v1.4 | 2/2 | Complete | 2026-01-17 |
 | 21. Aufträge Pipeline-View | v1.5 | 1/1 | Complete | 2026-01-16 |
 | 22. Reports & Navigation | v1.5 | 1/1 | Complete | 2026-01-17 |
+| 23. Reports neu | v1.6 | 0/? | Not started | - |
+| 24. Reports Zeitreihen + Dashboard | v1.6 | 0/? | Not started | - |
