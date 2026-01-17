@@ -21,10 +21,10 @@ Bei Klick auf KPIs und Charts in der Reports-Seite öffnet sich ein Dialog mit d
 **Goal:** API-Erweiterung für alle Reporting-KPIs (problem, oldest, tomorrow) und Stage-basierte Abfragen
 **Depends on:** Phase 27 (v1.7 complete)
 **Research:** Unlikely (interne Patterns, bestehende API erweitern)
-**Plans:** TBD
+**Plans:** 1
 
 Plans:
-- [ ] 28-01: TBD (run /gsd:plan-phase 28 to break down)
+- [x] 28-01: Reports KPI API (query functions + API endpoint) — completed 2026-01-17
 
 ### Phase 29: Reports-Drilldown-UI
 
@@ -173,5 +173,5 @@ Bei Klick auf KPI-Karten im Dashboard öffnet sich ein Dialog mit der zugehörig
 | 25. Dialog-Komponente | v1.7 | 1/1 | Complete | 2026-01-17 |
 | 26. KPI-Detail-API | v1.7 | 1/1 | Complete | 2026-01-17 |
 | 27. KPI-Overlay-UI | v1.7 | 1/1 | Complete | 2026-01-17 |
-| 28. Reports-KPI-API | v1.8 | 0/? | Not started | - |
+| 28. Reports-KPI-API | v1.8 | 1/1 | Complete | 2026-01-17 |
 | 29. Reports-Drilldown-UI | v1.8 | 0/? | Not started | - |
