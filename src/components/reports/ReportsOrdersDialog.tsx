@@ -20,12 +20,12 @@ import {
 import { cn } from '@/lib/utils';
 
 type StageType =
-  | 'vorbereitung'
-  | 'produktion'
-  | 'finishing'
+  | 'offen'
+  | 'in_produktion'
+  | 'fertig'
   | 'versandbereit'
   | 'versendet'
-  | 'abgeschlossen';
+  | 'problem';
 
 interface KPIOrderItem {
   auftragsnummer: string;

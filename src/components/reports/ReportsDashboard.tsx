@@ -20,6 +20,7 @@ import { PipelineKPIs } from './PipelineKPIs';
 import { ThroughputChart, type ThroughputData as TimeseriesDataPoint } from './ThroughputChart';
 import { PlzChart, type PlzData } from './PlzChart';
 import { CompletedOrdersTable } from './CompletedOrdersTable';
+import { ReportsOrdersDialog } from './ReportsOrdersDialog';
 import { cn } from '@/lib/utils';
 import type { FunnelStage } from '@/lib/reporting-queries';
 
@@ -75,6 +76,19 @@ export function ReportsDashboard() {
 
   // Collapsible state for completed orders
   const [isTableExpanded, setIsTableExpanded] = useState(false);
+
+  // Dialog state for drilldown
+  type StageType = 'offen' | 'in_produktion' | 'fertig' | 'versandbereit' | 'versendet' | 'problem';
+  const [dialogState, setDialogState] = useState<{
+    isOpen: boolean;
+    type: 'problem' | 'oldest' | 'tomorrow' | 'stage';
+    stage?: StageType;
+    title: string;
+  }>({
+    isOpen: false,
+    type: 'problem',
+    title: '',
+  });
 
   // Track if snapshot has been fetched
   const snapshotFetchedRef = useRef(false);
@@ -196,6 +210,39 @@ export function ReportsDashboard() {
     setDateRange(range);
   };
 
+  // Handler for SnapshotKPIs click
+  const handleKpiClick = (type: 'problem' | 'oldest' | 'tomorrow') => {
+    const titles = {
+      problem: 'Problem-Aufträge',
+      oldest: 'Älteste Aufträge',
+      tomorrow: 'Morgen fällig',
+    };
+    setDialogState({
+      isOpen: true,
+      type,
+      title: titles[type],
+    });
+  };
+
+  // Handler for FunnelChart and StageDistributionChart clicks
+  const handleStageClick = (stageKey: string) => {
+    const stageNames: Record<StageType, string> = {
+      offen: 'Offen',
+      in_produktion: 'In Produktion',
+      fertig: 'Fertig',
+      versandbereit: 'Versandbereit',
+      versendet: 'Versendet',
+      problem: 'Problem',
+    };
+    const stage = stageKey as StageType;
+    setDialogState({
+      isOpen: true,
+      type: 'stage',
+      stage,
+      title: `Aufträge: ${stageNames[stage] || stageKey}`,
+    });
+  };
+
   return (
     <div className="space-y-6">
       {/* Global Header with DateRangePicker */}
@@ -230,10 +277,11 @@ export function ReportsDashboard() {
             </>
           ) : (
             <>
-              <FunnelChart data={funnelData} />
+              <FunnelChart data={funnelData} onStageClick={handleStageClick} />
               <StageDistributionChart
                 data={stageDistribution.data}
                 total={stageDistribution.total}
+                onStageClick={handleStageClick}
               />
             </>
           )}
@@ -251,6 +299,7 @@ export function ReportsDashboard() {
         <SnapshotKPIs
           data={snapshotData}
           loading={snapshotLoading}
+          onKpiClick={handleKpiClick}
         />
 
         {/* Divider */}
@@ -311,6 +360,15 @@ export function ReportsDashboard() {
           )}
         </div>
       </section>
+
+      {/* Reports Orders Dialog for drilldowns */}
+      <ReportsOrdersDialog
+        kpiType={dialogState.type}
+        stage={dialogState.stage}
+        title={dialogState.title}
+        isOpen={dialogState.isOpen}
+        onOpenChange={(open) => setDialogState(prev => ({ ...prev, isOpen: open }))}
+      />
     </div>
   );
 }
