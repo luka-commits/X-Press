@@ -45,11 +45,11 @@ Plans:
 **Goal**: Tests für kritische UI-Komponenten (Dashboard, Versand, Reports)
 **Depends on**: Phase 30
 **Research**: Unlikely (internal patterns)
-**Plans**: 0/3 complete
+**Plans**: 2/3 complete
 
 Plans:
-- [ ] 32-01: Dashboard dialog tests (KPIOrdersDialog, DashboardClient)
-- [ ] 32-02: Orders & Versand tests (OrderFilters, VersandKPIs)
+- [x] 32-01: Dashboard dialog tests (KPIOrdersDialog, DashboardClient) — completed 2026-01-18
+- [x] 32-02: Orders & Versand tests (OrderFilters, VersandKPIs) — completed 2026-01-18
 - [ ] 32-03: Reports tests (SnapshotKPIs, ReportsOrdersDialog)
 
 #### Phase 33: E2E-Tests
@@ -255,7 +255,7 @@ Bei Klick auf KPIs und Charts in der Reports-Seite öffnet sich ein Dialog mit d
 | 29. Reports-Drilldown-UI | v1.8 | 3/3 | Complete | 2026-01-17 |
 | 30. Test-Setup | v1.9 | 1/1 | Complete | 2026-01-17 |
 | 31. Unit-Tests API | v1.9 | 2/2 | Complete | 2026-01-18 |
-| 32. Component-Tests | v1.9 | 0/? | Not started | - |
+| 32. Component-Tests | v1.9 | 2/3 | In progress | - |
 | 33. E2E-Tests | v1.9 | 0/? | Not started | - |
 | 34. Bug-Fixes | v1.9 | 0/? | Not started | - |
 | 35. Performance-Audit | v1.9 | 0/? | Not started | - |
