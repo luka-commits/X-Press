@@ -18,7 +18,7 @@ import { DateRangePicker, type DateRange } from './DateRangePicker';
 import { SnapshotKPIs } from './SnapshotKPIs';
 import { PipelineFunnel } from './PipelineFunnel';
 import { PipelineKPIs } from './PipelineKPIs';
-import { VolumeChart, type VolumeData } from './VolumeChart';
+import { ThroughputChart, type ThroughputData as TimeseriesDataPoint } from './ThroughputChart';
 import { PlzChart, type PlzData } from './PlzChart';
 import { CompletedOrdersTable } from './CompletedOrdersTable';
 import { cn } from '@/lib/utils';
@@ -65,12 +65,12 @@ export function PipelineDashboard() {
 
   // Data states
   const [pipelineData, setPipelineData] = useState<PipelineData | null>(null);
-  const [volumeData, setVolumeData] = useState<VolumeData[]>([]);
+  const [timeseriesData, setTimeseriesData] = useState<TimeseriesDataPoint[]>([]);
   const [plzData, setPlzData] = useState<PlzData[]>([]);
 
   // Loading states
   const [pipelineLoading, setPipelineLoading] = useState(true);
-  const [volumeLoading, setVolumeLoading] = useState(true);
+  const [timeseriesLoading, setTimeseriesLoading] = useState(true);
   const [plzLoading, setPlzLoading] = useState(true);
 
   // Error state
@@ -117,27 +117,27 @@ export function PipelineDashboard() {
     }
   }, []);
 
-  // Fetch volume chart data
-  const fetchVolumeData = useCallback(async (range: DateRange) => {
-    setVolumeLoading(true);
+  // Fetch timeseries chart data (eingang vs versendet)
+  const fetchTimeseriesData = useCallback(async (range: DateRange) => {
+    setTimeseriesLoading(true);
 
     try {
       const fromISO = format(range.from, 'yyyy-MM-dd');
       const toISO = format(range.to, 'yyyy-MM-dd');
 
-      const response = await fetch(`/api/reports/analytics?from=${fromISO}&to=${toISO}`);
+      const response = await fetch(`/api/reports/timeseries?from=${fromISO}&to=${toISO}`);
 
       if (!response.ok) {
-        throw new Error('Fehler beim Laden der Volumendaten');
+        throw new Error('Fehler beim Laden der Zeitreihen-Daten');
       }
 
       const result = await response.json();
-      setVolumeData(result.data || []);
+      setTimeseriesData(result || []);
     } catch (err) {
-      console.error('Volume fetch error:', err);
-      setVolumeData([]);
+      console.error('Timeseries fetch error:', err);
+      setTimeseriesData([]);
     } finally {
-      setVolumeLoading(false);
+      setTimeseriesLoading(false);
     }
   }, []);
 
@@ -169,10 +169,10 @@ export function PipelineDashboard() {
   useEffect(() => {
     if (dateRange) {
       fetchPipelineData(dateRange);
-      fetchVolumeData(dateRange);
+      fetchTimeseriesData(dateRange);
       fetchPlzData(dateRange);
     }
-  }, [dateRange, fetchPipelineData, fetchVolumeData, fetchPlzData]);
+  }, [dateRange, fetchPipelineData, fetchTimeseriesData, fetchPlzData]);
 
   const handleDateRangeChange = (range: DateRange) => {
     setDateRange(range);
@@ -217,13 +217,13 @@ export function PipelineDashboard() {
         loading={pipelineLoading}
       />
 
-      {/* 4. Two-column row: VolumeChart + PlzChart */}
+      {/* 4. Two-column row: ThroughputChart + PlzChart */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Volume Chart */}
+        {/* Throughput Chart (Eingang vs Versendet) */}
         <div className="bg-white rounded-lg p-6 border border-neutral-200">
-          <h3 className="font-semibold text-ghl-text mb-1">Auftragsvolumen</h3>
-          <p className="text-sm text-neutral-500 mb-4">Abgeschlossene Aufträge pro Tag</p>
-          <VolumeChart data={volumeData} loading={volumeLoading} />
+          <h3 className="font-semibold text-ghl-text mb-1">Durchfluss Zeitreihe</h3>
+          <p className="text-sm text-neutral-500 mb-4">Aufträge pro Tag: Eingang vs. Versendet</p>
+          <ThroughputChart data={timeseriesData} loading={timeseriesLoading} />
         </div>
 
         {/* PLZ Distribution */}
