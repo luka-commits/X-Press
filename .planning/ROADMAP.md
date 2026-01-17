@@ -101,10 +101,11 @@ Plans:
 **Goal**: ESLint strict, TypeScript strict, Dead-Code entfernen, Konsistenz
 **Depends on**: Phase 36
 **Research**: Unlikely (established tooling)
-**Plans**: TBD
+**Plans**: 1/2
 
 Plans:
-- [ ] 37-01: TBD
+- [x] 37-01: TypeScript test types + lint auto-fix (jest-dom types, import order) — completed 2026-01-18
+- [ ] 37-02: ESLint strict mode + cleanup (no-explicit-any, eslint-disable review)
 
 ---
 
@@ -264,4 +265,4 @@ Bei Klick auf KPIs und Charts in der Reports-Seite öffnet sich ein Dialog mit d
 | 34. Bug-Fixes | v1.9 | 1/1 | Complete | 2026-01-18 |
 | 35. Performance-Audit | v1.9 | 1/1 | Complete | 2026-01-18 |
 | 36. Performance-Optimierung | v1.9 | 3/3 | Complete | 2026-01-18 |
-| 37. Code-Quality | v1.9 | 0/? | Not started | - |
+| 37. Code-Quality | v1.9 | 1/2 | In progress | - |
