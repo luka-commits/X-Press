@@ -1,4 +1,9 @@
 import { supabase } from './supabase';
+import { startOfDay, addDays, differenceInDays, endOfDay } from 'date-fns';
+
+// Re-export KPIOrderItem for convenience
+export type { KPIOrderItem } from './dashboard-queries';
+import type { KPIOrderItem } from './dashboard-queries';
 
 export interface FunnelStage {
     name: string;
@@ -114,4 +119,184 @@ export async function getStageDistribution() {
         data: funnel.stages,
         total: funnel.totalValue
     };
+}
+
+// ============================================================
+// Reports KPI Order List Queries
+// ============================================================
+
+/**
+ * Helper to map order data to KPIOrderItem
+ */
+function mapOrderToKPIItem(
+    order: {
+        auftragsnummer: string;
+        produkttyp: string | null;
+        liefertermin: string | null;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        Kunde: any;
+    },
+    referenceDate: Date
+): KPIOrderItem {
+    const rawKunde = order.Kunde;
+    const kunde = Array.isArray(rawKunde) ? rawKunde[0] : rawKunde;
+    const liefertermin = order.liefertermin ? new Date(order.liefertermin) : null;
+    const dateStart = startOfDay(referenceDate);
+    const tageUebrig = liefertermin ? differenceInDays(liefertermin, dateStart) : 0;
+
+    return {
+        auftragsnummer: order.auftragsnummer,
+        kunde: kunde?.firma || kunde?.name || '–',
+        produkttyp: order.produkttyp,
+        liefertermin: order.liefertermin || '',
+        tageUebrig,
+    };
+}
+
+/**
+ * Lädt alle Problem-Aufträge (istStatus = 'problem')
+ * @param date - Referenzdatum für tageUebrig-Berechnung (Default: heute)
+ */
+export async function getProblemOrders(date: Date = new Date()): Promise<KPIOrderItem[]> {
+    const { data, error } = await supabase
+        .from('Auftrag')
+        .select(`
+            auftragsnummer,
+            produkttyp,
+            liefertermin,
+            Kunde(firma, name)
+        `)
+        .eq('istStatus', 'problem')
+        .order('liefertermin', { ascending: true });
+
+    if (error || !data) {
+        console.error('Error fetching problem orders:', error);
+        return [];
+    }
+
+    return data.map((order) => mapOrderToKPIItem(order, date));
+}
+
+/**
+ * Lädt die ältesten offenen Aufträge (nach Liefertermin sortiert)
+ * @param date - Referenzdatum für tageUebrig-Berechnung (Default: heute)
+ * @param limit - Maximale Anzahl zurückgegebener Aufträge (Default: 10)
+ */
+export async function getOldestOrders(date: Date = new Date(), limit: number = 10): Promise<KPIOrderItem[]> {
+    const { data, error } = await supabase
+        .from('Auftrag')
+        .select(`
+            auftragsnummer,
+            produkttyp,
+            liefertermin,
+            Kunde(firma, name)
+        `)
+        .neq('versandStatus', 'versendet')
+        .order('liefertermin', { ascending: true })
+        .limit(limit);
+
+    if (error || !data) {
+        console.error('Error fetching oldest orders:', error);
+        return [];
+    }
+
+    return data.map((order) => mapOrderToKPIItem(order, date));
+}
+
+/**
+ * Lädt alle Aufträge die morgen fällig sind
+ * @param date - Referenzdatum (Default: heute) - morgen = date + 1
+ */
+export async function getTomorrowOrders(date: Date = new Date()): Promise<KPIOrderItem[]> {
+    const tomorrow = addDays(startOfDay(date), 1);
+    const tomorrowEnd = endOfDay(tomorrow);
+
+    const { data, error } = await supabase
+        .from('Auftrag')
+        .select(`
+            auftragsnummer,
+            produkttyp,
+            liefertermin,
+            Kunde(firma, name)
+        `)
+        .neq('versandStatus', 'versendet')
+        .gte('liefertermin', tomorrow.toISOString())
+        .lte('liefertermin', tomorrowEnd.toISOString())
+        .order('liefertermin', { ascending: true });
+
+    if (error || !data) {
+        console.error('Error fetching tomorrow orders:', error);
+        return [];
+    }
+
+    return data.map((order) => mapOrderToKPIItem(order, date));
+}
+
+/**
+ * Stage-Typen für getOrdersByStage
+ */
+export type StageType = 'offen' | 'in_produktion' | 'fertig' | 'versandbereit' | 'versendet' | 'problem';
+
+/**
+ * Lädt Aufträge für eine bestimmte Pipeline-Stage
+ * Logik entspricht getFunnelData() Kategorisierung:
+ * - 'problem': istStatus = 'problem'
+ * - 'versendet': versandStatus = 'versendet'
+ * - 'versandbereit': versandStatus = 'versandbereit'
+ * - 'fertig': istStatus = 'fertig'
+ * - 'in_produktion': istStatus = 'in_produktion'
+ * - 'offen': no istStatus AND versandStatus NOT in ('versandbereit', 'versendet')
+ *
+ * @param stage - Die Pipeline-Stage
+ * @param date - Referenzdatum für tageUebrig-Berechnung (Default: heute)
+ */
+export async function getOrdersByStage(stage: StageType, date: Date = new Date()): Promise<KPIOrderItem[]> {
+    let query = supabase
+        .from('Auftrag')
+        .select(`
+            auftragsnummer,
+            produkttyp,
+            liefertermin,
+            istStatus,
+            versandStatus,
+            Kunde(firma, name)
+        `)
+        .eq('status', 'aktiv');
+
+    // Apply stage-specific filters
+    switch (stage) {
+        case 'problem':
+            query = query.eq('istStatus', 'problem');
+            break;
+        case 'versendet':
+            query = query.eq('versandStatus', 'versendet');
+            break;
+        case 'versandbereit':
+            query = query.eq('versandStatus', 'versandbereit');
+            break;
+        case 'fertig':
+            query = query.eq('istStatus', 'fertig');
+            break;
+        case 'in_produktion':
+            query = query.eq('istStatus', 'in_produktion');
+            break;
+        case 'offen':
+            // Offen: no istStatus AND versandStatus NOT in ('versandbereit', 'versendet')
+            query = query.is('istStatus', null)
+                .not('versandStatus', 'in', '("versandbereit","versendet")');
+            break;
+    }
+
+    const { data, error } = await query.order('liefertermin', { ascending: true });
+
+    if (error || !data) {
+        console.error(`Error fetching ${stage} orders:`, error);
+        return [];
+    }
+
+    // For stages that match the switch, we can return directly
+    // But for 'offen', we need to filter out cases where other stages would match
+    // The query already handles this with the .is('istStatus', null)
+
+    return data.map((order) => mapOrderToKPIItem(order, date));
 }
