@@ -11,6 +11,8 @@
 import { Package, AlertTriangle, Clock, Calendar, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+type KpiClickType = 'problem' | 'oldest' | 'tomorrow';
+
 interface SnapshotKPIsProps {
   data: {
     aktiveAuftraege: number;
@@ -19,6 +21,7 @@ interface SnapshotKPIsProps {
     morgenFaellig: number;
   } | null;
   loading: boolean;
+  onKpiClick?: (type: KpiClickType) => void;
 }
 
 interface KpiCardConfig {
@@ -29,15 +32,17 @@ interface KpiCardConfig {
   getValue: (value: number | null) => string;
   getHighlightCondition?: (value: number | null) => boolean;
   highlightColorClass?: string;
+  clickType?: KpiClickType;
 }
 
 const KPI_CARDS: KpiCardConfig[] = [
   {
     key: 'aktiveAuftraege',
-    label: 'Aktive Aufträge',
+    label: 'Offene Aufträge',
     icon: Package,
     iconColorClass: 'text-blue-600',
     getValue: (v) => String(v ?? 0),
+    // No clickType - not clickable (just a total count)
   },
   {
     key: 'problemAuftraege',
@@ -47,6 +52,7 @@ const KPI_CARDS: KpiCardConfig[] = [
     getValue: (v) => String(v ?? 0),
     getHighlightCondition: (v) => (v ?? 0) > 0,
     highlightColorClass: 'text-red-600',
+    clickType: 'problem',
   },
   {
     key: 'aeltesterAuftrag',
@@ -56,6 +62,7 @@ const KPI_CARDS: KpiCardConfig[] = [
     getValue: (v) => (v !== null ? `${v} Tage` : '-'),
     getHighlightCondition: (v) => (v ?? 0) > 7,
     highlightColorClass: 'text-amber-600',
+    clickType: 'oldest',
   },
   {
     key: 'morgenFaellig',
@@ -65,10 +72,11 @@ const KPI_CARDS: KpiCardConfig[] = [
     getValue: (v) => String(v ?? 0),
     getHighlightCondition: (v) => (v ?? 0) > 0,
     highlightColorClass: 'text-amber-600',
+    clickType: 'tomorrow',
   },
 ];
 
-export function SnapshotKPIs({ data, loading }: SnapshotKPIsProps) {
+export function SnapshotKPIs({ data, loading, onKpiClick }: SnapshotKPIsProps) {
   return (
     <div className="space-y-4">
       {/* Section header */}
@@ -83,12 +91,23 @@ export function SnapshotKPIs({ data, loading }: SnapshotKPIsProps) {
           const iconColor = isHighlighted && card.highlightColorClass
             ? card.highlightColorClass
             : card.iconColorClass;
+          const isClickable = !!card.clickType && !!onKpiClick;
 
-          return (
-            <div
-              key={card.key}
-              className="bg-white rounded-lg border border-neutral-200 p-4"
-            >
+          const handleClick = () => {
+            if (card.clickType && onKpiClick) {
+              onKpiClick(card.clickType);
+            }
+          };
+
+          const handleKeyDown = (e: React.KeyboardEvent) => {
+            if ((e.key === 'Enter' || e.key === ' ') && card.clickType && onKpiClick) {
+              e.preventDefault();
+              onKpiClick(card.clickType);
+            }
+          };
+
+          const cardContent = (
+            <>
               {/* Icon and label */}
               <div className="flex items-center gap-2 mb-2">
                 <IconComponent className={cn('w-5 h-5', iconColor)} />
@@ -115,6 +134,37 @@ export function SnapshotKPIs({ data, loading }: SnapshotKPIsProps) {
                   {card.getValue(value)}
                 </p>
               )}
+            </>
+          );
+
+          // Clickable cards have hover effect and keyboard accessibility
+          if (isClickable) {
+            return (
+              <div
+                key={card.key}
+                role="button"
+                tabIndex={0}
+                onClick={handleClick}
+                onKeyDown={handleKeyDown}
+                className={cn(
+                  'bg-white rounded-lg border border-neutral-200 p-4',
+                  'cursor-pointer transition-all',
+                  'hover:border-ghl-blue hover:shadow-sm',
+                  'focus:outline-none focus:ring-2 focus:ring-ghl-blue focus:ring-offset-2'
+                )}
+              >
+                {cardContent}
+              </div>
+            );
+          }
+
+          // Non-clickable cards (aktiveAuftraege)
+          return (
+            <div
+              key={card.key}
+              className="bg-white rounded-lg border border-neutral-200 p-4"
+            >
+              {cardContent}
             </div>
           );
         })}
