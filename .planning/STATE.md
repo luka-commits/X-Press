@@ -24,7 +24,7 @@ Progress: ██████████ 100% (v1.6)
 - ✅ v1.3 Routenplanung (Phases 15-17) — SHIPPED 2026-01-16
 - ✅ v1.4 Reporting (Phases 18-20) — SHIPPED 2026-01-17
 - ✅ v1.5 System-Konsolidierung (Phases 21-22) — SHIPPED 2026-01-17
-- ✅ v1.6 Pipeline-Analytics (Phases 23-24) — COMPLETE 2026-01-17
+- ✅ v1.6 Pipeline-Analytics (Phases 23-24) — SHIPPED 2026-01-17
 
 ## Performance Metrics
 
@@ -67,11 +67,11 @@ None currently.
 - v1.3 shipped: 2026-01-16 (3 phases, 3 plans)
 - v1.4 shipped: 2026-01-17 (3 phases, 5 plans)
 - v1.5 shipped: 2026-01-17 (2 phases, 2 plans)
-- v1.6 created: 2026-01-17 (Pipeline-Analytics, 2 phases: 23-24)
+- v1.6 shipped: 2026-01-17 (2 phases, 2 plans)
 
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: v1.6 Pipeline-Analytics milestone complete
+Stopped at: v1.6 milestone archived
 Resume file: None
-Next: /gsd:complete-milestone
+Next: Plan next milestone or new project

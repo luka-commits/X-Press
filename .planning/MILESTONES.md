@@ -1,5 +1,32 @@
 # Project Milestones: XOS Mobile Status-Update
 
+## v1.6 Pipeline-Analytics (Shipped: 2026-01-17)
+
+**Delivered:** Konsolidiertes Pipeline-Dashboard mit Zeitreihen-Chart und entschlacktem Dashboard.
+
+**Phases completed:** 23-24 (2 plans total)
+
+**Key accomplishments:**
+
+- Pipeline Analytics API with throughput, snapshot, and period KPIs
+- PipelineFunnel component showing 4-stage horizontal order flow
+- SnapshotKPIs and PipelineKPIs components with comparison badges
+- ThroughputChart with dual-line time series (eingang vs versendet)
+- Dashboard streamlined from 5 to 4 KPIs (Problem-KPI moved to Reports)
+- Consolidated 3-tab Reports into single PipelineDashboard
+
+**Stats:**
+
+- 19 files modified (+2,016 / -102 lines)
+- 2 phases, 2 plans
+- Same day (2026-01-17, ~16 min execution)
+
+**Git range:** `2cf2ecb` (feat(reports)) → `57449be` (docs(24-01))
+
+**Archive:** [v1.6-ROADMAP.md](milestones/v1.6-ROADMAP.md)
+
+---
+
 ## v1.5 System-Konsolidierung (Shipped: 2026-01-17)
 
 **Delivered:** Kohäsives System mit kombinierter Pipeline-Status-Spalte und klaren Tab-Verantwortlichkeiten.
