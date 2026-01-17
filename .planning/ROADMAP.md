@@ -9,6 +9,7 @@
 - ✅ **v1.4 Reporting** — Phases 18-20 (shipped 2026-01-17)
 - ✅ **v1.5 System-Konsolidierung** — Phases 21-22 (shipped 2026-01-17)
 - ✅ **v1.6 Pipeline-Analytics** — Phases 23-24 (shipped 2026-01-17)
+- 🚧 **v1.7 KPI-Klick-Overlay** — Phases 25-27 (in progress)
 
 ## Completed Milestones
 
@@ -103,6 +104,40 @@ Reports zu einem fokussierten Pipeline-Dashboard konsolidieren, Dashboard entsch
 
 </details>
 
+### 🚧 v1.7 KPI-Klick-Overlay (In Progress)
+
+**Milestone Goal:** Bei Klick auf KPI-Karten im Dashboard öffnet sich ein Dialog mit der zugehörigen Auftragsliste.
+
+#### Phase 25: Dialog-Komponente
+
+**Goal**: shadcn/ui Dialog-Komponente installieren und einrichten
+**Depends on**: Phase 24
+**Research**: Unlikely (Standard shadcn/ui Pattern)
+**Plans**: TBD
+
+Plans:
+- [ ] 25-01: TBD (run /gsd:plan-phase 25 to break down)
+
+#### Phase 26: KPI-Detail-API
+
+**Goal**: API-Endpunkte für Aufträge pro KPI-Typ (Offene, Bald fällig, etc.)
+**Depends on**: Phase 25
+**Research**: Unlikely (interne Patterns aus dashboard-queries.ts)
+**Plans**: TBD
+
+Plans:
+- [ ] 26-01: TBD
+
+#### Phase 27: KPI-Overlay-UI
+
+**Goal**: KPI-Karten klickbar machen, Dialog mit Auftragsliste anzeigen
+**Depends on**: Phase 26
+**Research**: Unlikely (bestehende Komponenten CriticalOrdersList, OrderTable)
+**Plans**: TBD
+
+Plans:
+- [ ] 27-01: TBD
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -131,3 +166,6 @@ Reports zu einem fokussierten Pipeline-Dashboard konsolidieren, Dashboard entsch
 | 22. Reports & Navigation | v1.5 | 1/1 | Complete | 2026-01-17 |
 | 23. Reports neu | v1.6 | 1/1 | Complete | 2026-01-17 |
 | 24. Reports Zeitreihen + Dashboard | v1.6 | 1/1 | Complete | 2026-01-17 |
+| 25. Dialog-Komponente | v1.7 | 0/? | Not started | - |
+| 26. KPI-Detail-API | v1.7 | 0/? | Not started | - |
+| 27. KPI-Overlay-UI | v1.7 | 0/? | Not started | - |

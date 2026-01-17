@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-17)
 
 **Core value:** Mitarbeiter können mit 3 Klicks den Auftragsstatus vom Handy aus updaten.
-**Current focus:** v1.6 Pipeline-Analytics COMPLETE
+**Current focus:** v1.7 KPI-Klick-Overlay
 
 ## Current Position
 
-Phase: 24 of 24 (Reports Zeitreihen + Dashboard)
-Plan: 1 of 1 in current phase
-Status: Milestone complete
-Last activity: 2026-01-17 — Completed 24-01-PLAN.md
+Phase: 25 of 27 (Dialog-Komponente)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-01-17 — Milestone v1.7 created
 
-Progress: ██████████ 100% (v1.6)
+Progress: ░░░░░░░░░░ 0% (v1.7)
 
 ## Milestones
 
@@ -25,6 +25,7 @@ Progress: ██████████ 100% (v1.6)
 - ✅ v1.4 Reporting (Phases 18-20) — SHIPPED 2026-01-17
 - ✅ v1.5 System-Konsolidierung (Phases 21-22) — SHIPPED 2026-01-17
 - ✅ v1.6 Pipeline-Analytics (Phases 23-24) — SHIPPED 2026-01-17
+- 🚧 v1.7 KPI-Klick-Overlay (Phases 25-27) — in progress
 
 ## Performance Metrics
 
@@ -68,10 +69,11 @@ None currently.
 - v1.4 shipped: 2026-01-17 (3 phases, 5 plans)
 - v1.5 shipped: 2026-01-17 (2 phases, 2 plans)
 - v1.6 shipped: 2026-01-17 (2 phases, 2 plans)
+- v1.7 created: 2026-01-17 (3 phases: KPI-Klick-Overlay)
 
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: v1.6 milestone archived
+Stopped at: Milestone v1.7 initialization
 Resume file: None
-Next: Plan next milestone or new project
+Next: /gsd:plan-phase 25
