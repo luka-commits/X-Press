@@ -40,10 +40,9 @@ interface KPICardsGridProps {
     name: string;
     auslastung: number;
   } | null;
-  problemOrders: number;
 }
 
-export function KPICardsGrid({ total, critical, avgCapacity, engpass, problemOrders }: KPICardsGridProps) {
+export function KPICardsGrid({ total, critical, avgCapacity, engpass }: KPICardsGridProps) {
   // Determine capacity variant based on percentage
   const capacityVariant =
     avgCapacity > 90 ? 'critical' : avgCapacity > 70 ? 'warning' : avgCapacity > 0 ? 'success' : 'default';
@@ -58,17 +57,12 @@ export function KPICardsGrid({ total, critical, avgCapacity, engpass, problemOrd
     : 'default';
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
       <KPICard label="Aktive Aufträge" value={total} />
       <KPICard
         label="Bald fällig (≤2 Tage)"
         value={critical}
         variant={critical > 0 ? 'warning' : 'default'}
-      />
-      <KPICard
-        label="Problem-Aufträge"
-        value={problemOrders}
-        variant={problemOrders > 0 ? 'critical' : 'default'}
       />
       <KPICard
         label="Ø Auslastung"
