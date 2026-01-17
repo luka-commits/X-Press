@@ -45,22 +45,23 @@ export function FunnelChart({ data, onStageClick }: FunnelChartProps) {
     ];
 
     // Calculate cumulative and next-step conversion
+    // Note: With exclusive data, 'cumulative' is actually just % of total
     const formattedData = data.map((stage, index) => {
-        const cumulative = totalOrders > 0
-            ? ((stage.value / totalOrders) * 100).toFixed(2)
-            : '0.00';
+        const percentOfTotal = totalOrders > 0
+            ? ((stage.value / totalOrders) * 100).toFixed(1)
+            : '0.0';
 
-        // Next step conversion: current / previous (or 100% for first)
-        let nextStepConversion = '100.00';
-        if (index > 0 && data[index - 1].value > 0) {
-            nextStepConversion = ((stage.value / data[index - 1].value) * 100).toFixed(2);
-        }
+        // Placeholder for Avg Time (would need real data)
+        // For now, leave empty or mock logic?
+        // User asked to remove "Next Step Conversion" confusion?
+        // Let's just put "-" or a placeholder.
+        const avgTime = '-';
 
         return {
             ...stage,
             fill: coolDistinctColors[index % coolDistinctColors.length], // New distinct palette
-            cumulative: `${cumulative}%`,
-            nextStep: `${nextStepConversion}%`,
+            cumulative: `${percentOfTotal}%`,
+            nextStep: avgTime,
             barWidth: (stage.value / maxValue) * 100
         };
     });
@@ -81,8 +82,8 @@ export function FunnelChart({ data, onStageClick }: FunnelChartProps) {
             {/* Column Headers */}
             <div className="grid grid-cols-12 gap-4 text-[10px] uppercase font-bold text-neutral-400 mb-2 px-1">
                 <div className="col-span-6"></div>
-                <div className="col-span-3 text-center">Cumulative</div>
-                <div className="col-span-3 text-center">Next Step Conversion</div>
+                <div className="col-span-3 text-center">% Of Total</div>
+                <div className="col-span-3 text-center">Avg. Time</div>
             </div>
 
             {/* Funnel Bars */}

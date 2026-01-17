@@ -102,8 +102,10 @@ export function ReportsDashboard() {
     setFunnelLoading(true);
     try {
       // Fetch both in parallel
+      // Switch Funnel to EXCLUSIVE mode to match user expectation (Current Status Pipeline)
+      // This fixes the "Total" double counting and "In Produktion" being non-zero.
       const [funnelResponse, stageResponse] = await Promise.all([
-        fetch('/api/reports/funnel'),                     // cumulative (default)
+        fetch('/api/reports/funnel?mode=exclusive'),      // exclusive (was cumulative)
         fetch('/api/reports/funnel?mode=exclusive'),      // exclusive for donut
       ]);
 
