@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-18)
 
 **Core value:** Mitarbeiter können mit 3 Klicks den Auftragsstatus vom Handy aus updaten.
-**Current focus:** Planning next milestone
+**Current focus:** v2.0 Production-Readiness
 
 ## Current Position
 
-Phase: All milestones complete (v1.0-v1.9)
-Plan: Ready for next milestone
-Status: MILESTONE COMPLETE
-Last activity: 2026-01-18 — v1.9 Fixes archived
+Phase: 38 of 41 (Observability)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-01-18 — Milestone v2.0 created
 
-Progress: ██████████ 100% (v1.9 - 8 phases, 16 plans complete)
+Progress: ░░░░░░░░░░ 0% (v2.0 - 4 phases)
 
 ## Milestones
 
@@ -28,6 +28,7 @@ Progress: ██████████ 100% (v1.9 - 8 phases, 16 plans complet
 - ✅ v1.7 KPI-Klick-Overlay (Phases 25-27) — SHIPPED 2026-01-17
 - ✅ v1.8 Reports-Drilldown (Phases 28-29) — SHIPPED 2026-01-17
 - ✅ v1.9 Fixes (Phases 30-37) — SHIPPED 2026-01-18
+- 🚧 v2.0 Production-Readiness (Phases 38-41) — in progress
 
 ## Performance Metrics
 
@@ -77,10 +78,11 @@ None currently.
 - v1.7 shipped: 2026-01-17 (3 phases, 3 plans: KPI-Klick-Overlay)
 - v1.8 shipped: 2026-01-17 (2 phases, 4 plans: Reports-Drilldown)
 - v1.9 shipped: 2026-01-18 (8 phases, 16 plans: Testing, Performance, Code-Quality)
+- v2.0 created: 2026-01-18 (4 phases: Observability, CI, Caching, Query-Optimization)
 
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: v1.9 Fixes milestone archived - all milestones complete
+Stopped at: Milestone v2.0 initialization
 Resume file: None
-Next action: Plan next milestone (v2.0) or archive planning
+Next action: /gsd:plan-phase 38

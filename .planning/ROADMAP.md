@@ -12,6 +12,7 @@
 - ✅ **v1.7 KPI-Klick-Overlay** — Phases 25-27 (shipped 2026-01-17)
 - ✅ **v1.8 Reports-Drilldown** — Phases 28-29 (shipped 2026-01-17)
 - ✅ **v1.9 Fixes** — Phases 30-37 (shipped 2026-01-18)
+- 🚧 **v2.0 Production-Readiness** — Phases 38-41 (in progress)
 
 ---
 
@@ -148,6 +149,51 @@ Systematisches Testing, Bug-Fixes, Performance-Optimierung und Code-Quality Verb
 
 </details>
 
+### 🚧 v2.0 Production-Readiness (In Progress)
+
+**Milestone Goal:** Robustheit, Monitoring, CI/CD und Performance-Optimierungen für Produktionsreife.
+
+#### Phase 38: Observability
+
+**Goal**: Sentry Error-Tracking, Health-Check Endpoint, strukturiertes Logging
+**Depends on**: v1.9 complete
+**Research**: Likely (Sentry Next.js SDK Integration)
+**Research topics**: Sentry Next.js SDK, structured logging patterns
+**Plans**: TBD
+
+Plans:
+- [ ] 38-01: TBD (run /gsd:plan-phase 38 to break down)
+
+#### Phase 39: CI-Enhancement
+
+**Goal**: E2E Tests in GitHub Actions CI, Coverage-Threshold
+**Depends on**: Phase 38
+**Research**: Unlikely (established patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 39-01: TBD
+
+#### Phase 40: API-Caching
+
+**Goal**: Response-Caching für KPI-Routes, Cache-Headers
+**Depends on**: Phase 39
+**Research**: Unlikely (Next.js caching patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 40-01: TBD
+
+#### Phase 41: Query-Optimization
+
+**Goal**: Aggregation in DB verschieben, Over-Fetching eliminieren
+**Depends on**: Phase 40
+**Research**: Unlikely (Prisma/Supabase patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 41-01: TBD
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -189,3 +235,7 @@ Systematisches Testing, Bug-Fixes, Performance-Optimierung und Code-Quality Verb
 | 35. Performance-Audit | v1.9 | 1/1 | Complete | 2026-01-18 |
 | 36. Performance-Optimierung | v1.9 | 3/3 | Complete | 2026-01-18 |
 | 37. Code-Quality | v1.9 | 2/2 | Complete | 2026-01-18 |
+| 38. Observability | v2.0 | 0/? | Not started | - |
+| 39. CI-Enhancement | v2.0 | 0/? | Not started | - |
+| 40. API-Caching | v2.0 | 0/? | Not started | - |
+| 41. Query-Optimization | v2.0 | 0/? | Not started | - |
