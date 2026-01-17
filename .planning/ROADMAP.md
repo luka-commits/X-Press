@@ -19,15 +19,15 @@
 
 **Milestone Goal:** Systematisches Testing, Bug-Fixes, Performance-Optimierung und Code-Quality Verbesserungen.
 
-#### Phase 30: Test-Setup
+#### Phase 30: Test-Setup ✓
 
 **Goal**: Jest und Testing-Library konfigurieren, Test-Grundlagen schaffen
 **Depends on**: Previous milestone complete
 **Research**: Unlikely (established patterns)
-**Plans**: TBD
+**Plans**: 1/1 complete
 
 Plans:
-- [ ] 30-01: Test utilities and mocks (Prisma/Supabase mocks, fixtures, docs update)
+- [x] 30-01: Test utilities and mocks (Prisma/Supabase mocks, fixtures, docs update) — completed 2026-01-17
 
 #### Phase 31: Unit-Tests API
 
@@ -250,7 +250,7 @@ Bei Klick auf KPIs und Charts in der Reports-Seite öffnet sich ein Dialog mit d
 | 27. KPI-Overlay-UI | v1.7 | 1/1 | Complete | 2026-01-17 |
 | 28. Reports-KPI-API | v1.8 | 1/1 | Complete | 2026-01-17 |
 | 29. Reports-Drilldown-UI | v1.8 | 3/3 | Complete | 2026-01-17 |
-| 30. Test-Setup | v1.9 | 0/? | Not started | - |
+| 30. Test-Setup | v1.9 | 1/1 | Complete | 2026-01-17 |
 | 31. Unit-Tests API | v1.9 | 0/? | Not started | - |
 | 32. Component-Tests | v1.9 | 0/? | Not started | - |
 | 33. E2E-Tests | v1.9 | 0/? | Not started | - |
