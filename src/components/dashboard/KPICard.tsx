@@ -6,9 +6,24 @@
  * Einzelne Kennzahl-Karte für das Dashboard
  */
 
+import { Loader2 } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
+
 import { cn } from '@/lib/utils';
-import { KPIOrdersDialog } from './KPIOrdersDialog';
+
+// Lazy load KPIOrdersDialog - only needed when user clicks a KPI card
+const KPIOrdersDialog = dynamic(
+  () => import('./KPIOrdersDialog').then((mod) => ({ default: mod.KPIOrdersDialog })),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <Loader2 className="h-8 w-8 animate-spin text-white" />
+      </div>
+    ),
+  }
+);
 
 interface KPICardProps {
   label: string;
@@ -69,7 +84,14 @@ interface KPICardsGridProps {
   } | null;
 }
 
-export function KPICardsGrid({ total, critical, overdue, problem, avgCapacity, engpass }: KPICardsGridProps) {
+export function KPICardsGrid({
+  total,
+  critical,
+  overdue,
+  problem,
+  avgCapacity,
+  engpass,
+}: KPICardsGridProps) {
   const [dialogState, setDialogState] = useState<{
     type: 'total' | 'critical' | 'overdue' | 'problem' | null;
     isOpen: boolean;
@@ -80,7 +102,13 @@ export function KPICardsGrid({ total, critical, overdue, problem, avgCapacity, e
 
   // Determine capacity variant based on percentage
   const capacityVariant =
-    avgCapacity > 90 ? 'critical' : avgCapacity > 70 ? 'warning' : avgCapacity > 0 ? 'success' : 'default';
+    avgCapacity > 90
+      ? 'critical'
+      : avgCapacity > 70
+        ? 'warning'
+        : avgCapacity > 0
+          ? 'success'
+          : 'default';
 
   // Determine engpass variant
   const engpassVariant = engpass
@@ -119,11 +147,7 @@ export function KPICardsGrid({ total, critical, overdue, problem, avgCapacity, e
   return (
     <>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
-        <KPICard
-          label="Offene Aufträge"
-          value={total}
-          onClick={() => openDialog('total')}
-        />
+        <KPICard label="Offene Aufträge" value={total} onClick={() => openDialog('total')} />
         <KPICard
           label="Bald fällig (≤2 Tage)"
           value={critical}
@@ -142,12 +166,7 @@ export function KPICardsGrid({ total, critical, overdue, problem, avgCapacity, e
           variant={problem > 0 ? 'critical' : 'default'}
           onClick={() => openDialog('problem')}
         />
-        <KPICard
-          label="Ø Auslastung"
-          value={avgCapacity}
-          suffix="%"
-          variant={capacityVariant}
-        />
+        <KPICard label="Ø Auslastung" value={avgCapacity} suffix="%" variant={capacityVariant} />
         <KPICard
           label="Engpass"
           value={engpass ? engpass.name : '–'}
