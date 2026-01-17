@@ -84,17 +84,17 @@ Plans:
 Plans:
 - [x] 35-01: Performance audit (Lighthouse, bundle analysis, Core Web Vitals) — completed 2026-01-18
 
-#### Phase 36: Performance-Optimierung
+#### Phase 36: Performance-Optimierung ✓
 
 **Goal**: Identifizierte Bottlenecks beheben (Bundle-Size, Lazy-Loading, Caching)
 **Depends on**: Phase 35
 **Research**: Unlikely (Next.js patterns)
-**Plans**: 2/3
+**Plans**: 3/3 complete
 
 Plans:
 - [x] 36-01: Dashboard KPIOrdersDialog lazy loading (next/dynamic) — completed 2026-01-18
 - [x] 36-02: Reports Recharts lazy loading (all chart components) — completed 2026-01-18
-- [ ] 36-03: Verify optimizations (Lighthouse re-audit, checkpoint)
+- [x] 36-03: Verify optimizations (Lighthouse re-audit, checkpoint) — completed 2026-01-18
 
 #### Phase 37: Code-Quality
 
@@ -263,5 +263,5 @@ Bei Klick auf KPIs und Charts in der Reports-Seite öffnet sich ein Dialog mit d
 | 33. E2E-Tests | v1.9 | 3/3 | Complete | 2026-01-18 |
 | 34. Bug-Fixes | v1.9 | 1/1 | Complete | 2026-01-18 |
 | 35. Performance-Audit | v1.9 | 1/1 | Complete | 2026-01-18 |
-| 36. Performance-Optimierung | v1.9 | 2/3 | In progress | - |
+| 36. Performance-Optimierung | v1.9 | 3/3 | Complete | 2026-01-18 |
 | 37. Code-Quality | v1.9 | 0/? | Not started | - |
