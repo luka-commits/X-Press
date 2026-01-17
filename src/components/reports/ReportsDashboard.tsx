@@ -280,17 +280,41 @@ export function ReportsDashboard() {
   return (
     <div className="space-y-6">
       {/* Global Header with DateRangePicker */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-ghl-text">Reporting Dashboard</h1>
-          <p className="text-sm text-ghl-text-secondary mt-1">
-            Produktions-Insights & Pipeline Analytics
-          </p>
+      <div className="flex flex-col gap-4 mb-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="bg-white border border-neutral-200 p-2 rounded-md shadow-sm">
+              <svg className="w-5 h-5 text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+              </svg>
+            </div>
+            <h1 className="text-2xl font-bold text-ghl-text">Pipeline</h1>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <DateRangePicker
+              value={dateRange}
+              onChange={handleDateRangeChange}
+            />
+            <button className="p-2.5 bg-white border border-neutral-200 rounded-md shadow-sm text-neutral-500 hover:bg-neutral-50">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+            </button>
+            <button className="px-4 py-2.5 bg-ghl-blue text-white rounded-md shadow-sm text-sm font-medium hover:bg-ghl-blue-hover flex items-center gap-2">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              </svg>
+              Edit Dashboard
+            </button>
+          </div>
         </div>
-        <DateRangePicker
-          value={dateRange}
-          onChange={handleDateRangeChange}
-        />
+
+        <div className="flex items-center">
+          <button className="text-ghl-blue text-sm font-medium flex items-center gap-1 hover:text-ghl-blue-hover">
+            <span>+</span> Quick Filters
+          </button>
+        </div>
       </div>
 
       {/* Error state */}
@@ -302,7 +326,7 @@ export function ReportsDashboard() {
 
       {/* Section 1: Current Pipeline Snapshot */}
       <section className="space-y-4">
-        <h2 className="text-lg font-semibold text-ghl-text">Aktueller Pipeline-Stand</h2>
+        {/* <h2 className="text-lg font-semibold text-ghl-text">Aktueller Pipeline-Stand</h2>  REMOVED HEADER */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {funnelLoading ? (
             <>

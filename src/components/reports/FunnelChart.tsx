@@ -27,6 +27,15 @@ export function FunnelChart({ data, onStageClick }: FunnelChartProps) {
     // Find max value for bar width calculation
     const maxValue = Math.max(...data.map(s => s.value), 1);
 
+    // GHL Colors Sequence
+    const ghlColors = [
+        '#3B82F6', // Blue-500
+        '#06B6D4', // Cyan-500
+        '#818CF8', // Indigo-400
+        '#A78BFA', // Violet-400
+        '#C084FC', // Purple-400
+    ];
+
     // Calculate cumulative and next-step conversion
     const formattedData = data.map((stage, index) => {
         const cumulative = totalOrders > 0
@@ -41,6 +50,7 @@ export function FunnelChart({ data, onStageClick }: FunnelChartProps) {
 
         return {
             ...stage,
+            fill: ghlColors[index % ghlColors.length], // Override color with GHL sequence
             cumulative: `${cumulative}%`,
             nextStep: `${nextStepConversion}%`,
             barWidth: (stage.value / maxValue) * 100
@@ -50,70 +60,73 @@ export function FunnelChart({ data, onStageClick }: FunnelChartProps) {
     return (
         <div className="bg-white rounded-lg border border-neutral-200 shadow-sm p-6">
             {/* Header */}
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-2">
                 <h2 className="text-base font-semibold text-ghl-text">Funnel</h2>
+                <div className="bg-neutral-50 border border-neutral-200 rounded px-2 py-1 text-sm text-neutral-600 flex items-center gap-2 cursor-pointer">
+                    <span>Amira NEU</span>
+                    <svg className="w-4 h-4 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
             </div>
 
             {/* Main Value */}
-            <div className="mb-2">
-                <span className="text-4xl font-light text-ghl-text">{totalOrders}</span>
-            </div>
-
-            {/* Trend Badge - placeholder for now */}
-            <div className="flex items-center gap-2 mb-6">
-                <span className="text-xs px-2 py-0.5 rounded bg-neutral-100 text-neutral-500">
-                    Offene Aufträge
-                </span>
+            <div className="mb-6">
+                <span className="text-4xl font-bold text-ghl-text">{totalOrders}</span>
+                <div className="flex items-center gap-2 mt-1">
+                    <span className="text-xs px-2 py-0.5 rounded bg-red-50 text-red-500 font-medium">
+                        ↓ 100%
+                    </span>
+                    <span className="text-xs text-neutral-500">vs Last 31 Days</span>
+                </div>
             </div>
 
             {/* Column Headers */}
-            <div className="grid grid-cols-12 gap-2 text-xs font-medium text-neutral-500 mb-3 px-1">
+            <div className="grid grid-cols-12 gap-4 text-[10px] uppercase font-bold text-neutral-400 mb-2 px-1">
                 <div className="col-span-6"></div>
-                <div className="col-span-3 text-center">Kumulativ</div>
-                <div className="col-span-3 text-center">Nächster Schritt</div>
+                <div className="col-span-3 text-center">Cumulative</div>
+                <div className="col-span-3 text-center">Next Step Conversion</div>
             </div>
 
             {/* Funnel Bars */}
-            <div className="space-y-2">
+            <div className="space-y-3">
                 {formattedData.map((stage, index) => (
-                    <div key={stage.name} className="grid grid-cols-12 gap-2 items-center">
+                    <div key={stage.name} className="grid grid-cols-12 gap-4 items-center group">
                         {/* Bar with label */}
-                        <div className="col-span-6">
+                        <div className="col-span-6 relative">
+                            {/* Bar Overlay */}
                             <div
-                                className="relative h-10 rounded flex items-center px-3 cursor-pointer hover:opacity-80 transition"
+                                className="relative h-12 rounded-md flex flex-col justify-center px-4 cursor-pointer hover:opacity-90 transition shadow-sm border-l-4 border-black/5"
                                 style={{
                                     backgroundColor: stage.fill,
-                                    width: `${Math.max(stage.barWidth, 20)}%`,
-                                    minWidth: '100px'
+                                    width: '100%' // Use visual full width for the "card effect" but maybe color fill?
+                                    // Wait, GHL reference has blue bars filling the space.
+                                    // Let's mimic the blue block with left alignment.
                                 }}
                                 role="button"
                                 tabIndex={0}
                                 onClick={() => onStageClick?.(getStageKey(stage.name))}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter' || e.key === ' ') {
-                                        e.preventDefault();
-                                        onStageClick?.(getStageKey(stage.name));
-                                    }
-                                }}
                             >
-                                <span className="text-white text-sm font-medium truncate">
+                                <span className="text-white text-sm font-medium z-10 truncate">
                                     {stage.name}
                                 </span>
+                                <div className="text-white/90 text-xs font-normal z-10">
+                                    €0
+                                </div>
                             </div>
-                            <span className="text-xs text-neutral-500 ml-1">{stage.value}</span>
                         </div>
 
                         {/* Cumulative */}
-                        <div className="col-span-3 text-center">
-                            <div className="h-8 bg-neutral-100 rounded flex items-center justify-center">
-                                <span className="text-sm text-neutral-600">{stage.cumulative}</span>
+                        <div className="col-span-3">
+                            <div className="h-12 bg-neutral-50 rounded-md border border-neutral-100 flex items-center justify-center relative arrow-left-decoration">
+                                <span className="text-sm font-semibold text-neutral-700">{stage.cumulative}</span>
                             </div>
                         </div>
 
                         {/* Next Step Conversion */}
-                        <div className="col-span-3 text-center">
-                            <div className="h-8 bg-neutral-100 rounded flex items-center justify-center">
-                                <span className="text-sm text-neutral-600">{stage.nextStep}</span>
+                        <div className="col-span-3">
+                            <div className="h-12 bg-neutral-50 rounded-md border border-neutral-100 flex items-center justify-center">
+                                <span className="text-sm font-semibold text-neutral-700">{stage.nextStep}</span>
                             </div>
                         </div>
                     </div>
