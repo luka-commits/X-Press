@@ -157,12 +157,11 @@ Systematisches Testing, Bug-Fixes, Performance-Optimierung und Code-Quality Verb
 
 **Goal**: Sentry Error-Tracking, Health-Check Endpoint, strukturiertes Logging
 **Depends on**: v1.9 complete
-**Research**: Likely (Sentry Next.js SDK Integration)
-**Research topics**: Sentry Next.js SDK, structured logging patterns
-**Plans**: TBD
+**Research**: Complete
+**Status**: Complete
 
 Plans:
-- [ ] 38-01: TBD (run /gsd:plan-phase 38 to break down)
+- [x] 38-01: Sentry, Logging, Health Check — completed 2026-01-18
 
 #### Phase 39: CI-Enhancement
 
@@ -235,7 +234,7 @@ Plans:
 | 35. Performance-Audit | v1.9 | 1/1 | Complete | 2026-01-18 |
 | 36. Performance-Optimierung | v1.9 | 3/3 | Complete | 2026-01-18 |
 | 37. Code-Quality | v1.9 | 2/2 | Complete | 2026-01-18 |
-| 38. Observability | v2.0 | 0/? | Not started | - |
+| 38. Observability | v2.0 | 1/1 | Complete | 2026-01-18 |
 | 39. CI-Enhancement | v2.0 | 0/? | Not started | - |
 | 40. API-Caching | v2.0 | 0/? | Not started | - |
 | 41. Query-Optimization | v2.0 | 0/? | Not started | - |
