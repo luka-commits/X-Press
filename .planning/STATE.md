@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-17)
 
 **Core value:** Mitarbeiter können mit 3 Klicks den Auftragsstatus vom Handy aus updaten.
-**Current focus:** v1.7 KPI-Klick-Overlay
+**Current focus:** v1.8 Reports-Drilldown
 
 ## Current Position
 
-Phase: 27 of 27 (KPI-Overlay-UI)
-Plan: 1 of 1 complete
-Status: Phase complete
-Last activity: 2026-01-17 — Completed 27-01-PLAN.md
+Phase: 28 of 29 (Reports-KPI-API)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-01-17 — Milestone v1.8 created
 
-Progress: ██████████ 100% (v1.7)
+Progress: ░░░░░░░░░░ 0% (v1.8)
 
 ## Milestones
 
@@ -25,7 +25,8 @@ Progress: ██████████ 100% (v1.7)
 - ✅ v1.4 Reporting (Phases 18-20) — SHIPPED 2026-01-17
 - ✅ v1.5 System-Konsolidierung (Phases 21-22) — SHIPPED 2026-01-17
 - ✅ v1.6 Pipeline-Analytics (Phases 23-24) — SHIPPED 2026-01-17
-- ✅ v1.7 KPI-Klick-Overlay (Phases 25-27) — COMPLETE 2026-01-17
+- ✅ v1.7 KPI-Klick-Overlay (Phases 25-27) — SHIPPED 2026-01-17
+- 🚧 v1.8 Reports-Drilldown (Phases 28-29) — in progress
 
 ## Performance Metrics
 
@@ -71,10 +72,11 @@ None currently.
 - v1.5 shipped: 2026-01-17 (2 phases, 2 plans)
 - v1.6 shipped: 2026-01-17 (2 phases, 2 plans)
 - v1.7 shipped: 2026-01-17 (3 phases, 3 plans: KPI-Klick-Overlay)
+- v1.8 created: 2026-01-17 (2 phases: Reports-Drilldown)
 
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Completed 27-01-PLAN.md
+Stopped at: Milestone v1.8 initialization
 Resume file: None
-Next: /gsd:complete-milestone
+Next: /gsd:plan-phase 28
