@@ -27,7 +27,7 @@
 **Plans**: TBD
 
 Plans:
-- [ ] 30-01: TBD (run /gsd:plan-phase 30 to break down)
+- [ ] 30-01: Test utilities and mocks (Prisma/Supabase mocks, fixtures, docs update)
 
 #### Phase 31: Unit-Tests API
 
