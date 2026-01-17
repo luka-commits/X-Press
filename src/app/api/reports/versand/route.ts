@@ -70,14 +70,14 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Query shipped orders within date range
+    // Query shipped orders within date range (or all if versandUpdatedAt is NULL)
     // versandStatus='versendet' AND versandUpdatedAt within range
     const { data: orders, error } = await supabase
       .from('Auftrag')
       .select('auftragsnummer, liefertermin, versandUpdatedAt, statusUpdatedAt, lieferPlz, versandStatus')
       .eq('versandStatus', 'versendet')
-      .gte('versandUpdatedAt', fromParam)
-      .lte('versandUpdatedAt', toParam);
+      .or(`versandUpdatedAt.gte.${fromParam},versandUpdatedAt.is.null`)
+      .or(`versandUpdatedAt.lte.${toParam},versandUpdatedAt.is.null`);
 
     if (error) {
       console.error('Versand Reports API Error:', error);

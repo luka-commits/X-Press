@@ -42,12 +42,12 @@ export async function GET(request: NextRequest) {
       `, { count: 'exact' })
       .eq('versandStatus', 'versendet');
 
-    // Apply date range filter on versandUpdatedAt
+    // Apply date range filter on versandUpdatedAt (include NULL values for legacy data)
     if (from) {
-      query = query.gte('versandUpdatedAt', `${from}T00:00:00`);
+      query = query.or(`versandUpdatedAt.gte.${from}T00:00:00,versandUpdatedAt.is.null`);
     }
     if (to) {
-      query = query.lte('versandUpdatedAt', `${to}T23:59:59`);
+      query = query.or(`versandUpdatedAt.lte.${to}T23:59:59,versandUpdatedAt.is.null`);
     }
 
     const { data: orders, error, count } = await query

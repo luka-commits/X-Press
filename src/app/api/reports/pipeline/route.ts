@@ -194,13 +194,13 @@ async function fetchThroughput(from: string, to: string): Promise<{
       .gte('statusUpdatedAt', fromWithTime)
       .lte('statusUpdatedAt', toWithTime),
 
-    // Versendet: Orders shipped in period
+    // Versendet: Orders shipped in period (or all shipped if versandUpdatedAt is NULL)
     supabase
       .from('Auftrag')
       .select('*', { count: 'exact', head: true })
       .eq('versandStatus', 'versendet')
-      .gte('versandUpdatedAt', fromWithTime)
-      .lte('versandUpdatedAt', toWithTime),
+      .or(`versandUpdatedAt.gte.${fromWithTime},versandUpdatedAt.is.null`)
+      .or(`versandUpdatedAt.lte.${toWithTime},versandUpdatedAt.is.null`),
   ]);
 
   return {
@@ -227,11 +227,11 @@ async function fetchSnapshot(): Promise<SnapshotData> {
       .select('*', { count: 'exact', head: true })
       .neq('versandStatus', 'versendet'),
 
-    // Problem orders: hatProblem = true
+    // Problem orders: istStatus = 'problem' (consistent with funnel and dialog)
     supabase
       .from('Auftrag')
       .select('*', { count: 'exact', head: true })
-      .eq('hatProblem', true)
+      .eq('istStatus', 'problem')
       .neq('versandStatus', 'versendet'),
 
     // Oldest unshipped order: MIN(createdAt) where not shipped
@@ -276,12 +276,13 @@ async function fetchPeriodKpis(from: string, to: string): Promise<PeriodKpis> {
   const toWithTime = `${to}T23:59:59`;
 
   // Get shipped orders in period with needed fields for calculations
+  // Include orders with NULL versandUpdatedAt (legacy data)
   const { data: orders, error } = await supabase
     .from('Auftrag')
     .select('createdAt, liefertermin, versandUpdatedAt')
     .eq('versandStatus', 'versendet')
-    .gte('versandUpdatedAt', fromWithTime)
-    .lte('versandUpdatedAt', toWithTime);
+    .or(`versandUpdatedAt.gte.${fromWithTime},versandUpdatedAt.is.null`)
+    .or(`versandUpdatedAt.lte.${toWithTime},versandUpdatedAt.is.null`);
 
   if (error || !orders) {
     console.error('Period KPIs fetch error:', error);

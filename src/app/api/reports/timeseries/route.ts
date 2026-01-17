@@ -60,13 +60,13 @@ export async function GET(request: NextRequest) {
         .gte('createdAt', `${fromParam}T00:00:00`)
         .lte('createdAt', `${toParam}T23:59:59`),
 
-      // Versendet: Orders shipped in period, grouped by date
+      // Versendet: Orders shipped in period (or all if versandUpdatedAt is NULL)
       supabase
         .from('Auftrag')
-        .select('versandUpdatedAt')
+        .select('versandUpdatedAt, createdAt')
         .eq('versandStatus', 'versendet')
-        .gte('versandUpdatedAt', `${fromParam}T00:00:00`)
-        .lte('versandUpdatedAt', `${toParam}T23:59:59`),
+        .or(`versandUpdatedAt.gte.${fromParam}T00:00:00,versandUpdatedAt.is.null`)
+        .or(`versandUpdatedAt.lte.${toParam}T23:59:59,versandUpdatedAt.is.null`),
     ]);
 
     // Count orders per day for eingang
@@ -80,12 +80,13 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Count orders per day for versendet
+    // Count orders per day for versendet (use createdAt as fallback if versandUpdatedAt is NULL)
     const versendetByDay = new Map<string, number>();
     if (versendetResult.data) {
       for (const order of versendetResult.data) {
-        if (order.versandUpdatedAt) {
-          const dateStr = order.versandUpdatedAt.substring(0, 10);
+        const dateField = order.versandUpdatedAt || order.createdAt;
+        if (dateField) {
+          const dateStr = dateField.substring(0, 10);
           versendetByDay.set(dateStr, (versendetByDay.get(dateStr) || 0) + 1);
         }
       }
