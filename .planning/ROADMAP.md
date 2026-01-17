@@ -9,7 +9,7 @@
 - ✅ **v1.4 Reporting** — Phases 18-20 (shipped 2026-01-17)
 - ✅ **v1.5 System-Konsolidierung** — Phases 21-22 (shipped 2026-01-17)
 - ✅ **v1.6 Pipeline-Analytics** — Phases 23-24 (shipped 2026-01-17)
-- 🚧 **v1.7 KPI-Klick-Overlay** — Phases 25-27 (in progress)
+- ✅ **v1.7 KPI-Klick-Overlay** — Phases 25-27 (shipped 2026-01-17)
 
 ## Completed Milestones
 
@@ -104,39 +104,16 @@ Reports zu einem fokussierten Pipeline-Dashboard konsolidieren, Dashboard entsch
 
 </details>
 
-### 🚧 v1.7 KPI-Klick-Overlay (In Progress)
+<details>
+<summary>✅ v1.7 KPI-Klick-Overlay (Phases 25-27) — SHIPPED 2026-01-17</summary>
 
-**Milestone Goal:** Bei Klick auf KPI-Karten im Dashboard öffnet sich ein Dialog mit der zugehörigen Auftragsliste.
+Bei Klick auf KPI-Karten im Dashboard öffnet sich ein Dialog mit der zugehörigen Auftragsliste.
 
-#### Phase 25: Dialog-Komponente (Complete)
+- [x] Phase 25: Dialog-Komponente (1/1 plans) — completed 2026-01-17
+- [x] Phase 26: KPI-Detail-API (1/1 plans) — completed 2026-01-17
+- [x] Phase 27: KPI-Overlay-UI (1/1 plans) — completed 2026-01-17
 
-**Goal**: shadcn/ui Dialog-Komponente installieren und einrichten
-**Depends on**: Phase 24
-**Research**: Unlikely (Standard shadcn/ui Pattern)
-**Plans**: 1/1 complete
-
-Plans:
-- [x] 25-01: Install shadcn/ui Dialog component — completed 2026-01-17
-
-#### Phase 26: KPI-Detail-API (Complete)
-
-**Goal**: API-Endpunkte für Aufträge pro KPI-Typ (Offene, Bald fällig, etc.)
-**Depends on**: Phase 25
-**Research**: Unlikely (interne Patterns aus dashboard-queries.ts)
-**Plans**: 1/1 complete
-
-Plans:
-- [x] 26-01: Create KPI orders API endpoint — completed 2026-01-17
-
-#### Phase 27: KPI-Overlay-UI
-
-**Goal**: KPI-Karten klickbar machen, Dialog mit Auftragsliste anzeigen
-**Depends on**: Phase 26
-**Research**: Unlikely (bestehende Komponenten CriticalOrdersList, OrderTable)
-**Plans**: TBD
-
-Plans:
-- [ ] 27-01: TBD
+</details>
 
 ## Progress
 
@@ -168,4 +145,4 @@ Plans:
 | 24. Reports Zeitreihen + Dashboard | v1.6 | 1/1 | Complete | 2026-01-17 |
 | 25. Dialog-Komponente | v1.7 | 1/1 | Complete | 2026-01-17 |
 | 26. KPI-Detail-API | v1.7 | 1/1 | Complete | 2026-01-17 |
-| 27. KPI-Overlay-UI | v1.7 | 0/? | Not started | - |
+| 27. KPI-Overlay-UI | v1.7 | 1/1 | Complete | 2026-01-17 |
