@@ -11,10 +11,93 @@
 - ✅ **v1.6 Pipeline-Analytics** — Phases 23-24 (shipped 2026-01-17)
 - ✅ **v1.7 KPI-Klick-Overlay** — Phases 25-27 (shipped 2026-01-17)
 - ✅ **v1.8 Reports-Drilldown** — Phases 28-29 (shipped 2026-01-17)
+- 🚧 **v1.9 Fixes** — Phases 30-37 (in progress)
 
-## All Milestones Complete
+---
 
-Run `/gsd:complete-milestone` to archive v1.8 and prepare for next milestone.
+### 🚧 v1.9 Fixes (In Progress)
+
+**Milestone Goal:** Systematisches Testing, Bug-Fixes, Performance-Optimierung und Code-Quality Verbesserungen.
+
+#### Phase 30: Test-Setup
+
+**Goal**: Jest und Testing-Library konfigurieren, Test-Grundlagen schaffen
+**Depends on**: Previous milestone complete
+**Research**: Unlikely (established patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 30-01: TBD (run /gsd:plan-phase 30 to break down)
+
+#### Phase 31: Unit-Tests API
+
+**Goal**: Tests für API-Routen und Datenlogik schreiben
+**Depends on**: Phase 30
+**Research**: Unlikely (internal patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 31-01: TBD
+
+#### Phase 32: Component-Tests
+
+**Goal**: Tests für kritische UI-Komponenten (Dashboard, Versand, Reports)
+**Depends on**: Phase 30
+**Research**: Unlikely (internal patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 32-01: TBD
+
+#### Phase 33: E2E-Tests
+
+**Goal**: End-to-End Tests für Hauptworkflows (Status-Update, Versand, Reports)
+**Depends on**: Phase 31, 32
+**Research**: Unlikely (Playwright/Cypress patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 33-01: TBD
+
+#### Phase 34: Bug-Fixes
+
+**Goal**: Gefundene Bugs aus Testing und bekannte Issues beheben
+**Depends on**: Phase 33
+**Research**: Unlikely (internal code)
+**Plans**: TBD
+
+Plans:
+- [ ] 34-01: TBD
+
+#### Phase 35: Performance-Audit
+
+**Goal**: Lighthouse-Audit, Bundle-Analyse, Render-Performance messen
+**Depends on**: Phase 34
+**Research**: Unlikely (standard tools)
+**Plans**: TBD
+
+Plans:
+- [ ] 35-01: TBD
+
+#### Phase 36: Performance-Optimierung
+
+**Goal**: Identifizierte Bottlenecks beheben (Bundle-Size, Lazy-Loading, Caching)
+**Depends on**: Phase 35
+**Research**: Unlikely (Next.js patterns)
+**Plans**: TBD
+
+Plans:
+- [ ] 36-01: TBD
+
+#### Phase 37: Code-Quality
+
+**Goal**: ESLint strict, TypeScript strict, Dead-Code entfernen, Konsistenz
+**Depends on**: Phase 36
+**Research**: Unlikely (established tooling)
+**Plans**: TBD
+
+Plans:
+- [ ] 37-01: TBD
 
 ---
 
@@ -167,3 +250,11 @@ Bei Klick auf KPIs und Charts in der Reports-Seite öffnet sich ein Dialog mit d
 | 27. KPI-Overlay-UI | v1.7 | 1/1 | Complete | 2026-01-17 |
 | 28. Reports-KPI-API | v1.8 | 1/1 | Complete | 2026-01-17 |
 | 29. Reports-Drilldown-UI | v1.8 | 3/3 | Complete | 2026-01-17 |
+| 30. Test-Setup | v1.9 | 0/? | Not started | - |
+| 31. Unit-Tests API | v1.9 | 0/? | Not started | - |
+| 32. Component-Tests | v1.9 | 0/? | Not started | - |
+| 33. E2E-Tests | v1.9 | 0/? | Not started | - |
+| 34. Bug-Fixes | v1.9 | 0/? | Not started | - |
+| 35. Performance-Audit | v1.9 | 0/? | Not started | - |
+| 36. Performance-Optimierung | v1.9 | 0/? | Not started | - |
+| 37. Code-Quality | v1.9 | 0/? | Not started | - |
