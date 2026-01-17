@@ -20,11 +20,15 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1', 10);
     const pageSize = parseInt(searchParams.get('pageSize') || '20', 10);
 
+    // Date range parameters (optional)
+    const from = searchParams.get('from');
+    const to = searchParams.get('to');
+
     // Calculate offset for pagination
     const offset = (page - 1) * pageSize;
 
-    // Query shipped orders: versandStatus = 'versendet'
-    const { data: orders, error, count } = await supabase
+    // Build query for shipped orders: versandStatus = 'versendet'
+    let query = supabase
       .from('Auftrag')
       .select(`
         auftragsnummer,
@@ -36,7 +40,17 @@ export async function GET(request: NextRequest) {
         versandUpdatedAt,
         Kunde(name, firma)
       `, { count: 'exact' })
-      .eq('versandStatus', 'versendet')
+      .eq('versandStatus', 'versendet');
+
+    // Apply date range filter on versandUpdatedAt
+    if (from) {
+      query = query.gte('versandUpdatedAt', `${from}T00:00:00`);
+    }
+    if (to) {
+      query = query.lte('versandUpdatedAt', `${to}T23:59:59`);
+    }
+
+    const { data: orders, error, count } = await query
       .order('versandUpdatedAt', { ascending: false, nullsFirst: false })
       .range(offset, offset + pageSize - 1);
 

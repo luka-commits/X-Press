@@ -15,6 +15,11 @@ import {
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 
+interface DateRange {
+  from: Date;
+  to: Date;
+}
+
 interface Kunde {
   name: string | null;
   firma: string | null;
@@ -37,18 +42,28 @@ interface APIResponse {
   totalPages: number;
 }
 
+interface CompletedOrdersTableProps {
+  dateRange?: DateRange;
+}
+
 /**
  * CompletedOrdersTable - Table component for completed orders
  *
  * Displays orders with istStatus='fertig' OR versandStatus='versendet'
  * Includes pagination and status badges
+ * Optionally filters by date range
  */
-export function CompletedOrdersTable() {
+export function CompletedOrdersTable({ dateRange }: CompletedOrdersTableProps) {
   const [data, setData] = useState<APIResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const pageSize = 20;
+
+  // Reset page when dateRange changes
+  useEffect(() => {
+    setPage(1);
+  }, [dateRange]);
 
   useEffect(() => {
     async function fetchOrders() {
@@ -56,7 +71,16 @@ export function CompletedOrdersTable() {
       setError(null);
 
       try {
-        const response = await fetch(`/api/reports/completed?page=${page}&pageSize=${pageSize}`);
+        let url = `/api/reports/completed?page=${page}&pageSize=${pageSize}`;
+
+        // Add date range parameters if provided
+        if (dateRange) {
+          const fromISO = format(dateRange.from, 'yyyy-MM-dd');
+          const toISO = format(dateRange.to, 'yyyy-MM-dd');
+          url += `&from=${fromISO}&to=${toISO}`;
+        }
+
+        const response = await fetch(url);
         if (!response.ok) {
           throw new Error('Fehler beim Laden der Daten');
         }
@@ -70,7 +94,7 @@ export function CompletedOrdersTable() {
     }
 
     fetchOrders();
-  }, [page]);
+  }, [page, dateRange]);
 
   const formatDate = (dateString: string | null) => {
     if (!dateString) return '-';

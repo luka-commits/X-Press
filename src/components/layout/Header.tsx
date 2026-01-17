@@ -5,9 +5,9 @@ import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const navigation = [
-  { name: "Dashboard", href: "/" },
+  { name: "Tagesübersicht", href: "/" },
   { name: "Aufträge", href: "/orders" },
-  { name: "Kalender", href: "/calendar" },
+  { name: "Wochenplan", href: "/calendar" },
   { name: "Versand", href: "/versand" },
   { name: "Auftragsupdates", href: "/status" },
   { name: "Reports", href: "/reports" },
