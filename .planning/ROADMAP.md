@@ -52,15 +52,15 @@ Plans:
 - [x] 32-02: Orders & Versand tests (OrderFilters, VersandKPIs) — completed 2026-01-18
 - [x] 32-03: Reports tests (SnapshotKPIs, ReportsOrdersDialog) — completed 2026-01-18
 
-#### Phase 33: E2E-Tests
+#### Phase 33: E2E-Tests ✓
 
 **Goal**: End-to-End Tests für Hauptworkflows (Status-Update, Versand, Reports)
 **Depends on**: Phase 31, 32
 **Research**: Unlikely (Playwright/Cypress patterns)
-**Plans**: TBD
+**Plans**: 1/1 complete
 
 Plans:
-- [ ] 33-01: TBD
+- [x] 33-01: Playwright E2E setup (smoke tests for all pages) — completed 2026-01-18
 
 #### Phase 34: Bug-Fixes
 
@@ -256,7 +256,7 @@ Bei Klick auf KPIs und Charts in der Reports-Seite öffnet sich ein Dialog mit d
 | 30. Test-Setup | v1.9 | 1/1 | Complete | 2026-01-17 |
 | 31. Unit-Tests API | v1.9 | 2/2 | Complete | 2026-01-18 |
 | 32. Component-Tests | v1.9 | 3/3 | Complete | 2026-01-18 |
-| 33. E2E-Tests | v1.9 | 0/? | Not started | - |
+| 33. E2E-Tests | v1.9 | 1/1 | Complete | 2026-01-18 |
 | 34. Bug-Fixes | v1.9 | 0/? | Not started | - |
 | 35. Performance-Audit | v1.9 | 0/? | Not started | - |
 | 36. Performance-Optimierung | v1.9 | 0/? | Not started | - |

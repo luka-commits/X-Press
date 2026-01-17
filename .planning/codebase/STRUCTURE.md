@@ -1,6 +1,6 @@
 # Codebase Structure
 
-**Analysis Date:** 2026-01-16
+**Analysis Date:** 2026-01-17
 
 ## Directory Layout
 
@@ -10,7 +10,9 @@ X-Press/
 │   ├── app/               # Next.js App Router pages & API
 │   ├── components/        # React components
 │   ├── lib/               # Business logic & utilities
+│   ├── __tests__/         # Test utilities and fixtures
 │   └── instrumentation.ts # Server startup hook
+├── e2e/                    # Playwright E2E tests
 ├── prisma/                 # Database schema
 ├── data/                   # XML processing directories
 │   ├── hotfolder/         # Input XMLs
@@ -37,11 +39,15 @@ X-Press/
 - Purpose: Reusable React components
 - Contains: Feature-specific and UI primitive components
 - Subdirectories:
-  - `dashboard/` - KPICard, CapacityChart, MachineCards
+  - `dashboard/` - KPICard, CapacityChart, MachineCards, KPI-Overlay-Dialoge
   - `calendar/` - MachineCalendarGrid, CalendarCell, WeekNavigation
   - `orders/` - OrderFilters, OrderSearch, OrderTable
   - `layout/` - Header, MainLayout, Sidebar
   - `ui/` - shadcn/ui primitives (button, input, select, table)
+  - `reports/` - PipelineDashboard, FunnelChart, SnapshotKPIs, ThroughputChart, Drilldown
+  - `versand/` - VersandKPIs, VersandList, RouteBuilder, RouteOptimizer
+  - `map/` - GoogleMap, MarkerClusterer, MapMarker
+  - `status/` - StatusButtons, OrderSearch, StatusConfirmation
 
 **src/lib/**
 - Purpose: Business logic, services, utilities
@@ -52,9 +58,12 @@ X-Press/
   - `hotfolder-watcher.ts` - File system monitoring
   - `dashboard-queries.ts` - Dashboard KPI queries
   - `calendar-queries.ts` - Machine timeline queries
+  - `reporting-queries.ts` - Reports/Pipeline Analytics queries
+  - `route-utils.ts` - Routenoptimierung (Nearest-Neighbor)
   - `prisma.ts` - Prisma client singleton
   - `supabase.ts` - Supabase REST client
   - `utils.ts` - Tailwind utilities (cn function)
+  - `geocoding/` - Google Maps Geocoding utilities
 
 **prisma/**
 - Purpose: Database schema and migrations
@@ -89,7 +98,20 @@ X-Press/
 - `src/lib/dashboard-queries.ts` - Dashboard data
 
 **Testing:**
-- Not configured (no test files)
+- `src/__tests__/utils/` - Prisma/Supabase mocks, test helpers
+- `src/__tests__/fixtures/` - Order/Machine factory functions
+- `src/components/**/__tests__/` - Component tests (Jest + Testing Library)
+- `e2e/` - E2E tests (Playwright)
+
+**E2E Tests (e2e/):**
+- Purpose: End-to-end browser tests with Playwright
+- Key files:
+  - `smoke.spec.ts` - Smoke tests for all main pages
+
+**Configuration:**
+- `jest.config.js` - Jest configuration
+- `jest.setup.js` - Testing Library matchers
+- `playwright.config.ts` - Playwright configuration
 
 ## Naming Conventions
 
@@ -111,7 +133,8 @@ X-Press/
 
 **New Feature:**
 - Primary code: `src/lib/` for logic, `src/components/` for UI
-- Tests: Not configured
+- Unit tests: `src/components/{feature}/__tests__/`
+- E2E tests: `e2e/`
 - Config: `src/lib/` or project root
 
 **New Component:**
@@ -152,5 +175,5 @@ X-Press/
 
 ---
 
-*Structure analysis: 2026-01-16*
+*Structure analysis: 2026-01-18*
 *Update when directory structure changes*
