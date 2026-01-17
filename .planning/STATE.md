@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-17)
 ## Current Position
 
 Phase: 29 of 29 (Reports-Drilldown-UI)
-Plan: 02 of 3 in current phase
-Status: In progress
-Last activity: 2026-01-17 — Completed 29-02-PLAN.md
+Plan: 03 of 3 in current phase
+Status: Phase complete
+Last activity: 2026-01-17 — Completed 29-03-PLAN.md
 
-Progress: ██████████ 80% (v1.8)
+Progress: ██████████ 100% (v1.8)
 
 ## Milestones
 
@@ -26,14 +26,14 @@ Progress: ██████████ 80% (v1.8)
 - ✅ v1.5 System-Konsolidierung (Phases 21-22) — SHIPPED 2026-01-17
 - ✅ v1.6 Pipeline-Analytics (Phases 23-24) — SHIPPED 2026-01-17
 - ✅ v1.7 KPI-Klick-Overlay (Phases 25-27) — SHIPPED 2026-01-17
-- 🚧 v1.8 Reports-Drilldown (Phases 28-29) — in progress
+- ✅ v1.8 Reports-Drilldown (Phases 28-29) — SHIPPED 2026-01-17
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 31
+- Total plans completed: 32
 - Average duration: ~4 min
-- Total execution time: ~121 min
+- Total execution time: ~125 min
 
 **By Milestone:**
 
@@ -47,6 +47,7 @@ Progress: ██████████ 80% (v1.8)
 | v1.5 System-Konsolidierung | 2 | 2 | ~5 min |
 | v1.6 Pipeline-Analytics | 2 | 2 | ~16 min |
 | v1.7 KPI-Klick-Overlay | 3 | 3 | ~4 min |
+| v1.8 Reports-Drilldown | 2 | 4 | ~12 min |
 
 ## Accumulated Context
 
@@ -72,11 +73,11 @@ None currently.
 - v1.5 shipped: 2026-01-17 (2 phases, 2 plans)
 - v1.6 shipped: 2026-01-17 (2 phases, 2 plans)
 - v1.7 shipped: 2026-01-17 (3 phases, 3 plans: KPI-Klick-Overlay)
-- v1.8 created: 2026-01-17 (2 phases: Reports-Drilldown)
+- v1.8 shipped: 2026-01-17 (2 phases, 4 plans: Reports-Drilldown)
 
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: Completed 29-02-PLAN.md
+Stopped at: Completed 29-03-PLAN.md (Phase complete, Milestone complete)
 Resume file: None
-Next: Continue with 29-03 to wire up dialog state in Reports page
+Next: v1.8 complete - run /gsd:complete-milestone to archive

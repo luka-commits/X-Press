@@ -10,32 +10,11 @@
 - ✅ **v1.5 System-Konsolidierung** — Phases 21-22 (shipped 2026-01-17)
 - ✅ **v1.6 Pipeline-Analytics** — Phases 23-24 (shipped 2026-01-17)
 - ✅ **v1.7 KPI-Klick-Overlay** — Phases 25-27 (shipped 2026-01-17)
-- 🚧 **v1.8 Reports-Drilldown** — Phases 28-29 (in progress)
+- ✅ **v1.8 Reports-Drilldown** — Phases 28-29 (shipped 2026-01-17)
 
-## Current Milestone: v1.8 Reports-Drilldown
+## All Milestones Complete
 
-Bei Klick auf KPIs und Charts in der Reports-Seite öffnet sich ein Dialog mit der zugehörigen Auftragsliste.
-
-### Phase 28: Reports-KPI-API
-
-**Goal:** API-Erweiterung für alle Reporting-KPIs (problem, oldest, tomorrow) und Stage-basierte Abfragen
-**Depends on:** Phase 27 (v1.7 complete)
-**Research:** Unlikely (interne Patterns, bestehende API erweitern)
-**Plans:** 1
-
-Plans:
-- [x] 28-01: Reports KPI API (query functions + API endpoint) — completed 2026-01-17
-
-### Phase 29: Reports-Drilldown-UI
-
-**Goal:** Klickbare SnapshotKPIs, FunnelChart und StageDistributionChart mit Order-Dialog
-**Depends on:** Phase 28
-**Research:** Unlikely (interne Patterns, bestehende Komponenten erweitern)
-**Plans:** TBD
-
-Plans:
-- [x] 29-01: ReportsOrdersDialog + clickable SnapshotKPIs — completed 2026-01-17
-- [x] 29-02: Clickable FunnelChart and StageDistributionChart — completed 2026-01-17
+Run `/gsd:complete-milestone` to archive v1.8 and prepare for next milestone.
 
 ---
 
@@ -48,6 +27,8 @@ Plans:
 - ✅ [v1.4 Reporting](milestones/v1.4-ROADMAP.md) (Phases 18-20) — SHIPPED 2026-01-17
 - ✅ [v1.5 System-Konsolidierung](milestones/v1.5-ROADMAP.md) (Phases 21-22) — SHIPPED 2026-01-17
 - ✅ [v1.6 Pipeline-Analytics](milestones/v1.6-ROADMAP.md) (Phases 23-24) — SHIPPED 2026-01-17
+- ✅ [v1.7 KPI-Klick-Overlay](milestones/v1.7-ROADMAP.md) (Phases 25-27) — SHIPPED 2026-01-17
+- ✅ [v1.8 Reports-Drilldown](milestones/v1.8-ROADMAP.md) (Phases 28-29) — SHIPPED 2026-01-17
 
 <details>
 <summary>✅ v1.0 Mobile Status-Update (Phases 1-8) — SHIPPED 2026-01-16</summary>
@@ -143,6 +124,16 @@ Bei Klick auf KPI-Karten im Dashboard öffnet sich ein Dialog mit der zugehörig
 
 </details>
 
+<details>
+<summary>v1.8 Reports-Drilldown (Phases 28-29) — SHIPPED 2026-01-17</summary>
+
+Bei Klick auf KPIs und Charts in der Reports-Seite öffnet sich ein Dialog mit der zugehörigen Auftragsliste.
+
+- [x] Phase 28: Reports-KPI-API (1/1 plans) — completed 2026-01-17
+- [x] Phase 29: Reports-Drilldown-UI (3/3 plans) — completed 2026-01-17
+
+</details>
+
 ## Progress
 
 | Phase | Milestone | Plans Complete | Status | Completed |
@@ -175,4 +166,4 @@ Bei Klick auf KPI-Karten im Dashboard öffnet sich ein Dialog mit der zugehörig
 | 26. KPI-Detail-API | v1.7 | 1/1 | Complete | 2026-01-17 |
 | 27. KPI-Overlay-UI | v1.7 | 1/1 | Complete | 2026-01-17 |
 | 28. Reports-KPI-API | v1.8 | 1/1 | Complete | 2026-01-17 |
-| 29. Reports-Drilldown-UI | v1.8 | 2/3 | In progress | - |
+| 29. Reports-Drilldown-UI | v1.8 | 3/3 | Complete | 2026-01-17 |
