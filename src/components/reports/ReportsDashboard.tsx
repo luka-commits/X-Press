@@ -9,20 +9,28 @@
  * - Time-based Analytics (SnapshotKPIs, PipelineKPIs, Charts) - filtered by date range
  */
 
-import { useState, useEffect, useCallback, useRef } from 'react';
 import { subDays, format, startOfDay, endOfDay } from 'date-fns';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import { DateRangePicker, type DateRange } from './DateRangePicker';
-import { FunnelChart } from './FunnelChart';
-import { StageDistributionChart } from './StageDistributionChart';
-import { SnapshotKPIs } from './SnapshotKPIs';
-import { PipelineKPIs } from './PipelineKPIs';
-import { ThroughputChart, type ThroughputData as TimeseriesDataPoint } from './ThroughputChart';
-import { PlzChart, type PlzData } from './PlzChart';
-import { CompletedOrdersTable } from './CompletedOrdersTable';
-import { ReportsOrdersDialog } from './ReportsOrdersDialog';
-import { cn } from '@/lib/utils';
+import { useState, useEffect, useCallback, useRef } from 'react';
+
 import type { FunnelStage } from '@/lib/reporting-queries';
+import { cn } from '@/lib/utils';
+
+import {
+  FunnelChartLazy as FunnelChart,
+  StageDistributionChartLazy as StageDistributionChart,
+  ThroughputChartLazy as ThroughputChart,
+  PlzChartLazy as PlzChart,
+} from './charts';
+import { CompletedOrdersTable } from './CompletedOrdersTable';
+import { DateRangePicker, type DateRange } from './DateRangePicker';
+import { PipelineKPIs } from './PipelineKPIs';
+
+// Keep type imports as static (types are stripped at build time)
+import type { PlzData } from './PlzChart';
+import { ReportsOrdersDialog } from './ReportsOrdersDialog';
+import { SnapshotKPIs } from './SnapshotKPIs';
+import type { ThroughputData as TimeseriesDataPoint } from './ThroughputChart';
 
 interface SnapshotData {
   aktiveAuftraege: number;
@@ -58,7 +66,10 @@ export function ReportsDashboard() {
 
   // Funnel / Stage Distribution (current snapshot, independent of date range)
   const [funnelData, setFunnelData] = useState<FunnelStage[]>([]);
-  const [stageDistribution, setStageDistribution] = useState<{ data: StageDistributionData[]; total: number }>({ data: [], total: 0 });
+  const [stageDistribution, setStageDistribution] = useState<{
+    data: StageDistributionData[];
+    total: number;
+  }>({ data: [], total: 0 });
   const [funnelLoading, setFunnelLoading] = useState(true);
 
   // Pipeline data (time-based)
@@ -105,8 +116,8 @@ export function ReportsDashboard() {
       // Switch Funnel to EXCLUSIVE mode to match user expectation (Current Status Pipeline)
       // This fixes the "Total" double counting and "In Produktion" being non-zero.
       const [funnelResponse, stageResponse] = await Promise.all([
-        fetch('/api/reports/funnel?mode=exclusive'),      // exclusive (was cumulative)
-        fetch('/api/reports/funnel?mode=exclusive'),      // exclusive for donut
+        fetch('/api/reports/funnel?mode=exclusive'), // exclusive (was cumulative)
+        fetch('/api/reports/funnel?mode=exclusive'), // exclusive for donut
       ]);
 
       if (!funnelResponse.ok) throw new Error('Fehler beim Laden der Funnel-Daten');
@@ -285,14 +296,9 @@ export function ReportsDashboard() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-ghl-text">Pipeline</h1>
-          <p className="text-sm text-neutral-500 mt-1">
-            Produktions-Insights & Pipeline Analytics
-          </p>
+          <p className="text-sm text-neutral-500 mt-1">Produktions-Insights & Pipeline Analytics</p>
         </div>
-        <DateRangePicker
-          value={dateRange}
-          onChange={handleDateRangeChange}
-        />
+        <DateRangePicker value={dateRange} onChange={handleDateRangeChange} />
       </div>
 
       {/* Error state */}
@@ -332,11 +338,7 @@ export function ReportsDashboard() {
         <h2 className="text-lg font-semibold text-ghl-text">Zeitraum-Analyse</h2>
 
         {/* Snapshot KPIs - Current state (independent of date range) */}
-        <SnapshotKPIs
-          data={snapshotData}
-          loading={snapshotLoading}
-          onKpiClick={handleKpiClick}
-        />
+        <SnapshotKPIs data={snapshotData} loading={snapshotLoading} onKpiClick={handleKpiClick} />
 
         {/* Divider */}
         <div className="border-t border-neutral-200" />
@@ -378,9 +380,7 @@ export function ReportsDashboard() {
           >
             <div>
               <h3 className="font-semibold text-ghl-text">Abgeschlossene Aufträge</h3>
-              <p className="text-sm text-neutral-500">
-                Alle versendeten Aufträge mit Details
-              </p>
+              <p className="text-sm text-neutral-500">Alle versendeten Aufträge mit Details</p>
             </div>
             {isTableExpanded ? (
               <ChevronUp className="w-5 h-5 text-neutral-400" />
@@ -404,7 +404,7 @@ export function ReportsDashboard() {
         stage={dialogState.stage}
         title={dialogState.title}
         isOpen={dialogState.isOpen}
-        onOpenChange={(open) => setDialogState(prev => ({ ...prev, isOpen: open }))}
+        onOpenChange={(open) => setDialogState((prev) => ({ ...prev, isOpen: open }))}
       />
     </div>
   );
