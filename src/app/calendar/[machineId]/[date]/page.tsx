@@ -1,8 +1,7 @@
 import { MainLayout } from '@/components/layout';
 import { getMachineOrdersForDay } from '@/lib/calendar-queries';
 import { supabase } from '@/lib/supabase';
-import { format, parseISO } from 'date-fns';
-import { de } from 'date-fns/locale';
+import { parseISO } from 'date-fns';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
@@ -34,9 +33,6 @@ export default async function CalendarDetailPage({
   const gesamtZeit = orders.reduce((sum, o) => sum + o.zeitMinuten, 0);
   const kapazitaet = machine?.tageskapazitaetMinuten || 480;
   const auslastung = Math.round((gesamtZeit / kapazitaet) * 100 * 10) / 10;
-
-  // Format date
-  const dateFormatted = format(dateObj, 'EEEE, dd. MMMM yyyy', { locale: de });
 
   // Ampel color
   const getStatusColor = (a: number) => {

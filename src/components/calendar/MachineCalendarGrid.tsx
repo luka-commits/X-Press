@@ -12,9 +12,6 @@ interface MachineCalendarGridProps {
   machines: MachineWeekCapacity[];
 }
 
-// Day headers
-const DAY_HEADERS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
-
 export function MachineCalendarGrid({ machines }: MachineCalendarGridProps) {
   const todayStr = format(new Date(), 'yyyy-MM-dd');
 
@@ -49,8 +46,8 @@ export function MachineCalendarGrid({ machines }: MachineCalendarGridProps) {
             <div
               key={index}
               className={`p-3 text-center font-medium text-sm border-l border-neutral-200 ${isToday
-                  ? 'bg-ghl-blue/5 text-ghl-blue'
-                  : 'text-neutral-600'
+                ? 'bg-ghl-blue/5 text-ghl-blue'
+                : 'text-neutral-600'
                 }`}
             >
               {day.dateFormatted}

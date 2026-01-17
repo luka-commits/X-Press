@@ -1,7 +1,4 @@
-'use server';
-
 import { supabase } from './supabase';
-import { startOfMonth, endOfMonth, subDays } from 'date-fns';
 
 export interface FunnelStage {
     name: string;

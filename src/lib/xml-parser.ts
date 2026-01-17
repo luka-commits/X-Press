@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * XOS XML-Parser für Prinance JDF/XML Exports
  *
@@ -232,7 +233,9 @@ export function parseXML(xmlContent: string): ParsedAuftrag {
   }
 
   const arbeitsgaenge: ParsedArbeitsgang[] = arbeitsvorgaengeArray
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .filter((av: any) => av && av['@_Kostenstelle'])
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .map((av: any) => {
       // Aggregate ZEIT from Elemente
       const zeitMinuten = aggregiereZeit(av.Elemente);
