@@ -56,17 +56,17 @@ export function StageDistributionChart({ data, total, onStageClick }: StageDistr
                 <p className="text-xs text-neutral-500 mt-1">Total Orders</p>
             </div>
 
-            <div className="flex-1 flex items-start mt-2">
-                {/* Chart */}
-                <div className="relative w-[160px] h-[160px] flex-shrink-0">
+            <div className="flex-1 flex items-center justify-center mt-2 pr-6">
+                {/* Chart - Increased size and improved centering */}
+                <div className="relative w-[220px] h-[220px] flex-shrink-0">
                     <ResponsiveContainer width="100%" height="100%">
                         <PieChart>
                             <Pie
                                 data={formattedData}
                                 cx="50%"
                                 cy="50%"
-                                innerRadius={60}
-                                outerRadius={80}
+                                innerRadius={75}
+                                outerRadius={105}
                                 paddingAngle={2}
                                 dataKey="value"
                                 stroke="none"
@@ -96,12 +96,12 @@ export function StageDistributionChart({ data, total, onStageClick }: StageDistr
                     </ResponsiveContainer>
                     {/* Centered Total */}
                     <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                        <span className="text-2xl font-semibold text-ghl-text">{total}</span>
+                        <span className="text-3xl font-bold text-ghl-text">{total}</span>
                     </div>
                 </div>
 
                 {/* Legend - Right Side List */}
-                <div className="flex-1 pl-8 space-y-3">
+                <div className="flex-1 flex flex-col justify-center pl-6 space-y-4">
                     {formattedData.map((item) => {
                         const pct = total > 0 ? ((item.value / total) * 100).toFixed(2) : '0.00';
                         return (
