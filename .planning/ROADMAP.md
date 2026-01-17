@@ -108,15 +108,15 @@ Reports zu einem fokussierten Pipeline-Dashboard konsolidieren, Dashboard entsch
 
 **Milestone Goal:** Bei Klick auf KPI-Karten im Dashboard öffnet sich ein Dialog mit der zugehörigen Auftragsliste.
 
-#### Phase 25: Dialog-Komponente
+#### Phase 25: Dialog-Komponente (Complete)
 
 **Goal**: shadcn/ui Dialog-Komponente installieren und einrichten
 **Depends on**: Phase 24
 **Research**: Unlikely (Standard shadcn/ui Pattern)
-**Plans**: TBD
+**Plans**: 1/1 complete
 
 Plans:
-- [ ] 25-01: TBD (run /gsd:plan-phase 25 to break down)
+- [x] 25-01: Install shadcn/ui Dialog component — completed 2026-01-17
 
 #### Phase 26: KPI-Detail-API
 
@@ -166,6 +166,6 @@ Plans:
 | 22. Reports & Navigation | v1.5 | 1/1 | Complete | 2026-01-17 |
 | 23. Reports neu | v1.6 | 1/1 | Complete | 2026-01-17 |
 | 24. Reports Zeitreihen + Dashboard | v1.6 | 1/1 | Complete | 2026-01-17 |
-| 25. Dialog-Komponente | v1.7 | 0/? | Not started | - |
+| 25. Dialog-Komponente | v1.7 | 1/1 | Complete | 2026-01-17 |
 | 26. KPI-Detail-API | v1.7 | 0/? | Not started | - |
 | 27. KPI-Overlay-UI | v1.7 | 0/? | Not started | - |
