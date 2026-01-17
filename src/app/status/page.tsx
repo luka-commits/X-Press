@@ -1,9 +1,16 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
 import { Check, X } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+
 import { MobileLayout } from '@/components/layout';
-import { OrderSearch, OrderDetails, StatusButtons, type OrderSearchResult, type IstStatusType } from '@/components/status';
+import {
+  OrderSearch,
+  OrderDetails,
+  StatusButtons,
+  type OrderSearchResult,
+  type IstStatusType,
+} from '@/components/status';
 
 /**
  * Feedback state for success/error messages
@@ -95,9 +102,7 @@ export default function StatusPage() {
         </div>
 
         {/* Order Details */}
-        {selectedOrder && (
-          <OrderDetails order={selectedOrder} onClear={handleClear} />
-        )}
+        {selectedOrder && <OrderDetails order={selectedOrder} onClear={handleClear} />}
 
         {/* Status Update Buttons */}
         {selectedOrder && (
@@ -115,9 +120,10 @@ export default function StatusPage() {
             className={`
               flex items-center gap-3 p-4 rounded-lg border
               transition-all duration-300 animate-in fade-in slide-in-from-top-2
-              ${feedback.type === 'success'
-                ? 'bg-green-500/10 border-green-500/30 text-green-400'
-                : 'bg-red-500/10 border-red-500/30 text-red-400'
+              ${
+                feedback.type === 'success'
+                  ? 'bg-green-500/10 border-green-500/30 text-green-400'
+                  : 'bg-red-500/10 border-red-500/30 text-red-400'
               }
             `}
             role="alert"

@@ -41,6 +41,10 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 - ✓ Pipeline Analytics Dashboard mit Funnel und KPIs — v1.6
 - ✓ ThroughputChart Zeitreihen (Eingang vs Versendet) — v1.6
 - ✓ Dashboard auf 4 KPIs reduziert (Problem-KPI in Reports) — v1.6
+- ✓ KPI-Klick-Overlay mit Dialog und Auftragsliste — v1.7
+- ✓ KPI-Detail-API für Dashboard-Drilldown — v1.7
+- ✓ Reports-Drilldown bei Klick auf KPIs und Charts — v1.8
+- ✓ Reports-KPI-API mit Zeitraum-Filter — v1.8
 
 ### Active
 
@@ -56,20 +60,22 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 
 ## Context
 
-**Shipped v1.6:**
+**Shipped v1.8:**
 - ~10,000 LOC TypeScript
 - Tech stack: Next.js 14, Supabase, Prisma, Tailwind CSS, Google Maps API, Recharts
 - Mobile-first /status page for shopfloor workers
 - /versand page with routing optimization and navigation export
 - /reports page with consolidated PipelineDashboard (Funnel, KPIs, Charts)
-- Dashboard with 4 KPIs (streamlined from 5)
+- Dashboard with 4 KPIs and click-through drilldown
+- Reports with interactive drilldown on KPIs and charts
 
 **Production State:**
 - Produktionsmitarbeiter können Auftragsstatus updaten
 - Dashboard zeigt IST-Zustand vom Shopfloor mit Pipeline-Status (4 KPIs)
+- KPI-Klick-Overlay: Bei Klick auf KPI-Karten öffnet sich Dialog mit Auftragsliste
 - Problem-Aufträge sichtbar in Reports SnapshotKPIs
 - Versand-Team hat Routenplanung mit Optimierung und Google Maps Export
-- Management hat konsolidiertes Pipeline-Dashboard mit Zeitreihen
+- Management hat konsolidiertes Pipeline-Dashboard mit Zeitreihen und Drilldown
 - Klare Tab-Verantwortlichkeiten: Aufträge = in Bearbeitung, Reports = Analytics + Shipped
 
 ## Constraints
@@ -105,4 +111,4 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 | Abgeschlossene = nur versendet | Klare Trennung: Aufträge = in Bearbeitung, Reports = shipped | ✓ Good |
 
 ---
-*Last updated: 2026-01-17 after v1.6 milestone*
+*Last updated: 2026-01-17 after v1.8 milestone*

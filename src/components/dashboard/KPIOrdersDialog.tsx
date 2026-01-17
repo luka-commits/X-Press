@@ -7,16 +7,12 @@
  * Fetches data from /api/dashboard/kpi-orders when opened.
  */
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
+
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 
 interface KPIOrder {
@@ -41,12 +37,7 @@ interface KPIOrdersDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function KPIOrdersDialog({
-  kpiType,
-  title,
-  isOpen,
-  onOpenChange,
-}: KPIOrdersDialogProps) {
+export function KPIOrdersDialog({ kpiType, title, isOpen, onOpenChange }: KPIOrdersDialogProps) {
   const [orders, setOrders] = useState<KPIOrder[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -110,9 +101,7 @@ export function KPIOrdersDialog({
                   <th className="text-left py-2 px-3 font-medium text-ghl-text-secondary">
                     Auftrag
                   </th>
-                  <th className="text-left py-2 px-3 font-medium text-ghl-text-secondary">
-                    Kunde
-                  </th>
+                  <th className="text-left py-2 px-3 font-medium text-ghl-text-secondary">Kunde</th>
                   <th className="text-left py-2 px-3 font-medium text-ghl-text-secondary">
                     Produkttyp
                   </th>
@@ -139,9 +128,7 @@ export function KPIOrdersDialog({
                       </Link>
                     </td>
                     <td className="py-2 px-3 text-ghl-text">{order.kunde}</td>
-                    <td className="py-2 px-3 text-ghl-text">
-                      {order.produkttyp || '–'}
-                    </td>
+                    <td className="py-2 px-3 text-ghl-text">{order.produkttyp || '–'}</td>
                     <td className="py-2 px-3 text-ghl-text">
                       {order.liefertermin
                         ? format(new Date(order.liefertermin), 'dd.MM.yyyy', {

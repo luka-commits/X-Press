@@ -4,10 +4,11 @@
  * GET /api/orders - Liste aller Aufträge mit Filter, Suche & Pagination
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
 import { startOfDay, endOfDay, startOfWeek, endOfWeek } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
+import { NextRequest, NextResponse } from 'next/server';
+
+import prisma from '@/lib/prisma';
 
 const TIMEZONE = 'Europe/Berlin';
 
@@ -158,9 +159,6 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Orders API Error:', error);
-    return NextResponse.json(
-      { error: 'Fehler beim Laden der Aufträge' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Fehler beim Laden der Aufträge' }, { status: 500 });
   }
 }

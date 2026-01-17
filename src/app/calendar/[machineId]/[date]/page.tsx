@@ -1,9 +1,10 @@
+import { parseISO } from 'date-fns';
+import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+
 import { MainLayout } from '@/components/layout';
 import { getMachineOrdersForDay } from '@/lib/calendar-queries';
 import { supabase } from '@/lib/supabase';
-import { parseISO } from 'date-fns';
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
 
 interface CalendarDetailPageProps {
   params: Promise<{
@@ -12,9 +13,7 @@ interface CalendarDetailPageProps {
   }>;
 }
 
-export default async function CalendarDetailPage({
-  params,
-}: CalendarDetailPageProps) {
+export default async function CalendarDetailPage({ params }: CalendarDetailPageProps) {
   const { machineId, date } = await params;
   const machineIdNum = parseInt(machineId);
   const dateObj = parseISO(date);
@@ -60,15 +59,10 @@ export default async function CalendarDetailPage({
               <h2 className="text-xl font-semibold text-ghl-text">
                 {machine?.kurzname || machine?.name}
               </h2>
-              {machine?.kurzname && (
-                <p className="text-sm text-neutral-500">{machine.name}</p>
-              )}
+              {machine?.kurzname && <p className="text-sm text-neutral-500">{machine.name}</p>}
             </div>
             <div className="text-right">
-              <p
-                className="text-3xl font-bold"
-                style={{ color: getStatusColor(auslastung) }}
-              >
+              <p className="text-3xl font-bold" style={{ color: getStatusColor(auslastung) }}>
                 {auslastung}%
               </p>
               <p className="text-sm text-neutral-500">
@@ -92,9 +86,7 @@ export default async function CalendarDetailPage({
         {/* Orders list */}
         <div className="bg-white rounded-lg border border-neutral-200">
           <div className="px-6 py-4 border-b border-neutral-200">
-            <h3 className="font-semibold text-ghl-text">
-              Aufträge ({orders.length})
-            </h3>
+            <h3 className="font-semibold text-ghl-text">Aufträge ({orders.length})</h3>
           </div>
 
           {orders.length === 0 ? (
@@ -111,9 +103,7 @@ export default async function CalendarDetailPage({
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium text-ghl-blue">
-                        {order.auftragsnummer}
-                      </p>
+                      <p className="font-medium text-ghl-blue">{order.auftragsnummer}</p>
                       <p className="text-sm text-neutral-500">
                         {order.kunde}
                         {order.produkttyp && ` • ${order.produkttyp}`}

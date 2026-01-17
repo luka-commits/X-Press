@@ -7,16 +7,8 @@
  * Displays top PLZ regions by 2-digit prefix for regional shipping analysis.
  */
 
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from 'recharts';
 import { Loader2 } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 export interface PlzData {
   plz: string;
@@ -51,32 +43,17 @@ export function PlzChart({ data, loading }: PlzChartProps) {
   return (
     <div style={{ width: '100%', height: 300, minHeight: 300 }}>
       <ResponsiveContainer width="100%" height={300} minHeight={300}>
-        <BarChart
-          data={data}
-          layout="vertical"
-          margin={{ top: 5, right: 30, left: 40, bottom: 5 }}
-        >
+        <BarChart data={data} layout="vertical" margin={{ top: 5, right: 30, left: 40, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
-            type="number"
-            allowDecimals={false}
-            tick={{ fontSize: 12 }}
-          />
-          <YAxis
-            type="category"
-            dataKey="plz"
-            tick={{ fontSize: 12 }}
-            width={40}
-          />
+          <XAxis type="number" allowDecimals={false} tick={{ fontSize: 12 }} />
+          <YAxis type="category" dataKey="plz" tick={{ fontSize: 12 }} width={40} />
           <Tooltip
             content={({ active, payload }) => {
               if (active && payload && payload.length) {
                 const item = payload[0].payload as PlzData;
                 return (
                   <div className="bg-white border border-neutral-200 rounded-lg p-3 shadow-lg">
-                    <p className="font-semibold text-sm">
-                      PLZ-Region {item.plz}xxx
-                    </p>
+                    <p className="font-semibold text-sm">PLZ-Region {item.plz}xxx</p>
                     <p className="text-sm text-neutral-600">
                       {item.count} {item.count === 1 ? 'Sendung' : 'Sendungen'}
                     </p>
@@ -86,11 +63,7 @@ export function PlzChart({ data, loading }: PlzChartProps) {
               return null;
             }}
           />
-          <Bar
-            dataKey="count"
-            fill="#3b82f6"
-            radius={[0, 4, 4, 0]}
-          />
+          <Bar dataKey="count" fill="#3b82f6" radius={[0, 4, 4, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>

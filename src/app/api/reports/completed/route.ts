@@ -8,6 +8,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+
 import { supabase } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
@@ -30,7 +31,8 @@ export async function GET(request: NextRequest) {
     // Build query for shipped orders: versandStatus = 'versendet'
     let query = supabase
       .from('Auftrag')
-      .select(`
+      .select(
+        `
         auftragsnummer,
         produkttyp,
         liefertermin,
@@ -39,19 +41,27 @@ export async function GET(request: NextRequest) {
         statusUpdatedAt,
         versandUpdatedAt,
         Kunde(name, firma)
-      `, { count: 'exact' })
+      `,
+        { count: 'exact' }
+      )
       .eq('versandStatus', 'versendet');
 
     // Apply date range filter on versandUpdatedAt (include NULL values for legacy data)
     if (from && to) {
-      query = query.or(`and(versandUpdatedAt.gte.${from}T00:00:00,versandUpdatedAt.lte.${to}T23:59:59),versandUpdatedAt.is.null`);
+      query = query.or(
+        `and(versandUpdatedAt.gte.${from}T00:00:00,versandUpdatedAt.lte.${to}T23:59:59),versandUpdatedAt.is.null`
+      );
     } else if (from) {
       query = query.or(`versandUpdatedAt.gte.${from}T00:00:00,versandUpdatedAt.is.null`);
     } else if (to) {
       query = query.or(`versandUpdatedAt.lte.${to}T23:59:59,versandUpdatedAt.is.null`);
     }
 
-    const { data: orders, error, count } = await query
+    const {
+      data: orders,
+      error,
+      count,
+    } = await query
       .order('versandUpdatedAt', { ascending: false, nullsFirst: false })
       .range(offset, offset + pageSize - 1);
 
@@ -65,7 +75,7 @@ export async function GET(request: NextRequest) {
 
     // Transform data to match response shape
     const transformedOrders = (orders || []).map((order) => {
-      // Handle Kunde - Supabase may return array or object
+      // Supabase nested relations return unknown structure (single object or array)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const rawKunde = order.Kunde as any;
       const kunde = Array.isArray(rawKunde) ? rawKunde[0] : rawKunde;

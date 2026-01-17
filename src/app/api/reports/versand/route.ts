@@ -13,9 +13,10 @@
  * - shippingTimes: average days from versandbereit to versendet
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
 import { parseISO, isValid, differenceInDays, differenceInCalendarDays } from 'date-fns';
+import { NextRequest, NextResponse } from 'next/server';
+
+import { supabase } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
 
@@ -74,16 +75,17 @@ export async function GET(request: NextRequest) {
     // versandStatus='versendet' AND versandUpdatedAt within range
     const { data: orders, error } = await supabase
       .from('Auftrag')
-      .select('auftragsnummer, liefertermin, versandUpdatedAt, statusUpdatedAt, lieferPlz, versandStatus')
+      .select(
+        'auftragsnummer, liefertermin, versandUpdatedAt, statusUpdatedAt, lieferPlz, versandStatus'
+      )
       .eq('versandStatus', 'versendet')
-      .or(`and(versandUpdatedAt.gte.${fromParam},versandUpdatedAt.lte.${toParam}),versandUpdatedAt.is.null`);
+      .or(
+        `and(versandUpdatedAt.gte.${fromParam},versandUpdatedAt.lte.${toParam}),versandUpdatedAt.is.null`
+      );
 
     if (error) {
       console.error('Versand Reports API Error:', error);
-      return NextResponse.json(
-        { error: 'Fehler beim Laden der Versanddaten' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'Fehler beim Laden der Versanddaten' }, { status: 500 });
     }
 
     // Calculate delivery metrics
@@ -108,10 +110,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(response);
   } catch (error) {
     console.error('Versand Reports API Error:', error);
-    return NextResponse.json(
-      { error: 'Fehler beim Laden der Versanddaten' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Fehler beim Laden der Versanddaten' }, { status: 500 });
   }
 }
 
@@ -158,13 +157,13 @@ function calculateDeliveryMetrics(orders: OrderData[]): DeliveryMetrics {
   }
 
   // Calculate percentages based on orders with liefertermin
-  const onTimePercent = ordersWithLiefertermin > 0
-    ? Math.round((onTime / ordersWithLiefertermin) * 100)
-    : 0;
+  const onTimePercent =
+    ordersWithLiefertermin > 0 ? Math.round((onTime / ordersWithLiefertermin) * 100) : 0;
 
-  const avgDelayDays = late > 0
-    ? Math.round((totalDelayDays / late) * 10) / 10  // Round to 1 decimal
-    : 0;
+  const avgDelayDays =
+    late > 0
+      ? Math.round((totalDelayDays / late) * 10) / 10 // Round to 1 decimal
+      : 0;
 
   return {
     total,
@@ -220,9 +219,10 @@ function calculateShippingTimes(orders: OrderData[]): ShippingTimes {
     }
   }
 
-  const avgDaysToShip = count > 0
-    ? Math.round((totalDays / count) * 10) / 10  // Round to 1 decimal
-    : 0;
+  const avgDaysToShip =
+    count > 0
+      ? Math.round((totalDays / count) * 10) / 10 // Round to 1 decimal
+      : 0;
 
   return {
     avgDaysToShip,

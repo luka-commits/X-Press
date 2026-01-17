@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
+
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -68,10 +69,7 @@ export function OrderFilters({ produkttypen, sachbearbeiter }: OrderFiltersProps
   return (
     <div className="flex gap-2 items-center">
       {/* Deadline Dropdown */}
-      <Select
-        value={currentDeadline}
-        onValueChange={(value) => updateFilter('deadline', value)}
-      >
+      <Select value={currentDeadline} onValueChange={(value) => updateFilter('deadline', value)}>
         <SelectTrigger className="w-[140px] bg-white">
           <SelectValue placeholder="Termin" />
         </SelectTrigger>
@@ -85,10 +83,7 @@ export function OrderFilters({ produkttypen, sachbearbeiter }: OrderFiltersProps
       </Select>
 
       {/* Pipeline Dropdown */}
-      <Select
-        value={currentPipeline}
-        onValueChange={(value) => updateFilter('pipeline', value)}
-      >
+      <Select value={currentPipeline} onValueChange={(value) => updateFilter('pipeline', value)}>
         <SelectTrigger className="w-[160px] bg-white">
           <SelectValue placeholder="Pipeline" />
         </SelectTrigger>

@@ -14,8 +14,9 @@
  * - date: The reference date used for calculation
  */
 
-import { NextRequest, NextResponse } from 'next/server';
 import { parseISO, isValid } from 'date-fns';
+import { NextRequest, NextResponse } from 'next/server';
+
 import {
   getOpenOrders,
   getCriticalOrders,
@@ -46,14 +47,19 @@ export async function GET(request: NextRequest) {
 
     if (!typeParam) {
       return NextResponse.json(
-        { error: 'Fehlender Parameter: type ist erforderlich (total | critical | overdue | problem)' },
+        {
+          error:
+            'Fehlender Parameter: type ist erforderlich (total | critical | overdue | problem)',
+        },
         { status: 400 }
       );
     }
 
     if (!VALID_TYPES.includes(typeParam as KPIType)) {
       return NextResponse.json(
-        { error: `Ungültiger Typ: "${typeParam}". Erlaubte Werte: total, critical, overdue, problem` },
+        {
+          error: `Ungültiger Typ: "${typeParam}". Erlaubte Werte: total, critical, overdue, problem`,
+        },
         { status: 400 }
       );
     }
@@ -104,9 +110,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(response);
   } catch (error) {
     console.error('KPI Orders API Error:', error);
-    return NextResponse.json(
-      { error: 'Fehler beim Laden der KPI-Aufträge' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Fehler beim Laden der KPI-Aufträge' }, { status: 500 });
   }
 }

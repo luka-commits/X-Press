@@ -9,6 +9,7 @@
  */
 
 import { Package, AlertTriangle, Clock, Calendar, Loader2 } from 'lucide-react';
+
 import { cn } from '@/lib/utils';
 
 type KpiClickType = 'problem' | 'oldest' | 'tomorrow' | 'openOrders';
@@ -88,9 +89,10 @@ export function SnapshotKPIs({ data, loading, onKpiClick }: SnapshotKPIsProps) {
           const value = data ? data[card.key] : null;
           const isHighlighted = card.getHighlightCondition?.(value) ?? false;
           const IconComponent = card.icon;
-          const iconColor = isHighlighted && card.highlightColorClass
-            ? card.highlightColorClass
-            : card.iconColorClass;
+          const iconColor =
+            isHighlighted && card.highlightColorClass
+              ? card.highlightColorClass
+              : card.iconColorClass;
           const isClickable = !!card.clickType && !!onKpiClick;
 
           const handleClick = () => {
@@ -111,9 +113,7 @@ export function SnapshotKPIs({ data, loading, onKpiClick }: SnapshotKPIsProps) {
               {/* Icon and label */}
               <div className="flex items-center gap-2 mb-2">
                 <IconComponent className={cn('w-5 h-5', iconColor)} />
-                <span className="text-sm font-medium text-neutral-600">
-                  {card.label}
-                </span>
+                <span className="text-sm font-medium text-neutral-600">{card.label}</span>
               </div>
 
               {/* Value */}
@@ -160,10 +160,7 @@ export function SnapshotKPIs({ data, loading, onKpiClick }: SnapshotKPIsProps) {
 
           // Non-clickable cards (aktiveAuftraege)
           return (
-            <div
-              key={card.key}
-              className="bg-white rounded-lg border border-neutral-200 p-4"
-            >
+            <div key={card.key} className="bg-white rounded-lg border border-neutral-200 p-4">
               {cardContent}
             </div>
           );

@@ -17,8 +17,9 @@
  * - stage?: The stage (when type='stage')
  */
 
-import { NextRequest, NextResponse } from 'next/server';
 import { parseISO, isValid } from 'date-fns';
+import { NextRequest, NextResponse } from 'next/server';
+
 import {
   getProblemOrders,
   getOldestOrders,
@@ -41,7 +42,14 @@ interface KPIOrdersResponse {
 }
 
 const VALID_TYPES: KPIType[] = ['problem', 'oldest', 'tomorrow', 'stage'];
-const VALID_STAGES: StageType[] = ['offen', 'in_produktion', 'fertig', 'versandbereit', 'versendet', 'problem'];
+const VALID_STAGES: StageType[] = [
+  'offen',
+  'in_produktion',
+  'fertig',
+  'versandbereit',
+  'versendet',
+  'problem',
+];
 
 export async function GET(request: NextRequest) {
   try {
@@ -52,14 +60,18 @@ export async function GET(request: NextRequest) {
 
     if (!typeParam) {
       return NextResponse.json(
-        { error: 'Fehlender Parameter: type ist erforderlich (problem | oldest | tomorrow | stage)' },
+        {
+          error: 'Fehlender Parameter: type ist erforderlich (problem | oldest | tomorrow | stage)',
+        },
         { status: 400 }
       );
     }
 
     if (!VALID_TYPES.includes(typeParam as KPIType)) {
       return NextResponse.json(
-        { error: `Ungültiger Typ: "${typeParam}". Erlaubte Werte: problem, oldest, tomorrow, stage` },
+        {
+          error: `Ungültiger Typ: "${typeParam}". Erlaubte Werte: problem, oldest, tomorrow, stage`,
+        },
         { status: 400 }
       );
     }
@@ -73,14 +85,19 @@ export async function GET(request: NextRequest) {
     if (type === 'stage') {
       if (!stageParam) {
         return NextResponse.json(
-          { error: 'Fehlender Parameter: stage ist erforderlich für type=stage (offen | in_produktion | fertig | versandbereit | versendet | problem)' },
+          {
+            error:
+              'Fehlender Parameter: stage ist erforderlich für type=stage (offen | in_produktion | fertig | versandbereit | versendet | problem)',
+          },
           { status: 400 }
         );
       }
 
       if (!VALID_STAGES.includes(stageParam as StageType)) {
         return NextResponse.json(
-          { error: `Ungültige Stage: "${stageParam}". Erlaubte Werte: offen, in_produktion, fertig, versandbereit, versendet, problem` },
+          {
+            error: `Ungültige Stage: "${stageParam}". Erlaubte Werte: offen, in_produktion, fertig, versandbereit, versendet, problem`,
+          },
           { status: 400 }
         );
       }
@@ -148,9 +165,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(response);
   } catch (error) {
     console.error('Reports KPI Orders API Error:', error);
-    return NextResponse.json(
-      { error: 'Fehler beim Laden der KPI-Aufträge' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Fehler beim Laden der KPI-Aufträge' }, { status: 500 });
   }
 }

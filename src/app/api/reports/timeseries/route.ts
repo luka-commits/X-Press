@@ -11,9 +11,10 @@
  * - Array of { date, eingang, versendet } for each day in range
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
 import { parseISO, isValid, eachDayOfInterval, format } from 'date-fns';
+import { NextRequest, NextResponse } from 'next/server';
+
+import { supabase } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
 
@@ -65,7 +66,9 @@ export async function GET(request: NextRequest) {
         .from('Auftrag')
         .select('versandUpdatedAt, createdAt')
         .eq('versandStatus', 'versendet')
-        .or(`and(versandUpdatedAt.gte.${fromParam}T00:00:00,versandUpdatedAt.lte.${toParam}T23:59:59),versandUpdatedAt.is.null`),
+        .or(
+          `and(versandUpdatedAt.gte.${fromParam}T00:00:00,versandUpdatedAt.lte.${toParam}T23:59:59),versandUpdatedAt.is.null`
+        ),
     ]);
 
     // Count orders per day for eingang
@@ -104,9 +107,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(data);
   } catch (error) {
     console.error('Timeseries API Error:', error);
-    return NextResponse.json(
-      { error: 'Fehler beim Laden der Zeitreihen-Daten' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Fehler beim Laden der Zeitreihen-Daten' }, { status: 500 });
   }
 }

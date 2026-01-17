@@ -1,16 +1,17 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+
+import { cn } from '@/lib/utils';
 
 const navigation = [
-  { name: "Tagesübersicht", href: "/" },
-  { name: "Aufträge", href: "/orders" },
-  { name: "Wochenplan", href: "/calendar" },
-  { name: "Versand", href: "/versand" },
-  { name: "Auftragsupdates", href: "/status" },
-  { name: "Reports", href: "/reports" },
+  { name: 'Tagesübersicht', href: '/' },
+  { name: 'Aufträge', href: '/orders' },
+  { name: 'Wochenplan', href: '/calendar' },
+  { name: 'Versand', href: '/versand' },
+  { name: 'Auftragsupdates', href: '/status' },
+  { name: 'Reports', href: '/reports' },
 ];
 
 interface HeaderProps {
@@ -43,10 +44,10 @@ export function Header({ headerRight }: HeaderProps) {
                 key={item.name}
                 href={item.href}
                 className={cn(
-                  "px-4 py-2 text-sm font-medium transition-colors rounded-md",
+                  'px-4 py-2 text-sm font-medium transition-colors rounded-md',
                   isActive
-                    ? "bg-ghl-blue/10 text-ghl-blue"
-                    : "text-ghl-text-secondary hover:text-ghl-text hover:bg-gray-100"
+                    ? 'bg-ghl-blue/10 text-ghl-blue'
+                    : 'text-ghl-text-secondary hover:text-ghl-text hover:bg-gray-100'
                 )}
               >
                 {item.name}

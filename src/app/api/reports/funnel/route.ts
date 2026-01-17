@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+
 import { getFunnelData, getCumulativeFunnelData } from '@/lib/reporting-queries';
 
 export const dynamic = 'force-dynamic';
@@ -30,9 +31,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(funnelData);
   } catch (error) {
     console.error('Funnel API error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

@@ -1,9 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * XOS XML-Parser für Prinance JDF/XML Exports
  *
  * Extrahiert Auftragsdaten aus Heidelberg Prinance XML-Dateien
  * und transformiert sie für die XOS-Datenbank.
+ *
+ * Note: fast-xml-parser returns dynamically structured objects based on XML content.
+ * Some `any` types are unavoidable where the XML structure varies per-document.
  */
 
 import { XMLParser } from 'fast-xml-parser';
@@ -40,7 +42,7 @@ export interface ParsedKunde {
   telefon: string | null;
   mobil: string | null;
   email: string | null;
-  adresse: string | null;  // Combined address for backwards compatibility
+  adresse: string | null; // Combined address for backwards compatibility
   externeNummer: string | null;
   // Individual address fields for PLZ sorting and map clustering
   strasse: string | null;
@@ -60,6 +62,33 @@ export interface ParsedArbeitsgang {
 }
 
 // ============================================================
+// Internal XML Structure Types (fast-xml-parser output)
+// ============================================================
+
+/** Raw XML element with ZEIT attribute from fast-xml-parser */
+interface RawXMLElement {
+  '@_ZEIT'?: string;
+  [key: string]: unknown;
+}
+
+/** Raw communication entry from XML */
+interface RawKomEntry {
+  '@_Kommtypname'?: string;
+  '@_Wert'?: string;
+}
+
+/** Raw Arbeitsvorgang from XML */
+interface RawArbeitsvorgang {
+  '@_Name'?: string;
+  '@_Kostenstelle'?: string;
+  '@_KostenstellenName'?: string;
+  '@_KostenstellenKurzbez'?: string;
+  '@_Sort'?: string;
+  '@_Noteprod'?: string;
+  Elemente?: RawXMLElement | RawXMLElement[];
+}
+
+// ============================================================
 // Encoding Fix
 // ============================================================
 
@@ -70,19 +99,21 @@ export interface ParsedArbeitsgang {
 export function fixEncoding(text: string): string {
   if (!text) return text;
 
-  return text
-    // Kleinbuchstaben
-    .replace(/Ã¼/g, 'ü')
-    .replace(/Ã¶/g, 'ö')
-    .replace(/Ã¤/g, 'ä')
-    .replace(/ÃŸ/g, 'ß')
-    // Großbuchstaben
-    .replace(/Ã„/g, 'Ä')
-    .replace(/Ã–/g, 'Ö')
-    .replace(/Ãœ/g, 'Ü')
-    // Entity Escapes
-    .replace(/&#xA;/g, '\n')
-    .replace(/&#x9;/g, '\t');
+  return (
+    text
+      // Kleinbuchstaben
+      .replace(/Ã¼/g, 'ü')
+      .replace(/Ã¶/g, 'ö')
+      .replace(/Ã¤/g, 'ä')
+      .replace(/ÃŸ/g, 'ß')
+      // Großbuchstaben
+      .replace(/Ã„/g, 'Ä')
+      .replace(/Ã–/g, 'Ö')
+      .replace(/Ãœ/g, 'Ü')
+      // Entity Escapes
+      .replace(/&#xA;/g, '\n')
+      .replace(/&#x9;/g, '\t')
+  );
 }
 
 // ============================================================
@@ -121,18 +152,18 @@ export function excelDateToJS(excelDate: number | string | null): Date | null {
  * Aggregiert ZEIT-Werte aus Elemente-Nodes eines Arbeitsvorgangs
  * Ignoriert ZEIT="0.00" (Material-Positionen)
  */
-function aggregiereZeit(elemente: any): number {
+function aggregiereZeit(elemente: RawXMLElement | RawXMLElement[] | undefined): number {
   if (!elemente) return 0;
 
   // Kann ein einzelnes Objekt oder ein Array sein
   const elementeArray = Array.isArray(elemente) ? elemente : [elemente];
 
   return elementeArray
-    .filter((el: any) => {
+    .filter((el: RawXMLElement) => {
       const zeit = parseFloat(el?.['@_ZEIT'] || '0');
       return zeit > 0;
     })
-    .reduce((sum: number, el: any) => {
+    .reduce((sum: number, el: RawXMLElement) => {
       return sum + parseFloat(el?.['@_ZEIT'] || '0');
     }, 0);
 }
@@ -188,11 +219,15 @@ export function parseXML(xmlContent: string): ParsedAuftrag {
   if (kundeNode) {
     // Extract communication entries
     const komEntries = kundeNode.KomEntry;
-    const komArray = Array.isArray(komEntries) ? komEntries : (komEntries ? [komEntries] : []);
+    const komArray: RawKomEntry[] = Array.isArray(komEntries)
+      ? komEntries
+      : komEntries
+        ? [komEntries]
+        : [];
 
-    const telefon = komArray.find((k: any) => k['@_Kommtypname'] === 'Telefon')?.['@_Wert'] || null;
-    const mobil = komArray.find((k: any) => k['@_Kommtypname'] === 'Mobil')?.['@_Wert'] || null;
-    const email = komArray.find((k: any) => k['@_Kommtypname'] === 'E-Mail')?.['@_Wert'] || null;
+    const telefon = komArray.find((k) => k['@_Kommtypname'] === 'Telefon')?.['@_Wert'] || null;
+    const mobil = komArray.find((k) => k['@_Kommtypname'] === 'Mobil')?.['@_Wert'] || null;
+    const email = komArray.find((k) => k['@_Kommtypname'] === 'E-Mail')?.['@_Wert'] || null;
 
     // Extract individual address fields
     const strasse = kundeNode['@_Strasse'] || '';
@@ -224,7 +259,7 @@ export function parseXML(xmlContent: string): ParsedAuftrag {
   const bogengruppenArray = Array.isArray(bogengruppen) ? bogengruppen : [bogengruppen];
 
   // Collect all Arbeitsvorgänge from all Bogengruppen
-  const arbeitsvorgaengeArray: any[] = [];
+  const arbeitsvorgaengeArray: RawArbeitsvorgang[] = [];
   for (const bg of bogengruppenArray) {
     if (!bg) continue;
     const avs = bg.Arbeitsvorgang || [];
@@ -233,17 +268,13 @@ export function parseXML(xmlContent: string): ParsedAuftrag {
   }
 
   const arbeitsgaenge: ParsedArbeitsgang[] = arbeitsvorgaengeArray
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .filter((av: any) => av && av['@_Kostenstelle'])
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .map((av: any) => {
+    .filter((av) => av && av['@_Kostenstelle'])
+    .map((av) => {
       // Aggregate ZEIT from Elemente
       const zeitMinuten = aggregiereZeit(av.Elemente);
 
       // Beschreibung: Noteprod hat Vorrang, dann Name als Fallback
-      const beschreibung = av['@_Noteprod']?.trim()
-        || av['@_Name']?.trim()
-        || null;
+      const beschreibung = av['@_Noteprod']?.trim() || av['@_Name']?.trim() || null;
 
       return {
         name: av['@_Name'] || 'Unbenannt',
@@ -263,9 +294,8 @@ export function parseXML(xmlContent: string): ParsedAuftrag {
     auftrag['@_Produktbeschreibung2'],
     auftrag['@_Produktbeschreibung3'],
   ].filter(Boolean);
-  const produktbeschreibung = beschreibungTeile.length > 0
-    ? beschreibungTeile.join(' ').trim()
-    : null;
+  const produktbeschreibung =
+    beschreibungTeile.length > 0 ? beschreibungTeile.join(' ').trim() : null;
 
   // Auflage extrahieren
   const auflagenhoehe = auftrag.Auflage?.['@_Auflagenhoehe'];

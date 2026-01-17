@@ -1,9 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState, useCallback } from "react";
-import { GoogleMap, useLoadScript, InfoWindowF } from "@react-google-maps/api";
-import { MarkerClusterer } from "@googlemaps/markerclusterer";
-import { cn } from "@/lib/utils";
+import { MarkerClusterer } from '@googlemaps/markerclusterer';
+import { GoogleMap, useLoadScript, InfoWindowF } from '@react-google-maps/api';
+import { useEffect, useRef, useState, useCallback } from 'react';
+
+import { cn } from '@/lib/utils';
 
 /**
  * Order data structure for map markers
@@ -40,8 +41,8 @@ const BERLIN_CENTER = { lat: 52.52, lng: 13.405 };
 
 // Map container style - uses 100% to fill parent container
 const containerStyle = {
-  width: "100%",
-  height: "100%",
+  width: '100%',
+  height: '100%',
 };
 
 /**
@@ -63,8 +64,8 @@ export default function DeliveryMap({
   encodedPolyline = null,
 }: DeliveryMapProps) {
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
-    libraries: ["geometry"], // Required for decoding polylines
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '',
+    libraries: ['geometry'], // Required for decoding polylines
   });
 
   const mapRef = useRef<google.maps.Map | null>(null);
@@ -106,7 +107,7 @@ export default function DeliveryMap({
         markerMapRef.current.set(order.auftragsnummer, marker);
 
         // Click handler to show InfoWindow and emit callback
-        marker.addListener("click", () => {
+        marker.addListener('click', () => {
           setSelectedOrder(order);
           onOrderSelect?.(order.auftragsnummer);
         });
@@ -147,7 +148,7 @@ export default function DeliveryMap({
       // Store in marker map for quick lookup
       markerMapRef.current.set(order.auftragsnummer, marker);
 
-      marker.addListener("click", () => {
+      marker.addListener('click', () => {
         setSelectedOrder(order);
         onOrderSelect?.(order.auftragsnummer);
       });
@@ -193,9 +194,9 @@ export default function DeliveryMap({
       marker.setIcon({
         path: google.maps.SymbolPath.CIRCLE,
         scale: 12,
-        fillColor: "#EF4444",
+        fillColor: '#EF4444',
         fillOpacity: 1,
-        strokeColor: "#ffffff",
+        strokeColor: '#ffffff',
         strokeWeight: 2,
       });
 
@@ -247,16 +248,16 @@ export default function DeliveryMap({
           marker.setIcon({
             path: google.maps.SymbolPath.CIRCLE,
             scale: 14,
-            fillColor: "#3B82F6", // Blue
+            fillColor: '#3B82F6', // Blue
             fillOpacity: 1,
-            strokeColor: "#ffffff",
+            strokeColor: '#ffffff',
             strokeWeight: 2,
           });
           marker.setLabel({
             text: String(position),
-            color: "#ffffff",
-            fontSize: "12px",
-            fontWeight: "bold",
+            color: '#ffffff',
+            fontSize: '12px',
+            fontWeight: 'bold',
           });
           marker.setZIndex(1000 + position); // Route markers on top
         } else {
@@ -264,9 +265,9 @@ export default function DeliveryMap({
           marker.setIcon({
             path: google.maps.SymbolPath.CIRCLE,
             scale: 8,
-            fillColor: "#9CA3AF", // Gray
+            fillColor: '#9CA3AF', // Gray
             fillOpacity: 0.5,
-            strokeColor: "#ffffff",
+            strokeColor: '#ffffff',
             strokeWeight: 1,
           });
           marker.setLabel(null);
@@ -282,13 +283,13 @@ export default function DeliveryMap({
           polylineRef.current = new google.maps.Polyline({
             path: decodedPath,
             geodesic: true,
-            strokeColor: "#2563EB", // Darker blue for optimized route
+            strokeColor: '#2563EB', // Darker blue for optimized route
             strokeOpacity: 0.9,
             strokeWeight: 4,
             map: mapRef.current,
           });
         } catch (error) {
-          console.error("Failed to decode polyline:", error);
+          console.error('Failed to decode polyline:', error);
         }
       } else if (routeOrders.length >= 2) {
         // Fallback: straight lines between stops (before optimization)
@@ -299,7 +300,7 @@ export default function DeliveryMap({
         polylineRef.current = new google.maps.Polyline({
           path,
           geodesic: true,
-          strokeColor: "#3B82F6", // Lighter blue for straight-line fallback
+          strokeColor: '#3B82F6', // Lighter blue for straight-line fallback
           strokeOpacity: 0.7,
           strokeWeight: 3,
           map: mapRef.current,
@@ -324,7 +325,12 @@ export default function DeliveryMap({
   // Error state - API key missing or invalid
   if (loadError) {
     return (
-      <div className={cn("h-[400px] w-full rounded-lg bg-ghl-card border border-ghl-border flex items-center justify-center", className)}>
+      <div
+        className={cn(
+          'h-[400px] w-full rounded-lg bg-ghl-card border border-ghl-border flex items-center justify-center',
+          className
+        )}
+      >
         <div className="text-center text-gray-400">
           <p>Google Maps konnte nicht geladen werden.</p>
           <p className="text-sm mt-1">Bitte API-Key prüfen.</p>
@@ -336,7 +342,12 @@ export default function DeliveryMap({
   // Loading state
   if (!isLoaded) {
     return (
-      <div className={cn("h-[400px] w-full rounded-lg bg-ghl-card border border-ghl-border flex items-center justify-center", className)}>
+      <div
+        className={cn(
+          'h-[400px] w-full rounded-lg bg-ghl-card border border-ghl-border flex items-center justify-center',
+          className
+        )}
+      >
         <span className="text-gray-400">Karte wird geladen...</span>
       </div>
     );
@@ -345,19 +356,22 @@ export default function DeliveryMap({
   // Check if API key is missing
   if (!process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY) {
     return (
-      <div className={cn("h-[400px] w-full rounded-lg bg-ghl-card border border-ghl-border flex items-center justify-center", className)}>
+      <div
+        className={cn(
+          'h-[400px] w-full rounded-lg bg-ghl-card border border-ghl-border flex items-center justify-center',
+          className
+        )}
+      >
         <div className="text-center text-gray-400">
           <p>Google Maps API-Key fehlt.</p>
-          <p className="text-sm mt-1">
-            Bitte NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in .env setzen.
-          </p>
+          <p className="text-sm mt-1">Bitte NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in .env setzen.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={cn("h-[400px] w-full rounded-lg overflow-hidden", className)}>
+    <div className={cn('h-[400px] w-full rounded-lg overflow-hidden', className)}>
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={BERLIN_CENTER}
@@ -376,11 +390,7 @@ export default function DeliveryMap({
           >
             <div className="text-sm text-gray-800">
               <div className="font-bold">{selectedOrder.auftragsnummer}</div>
-              <div>
-                {selectedOrder.kunde?.firma ||
-                  selectedOrder.kunde?.name ||
-                  "Unbekannt"}
-              </div>
+              <div>{selectedOrder.kunde?.firma || selectedOrder.kunde?.name || 'Unbekannt'}</div>
               <div>
                 {selectedOrder.lieferPlz} {selectedOrder.lieferOrt}
               </div>

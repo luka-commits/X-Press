@@ -7,8 +7,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { parseXML, summarizeAuftrag } from '@/lib/xml-parser';
+
 import { importAuftrag } from '@/lib/import-service';
+import { parseXML, summarizeAuftrag } from '@/lib/xml-parser';
 
 // Max file size: 50MB (Sample XMLs sind ~100-200KB, aber großzügig für komplexe Aufträge)
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
@@ -22,10 +23,7 @@ export async function POST(request: NextRequest) {
     // Check content-length header for size limit
     const contentLength = request.headers.get('content-length');
     if (contentLength && parseInt(contentLength) > MAX_FILE_SIZE) {
-      return NextResponse.json(
-        { error: 'File too large. Maximum size is 50MB.' },
-        { status: 413 }
-      );
+      return NextResponse.json({ error: 'File too large. Maximum size is 50MB.' }, { status: 413 });
     }
 
     // Handle different content types

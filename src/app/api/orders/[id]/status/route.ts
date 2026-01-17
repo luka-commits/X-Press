@@ -6,14 +6,12 @@
  * Enables mobile workers to update order status (IST-Zustand) with 3 clicks.
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
 import { IstStatus } from '@prisma/client';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+import prisma from '@/lib/prisma';
+
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
 
@@ -33,7 +31,7 @@ export async function PATCH(
     if (istStatus !== null && !Object.values(IstStatus).includes(istStatus)) {
       return NextResponse.json(
         {
-          error: `Ungültiger Status. Erlaubte Werte: ${Object.values(IstStatus).join(', ')} oder null`
+          error: `Ungültiger Status. Erlaubte Werte: ${Object.values(IstStatus).join(', ')} oder null`,
         },
         { status: 400 }
       );
@@ -46,10 +44,7 @@ export async function PATCH(
     });
 
     if (!existingOrder) {
-      return NextResponse.json(
-        { error: 'Auftrag nicht gefunden' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Auftrag nicht gefunden' }, { status: 404 });
     }
 
     // Update order status

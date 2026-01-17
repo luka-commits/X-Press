@@ -6,10 +6,11 @@
  * Zeigt Karten für jede Leitmaschine mit Auftragsdetails
  */
 
-import Link from 'next/link';
-import { MachineCapacity } from '@/lib/dashboard-queries';
 import { format, isSameDay } from 'date-fns';
 import { de } from 'date-fns/locale';
+import Link from 'next/link';
+
+import { MachineCapacity } from '@/lib/dashboard-queries';
 
 interface MachineCardsProps {
   machines: MachineCapacity[];
@@ -42,20 +43,13 @@ function MachineCard({ machine }: { machine: MachineCapacity }) {
   return (
     <div className="bg-white rounded-lg border border-ghl-border overflow-hidden transition-all duration-200 hover:shadow-md hover:border-blue-200 shadow-sm">
       {/* Header with machine name and utilization */}
-      <div
-        className={`px-4 py-3 border-b ${statusBgClass} flex items-center justify-between`}
-      >
+      <div className={`px-4 py-3 border-b ${statusBgClass} flex items-center justify-between`}>
         <div>
-          <h3 className="font-semibold text-ghl-text">
-            {machine.kurzname || machine.name}
-          </h3>
+          <h3 className="font-semibold text-ghl-text">{machine.kurzname || machine.name}</h3>
           <p className="text-xs text-ghl-text-secondary">{machine.name}</p>
         </div>
         <div className="text-right">
-          <p
-            className="text-2xl font-bold"
-            style={{ color: statusColor }}
-          >
+          <p className="text-2xl font-bold" style={{ color: statusColor }}>
             {machine.auslastung}%
           </p>
           <p className="text-xs text-ghl-text-secondary">
@@ -67,9 +61,7 @@ function MachineCard({ machine }: { machine: MachineCapacity }) {
       {/* Orders list */}
       <div className="p-4">
         {machine.auftraege.length === 0 ? (
-          <p className="text-sm text-neutral-400 text-center py-4">
-            Keine Aufträge
-          </p>
+          <p className="text-sm text-neutral-400 text-center py-4">Keine Aufträge</p>
         ) : (
           <div className="space-y-2">
             {machine.auftraege.map((order) => (
@@ -119,9 +111,7 @@ function MachineCard({ machine }: { machine: MachineCapacity }) {
 export function MachineCards({ machines, selectedDate }: MachineCardsProps) {
   const displayDate = selectedDate || new Date();
   const isToday = isSameDay(displayDate, new Date());
-  const dateLabel = isToday
-    ? 'Heute'
-    : format(displayDate, 'EEEE, dd.MM.', { locale: de });
+  const dateLabel = isToday ? 'Heute' : format(displayDate, 'EEEE, dd.MM.', { locale: de });
 
   if (machines.length === 0) {
     return (
@@ -129,9 +119,7 @@ export function MachineCards({ machines, selectedDate }: MachineCardsProps) {
         <h2 className="text-lg font-semibold text-ghl-text mb-4">
           Maschinen-Übersicht ({dateLabel})
         </h2>
-        <p className="text-neutral-500 text-center py-8">
-          Keine Leitmaschinen konfiguriert
-        </p>
+        <p className="text-neutral-500 text-center py-8">Keine Leitmaschinen konfiguriert</p>
       </div>
     );
   }
@@ -139,29 +127,18 @@ export function MachineCards({ machines, selectedDate }: MachineCardsProps) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-ghl-text">
-          Maschinen-Übersicht ({dateLabel})
-        </h2>
+        <h2 className="text-lg font-semibold text-ghl-text">Maschinen-Übersicht ({dateLabel})</h2>
         <div className="flex items-center gap-4 text-xs">
           <div className="flex items-center gap-1.5">
-            <div
-              className="w-3 h-3 rounded"
-              style={{ backgroundColor: COLORS.green }}
-            />
+            <div className="w-3 h-3 rounded" style={{ backgroundColor: COLORS.green }} />
             <span className="text-neutral-600">&lt;70%</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div
-              className="w-3 h-3 rounded"
-              style={{ backgroundColor: COLORS.yellow }}
-            />
+            <div className="w-3 h-3 rounded" style={{ backgroundColor: COLORS.yellow }} />
             <span className="text-neutral-600">70-90%</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div
-              className="w-3 h-3 rounded"
-              style={{ backgroundColor: COLORS.red }}
-            />
+            <div className="w-3 h-3 rounded" style={{ backgroundColor: COLORS.red }} />
             <span className="text-neutral-600">&gt;90%</span>
           </div>
         </div>

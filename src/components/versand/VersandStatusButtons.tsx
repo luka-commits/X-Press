@@ -1,13 +1,14 @@
-"use client";
+'use client';
 
-import { Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Loader2 } from 'lucide-react';
+
+import { cn } from '@/lib/utils';
 
 /**
  * VersandStatus type matching VersandStatus enum from Prisma schema.
  * Used for type-safe status updates.
  */
-export type VersandStatusType = "offen" | "versandbereit" | "versendet";
+export type VersandStatusType = 'offen' | 'versandbereit' | 'versendet';
 
 interface VersandStatusButtonsProps {
   orderId: string;
@@ -45,49 +46,49 @@ export function VersandStatusButtons({
 
   return (
     <div
-      className={cn("flex gap-2", className)}
+      className={cn('flex gap-2', className)}
       role="group"
       aria-label={`Versand-Status-Update für Auftrag ${orderId}`}
     >
       {/* Versandbereit - Amber */}
       <button
-        onClick={() => handleClick("versandbereit")}
+        onClick={() => handleClick('versandbereit')}
         disabled={disabled || isLoading}
         className={cn(
-          "flex-1 py-2.5 px-4 rounded-lg border font-medium transition-colors",
-          "bg-amber-500 border-amber-500 text-white hover:bg-amber-600",
-          "disabled:opacity-50 disabled:cursor-not-allowed",
-          "flex items-center justify-center gap-2 text-sm"
+          'flex-1 py-2.5 px-4 rounded-lg border font-medium transition-colors',
+          'bg-amber-500 border-amber-500 text-white hover:bg-amber-600',
+          'disabled:opacity-50 disabled:cursor-not-allowed',
+          'flex items-center justify-center gap-2 text-sm'
         )}
       >
-        {loadingStatus === "versandbereit" ? (
+        {loadingStatus === 'versandbereit' ? (
           <>
             <Loader2 className="w-4 h-4 animate-spin" />
             <span>...</span>
           </>
         ) : (
-          "Versandbereit"
+          'Versandbereit'
         )}
       </button>
 
       {/* Versendet - Green */}
       <button
-        onClick={() => handleClick("versendet")}
+        onClick={() => handleClick('versendet')}
         disabled={disabled || isLoading}
         className={cn(
-          "flex-1 py-2.5 px-4 rounded-lg border font-medium transition-colors",
-          "bg-green-500 border-green-500 text-white hover:bg-green-600",
-          "disabled:opacity-50 disabled:cursor-not-allowed",
-          "flex items-center justify-center gap-2 text-sm"
+          'flex-1 py-2.5 px-4 rounded-lg border font-medium transition-colors',
+          'bg-green-500 border-green-500 text-white hover:bg-green-600',
+          'disabled:opacity-50 disabled:cursor-not-allowed',
+          'flex items-center justify-center gap-2 text-sm'
         )}
       >
-        {loadingStatus === "versendet" ? (
+        {loadingStatus === 'versendet' ? (
           <>
             <Loader2 className="w-4 h-4 animate-spin" />
             <span>...</span>
           </>
         ) : (
-          "Versendet"
+          'Versendet'
         )}
       </button>
     </div>

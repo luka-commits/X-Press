@@ -67,6 +67,7 @@ interface RawOrderWithKunde {
   auftragsnummer: string;
   produkttyp: string | null;
   liefertermin: string | null;
+  // Supabase nested relations return unknown structure (single object or array)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Kunde: any;
 }
@@ -227,6 +228,7 @@ export async function getMachineCapacityForDate(
     const orderMap = new Map<string, MachineOrder>();
 
     for (const ag of tagesArbeit) {
+      // Supabase nested relation typing is incomplete - returns object | array
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const rawAuftrag = (ag as any).Auftrag;
       if (!rawAuftrag) continue;

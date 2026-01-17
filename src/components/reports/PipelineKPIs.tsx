@@ -9,6 +9,7 @@
  */
 
 import { Truck, Clock, CheckCircle2, Loader2 } from 'lucide-react';
+
 import { cn } from '@/lib/utils';
 
 type PipelineKpiClickType = 'shipped';
@@ -97,9 +98,7 @@ export function PipelineKPIs({ kpis, prevPeriod, loading, onKpiClick }: Pipeline
               {/* Icon and label */}
               <div className="flex items-center gap-2 mb-2">
                 <IconComponent className={cn('w-5 h-5', card.iconColorClass)} />
-                <span className="text-sm font-medium text-neutral-600">
-                  {card.label}
-                </span>
+                <span className="text-sm font-medium text-neutral-600">{card.label}</span>
               </div>
 
               {/* Value */}
@@ -148,10 +147,7 @@ export function PipelineKPIs({ kpis, prevPeriod, loading, onKpiClick }: Pipeline
 
           // Non-clickable cards
           return (
-            <div
-              key={card.key}
-              className="bg-white rounded-lg border border-neutral-200 p-4"
-            >
+            <div key={card.key} className="bg-white rounded-lg border border-neutral-200 p-4">
               {cardContent}
             </div>
           );
@@ -170,11 +166,7 @@ interface ComparisonBadgeProps {
 function ComparisonBadge({ current, previous, invertComparison }: ComparisonBadgeProps) {
   // Cannot compare if either is null
   if (current === null || previous === null) {
-    return (
-      <span className="text-xs text-neutral-400 mt-1 block">
-        vs Vorperiode
-      </span>
-    );
+    return <span className="text-xs text-neutral-400 mt-1 block">vs Vorperiode</span>;
   }
 
   // Calculate change
@@ -186,11 +178,7 @@ function ComparisonBadge({ current, previous, invertComparison }: ComparisonBadg
   }
 
   if (changePercent === 0) {
-    return (
-      <span className="text-xs text-neutral-500 mt-1 block">
-        0% vs Vorperiode
-      </span>
-    );
+    return <span className="text-xs text-neutral-500 mt-1 block">0% vs Vorperiode</span>;
   }
 
   // For inverted comparison (like avgDaysToShip), lower is better

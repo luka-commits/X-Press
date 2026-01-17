@@ -244,6 +244,7 @@ export async function getMachineOrdersForDay(
   >();
 
   for (const ag of arbeitsgaenge) {
+    // Supabase nested relation typing is incomplete - returns object | array
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const rawAuftrag = ag.Auftrag as any;
     if (!rawAuftrag) continue;

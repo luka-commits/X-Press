@@ -6,14 +6,12 @@
  * Enables shipping team to update versand status (versandbereit/versendet).
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
 import { VersandStatus } from '@prisma/client';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+import prisma from '@/lib/prisma';
+
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
 
@@ -23,17 +21,14 @@ export async function PATCH(
 
     // Validate versandStatus is provided
     if (!versandStatus) {
-      return NextResponse.json(
-        { error: 'versandStatus ist erforderlich' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'versandStatus ist erforderlich' }, { status: 400 });
     }
 
     // Validate versandStatus is a valid VersandStatus enum value
     if (!Object.values(VersandStatus).includes(versandStatus)) {
       return NextResponse.json(
         {
-          error: `Ungültiger Versandstatus. Erlaubte Werte: ${Object.values(VersandStatus).join(', ')}`
+          error: `Ungültiger Versandstatus. Erlaubte Werte: ${Object.values(VersandStatus).join(', ')}`,
         },
         { status: 400 }
       );
@@ -46,10 +41,7 @@ export async function PATCH(
     });
 
     if (!existingOrder) {
-      return NextResponse.json(
-        { error: 'Auftrag nicht gefunden' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Auftrag nicht gefunden' }, { status: 404 });
     }
 
     // Update versand status

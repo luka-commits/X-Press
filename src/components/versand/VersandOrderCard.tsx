@@ -1,9 +1,11 @@
-"use client";
+'use client';
 
-import { format } from "date-fns";
-import { de } from "date-fns/locale";
-import { cn } from "@/lib/utils";
-import type { VersandStatusType } from "./VersandStatusButtons";
+import { format } from 'date-fns';
+import { de } from 'date-fns/locale';
+
+import { cn } from '@/lib/utils';
+
+import type { VersandStatusType } from './VersandStatusButtons';
 
 /**
  * Order data structure from GET /api/versand/orders
@@ -44,13 +46,13 @@ interface VersandOrderCardProps {
  */
 function getStatusColor(status: VersandStatusType | null): string {
   switch (status) {
-    case "versandbereit":
-      return "bg-amber-50 text-amber-700 border-amber-200";
-    case "versendet":
-      return "bg-green-50 text-green-700 border-green-200";
-    case "offen":
+    case 'versandbereit':
+      return 'bg-amber-50 text-amber-700 border-amber-200';
+    case 'versendet':
+      return 'bg-green-50 text-green-700 border-green-200';
+    case 'offen':
     default:
-      return "bg-neutral-100 text-neutral-600 border-neutral-200";
+      return 'bg-neutral-100 text-neutral-600 border-neutral-200';
   }
 }
 
@@ -59,13 +61,13 @@ function getStatusColor(status: VersandStatusType | null): string {
  */
 function getStatusText(status: VersandStatusType | null): string {
   switch (status) {
-    case "versandbereit":
-      return "Versandbereit";
-    case "versendet":
-      return "Versendet";
-    case "offen":
+    case 'versandbereit':
+      return 'Versandbereit';
+    case 'versendet':
+      return 'Versendet';
+    case 'offen':
     default:
-      return "Offen";
+      return 'Offen';
   }
 }
 
@@ -89,10 +91,10 @@ export function VersandOrderCard({
   onRouteToggle,
 }: VersandOrderCardProps) {
   const formattedDate = order.liefertermin
-    ? format(new Date(order.liefertermin), "dd.MM.yyyy", { locale: de })
-    : "Kein Termin";
+    ? format(new Date(order.liefertermin), 'dd.MM.yyyy', { locale: de })
+    : 'Kein Termin';
 
-  const customerName = order.kunde?.firma || order.kunde?.name || "Unbekannt";
+  const customerName = order.kunde?.firma || order.kunde?.name || 'Unbekannt';
 
   // Handle click based on mode
   const handleClick = () => {
@@ -113,17 +115,17 @@ export function VersandOrderCard({
       id={`order-card-${order.auftragsnummer}`}
       onClick={handleClick}
       className={cn(
-        "w-full text-left p-4 rounded-lg border transition-all duration-200 shadow-sm",
-        "bg-white border-ghl-border",
+        'w-full text-left p-4 rounded-lg border transition-all duration-200 shadow-sm',
+        'bg-white border-ghl-border',
         // Route planning mode styling
         routePlanningMode && isInRoute
-          ? "ring-2 ring-blue-400 border-blue-400 shadow-md border-l-4 border-l-blue-500"
+          ? 'ring-2 ring-blue-400 border-blue-400 shadow-md border-l-4 border-l-blue-500'
           : routePlanningMode
-          ? "hover:shadow-md hover:border-blue-200"
-          : // Normal mode styling
-          isSelected
-          ? "ring-2 ring-blue-400 border-blue-400 shadow-md"
-          : "hover:shadow-md hover:border-blue-200"
+            ? 'hover:shadow-md hover:border-blue-200'
+            : // Normal mode styling
+              isSelected
+              ? 'ring-2 ring-blue-400 border-blue-400 shadow-md'
+              : 'hover:shadow-md hover:border-blue-200'
       )}
     >
       {/* Route Planning Mode: Checkbox and Position Badge */}
@@ -132,10 +134,8 @@ export function VersandOrderCard({
           {/* Checkbox */}
           <div
             className={cn(
-              "w-5 h-5 rounded border-2 flex items-center justify-center transition-colors",
-              isInRoute
-                ? "bg-blue-500 border-blue-500"
-                : "border-neutral-300 bg-white"
+              'w-5 h-5 rounded border-2 flex items-center justify-center transition-colors',
+              isInRoute ? 'bg-blue-500 border-blue-500' : 'border-neutral-300 bg-white'
             )}
           >
             {isInRoute && (
@@ -164,19 +164,17 @@ export function VersandOrderCard({
 
           {/* Label */}
           <span className="text-sm text-neutral-500">
-            {isInRoute ? `Stopp ${routePosition}` : "Zur Route hinzufügen"}
+            {isInRoute ? `Stopp ${routePosition}` : 'Zur Route hinzufügen'}
           </span>
         </div>
       )}
 
       {/* Header: Auftragsnummer + Status Badge */}
       <div className="flex items-center justify-between mb-2">
-        <span className="font-semibold text-ghl-text">
-          {order.auftragsnummer}
-        </span>
+        <span className="font-semibold text-ghl-text">{order.auftragsnummer}</span>
         <span
           className={cn(
-            "px-2 py-0.5 text-xs font-medium rounded-full border",
+            'px-2 py-0.5 text-xs font-medium rounded-full border',
             getStatusColor(order.versandStatus)
           )}
         >
@@ -188,9 +186,7 @@ export function VersandOrderCard({
       <div className="text-sm text-neutral-700 mb-1">{customerName}</div>
 
       {/* Product Type */}
-      {order.produkttyp && (
-        <div className="text-xs text-neutral-500 mb-3">{order.produkttyp}</div>
-      )}
+      {order.produkttyp && <div className="text-xs text-neutral-500 mb-3">{order.produkttyp}</div>}
 
       {/* Address - PLZ emphasized for sorting visibility */}
       <div className="bg-neutral-50 rounded-md p-2.5 mb-3 border border-neutral-100">
@@ -198,12 +194,8 @@ export function VersandOrderCard({
           <div className="text-sm text-neutral-600">{order.lieferStrasse}</div>
         )}
         <div className="flex items-baseline gap-1.5 mt-0.5">
-          <span className="font-semibold text-ghl-text text-lg">
-            {order.lieferPlz || "—"}
-          </span>
-          <span className="text-sm text-neutral-600">
-            {order.lieferOrt || "Unbekannt"}
-          </span>
+          <span className="font-semibold text-ghl-text text-lg">{order.lieferPlz || '—'}</span>
+          <span className="text-sm text-neutral-600">{order.lieferOrt || 'Unbekannt'}</span>
         </div>
       </div>
 

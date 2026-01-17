@@ -7,6 +7,9 @@
  * Displays daily order counts for completed orders.
  */
 
+import { format, parseISO } from 'date-fns';
+import { de } from 'date-fns/locale';
+import { Loader2 } from 'lucide-react';
 import {
   LineChart,
   Line,
@@ -16,9 +19,6 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { format, parseISO } from 'date-fns';
-import { de } from 'date-fns/locale';
-import { Loader2 } from 'lucide-react';
 
 export interface VolumeData {
   date: string; // 'yyyy-MM-dd' format
@@ -53,10 +53,7 @@ export function VolumeChart({ data, loading }: VolumeChartProps) {
   return (
     <div style={{ width: '100%', height: 300, minHeight: 300 }}>
       <ResponsiveContainer width="100%" height={300} minHeight={300}>
-        <LineChart
-          data={data}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-        >
+        <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
             dataKey="date"
@@ -69,10 +66,7 @@ export function VolumeChart({ data, loading }: VolumeChartProps) {
             }}
             tick={{ fontSize: 12 }}
           />
-          <YAxis
-            allowDecimals={false}
-            tick={{ fontSize: 12 }}
-          />
+          <YAxis allowDecimals={false} tick={{ fontSize: 12 }} />
           <Tooltip
             content={({ active, payload }) => {
               if (active && payload && payload.length) {
@@ -91,13 +85,7 @@ export function VolumeChart({ data, loading }: VolumeChartProps) {
               return null;
             }}
           />
-          <Line
-            type="monotone"
-            dataKey="count"
-            stroke="#3b82f6"
-            strokeWidth={2}
-            dot={false}
-          />
+          <Line type="monotone" dataKey="count" stroke="#3b82f6" strokeWidth={2} dot={false} />
         </LineChart>
       </ResponsiveContainer>
     </div>

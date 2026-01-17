@@ -1,8 +1,17 @@
+import { format } from 'date-fns';
+import { startOfDay } from 'date-fns';
+import { de } from 'date-fns/locale';
+import { toZonedTime } from 'date-fns-tz';
+import { ArrowLeft, Phone, Mail, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { format } from 'date-fns';
-import { de } from 'date-fns/locale';
+
 import { MainLayout } from '@/components/layout';
+import {
+  OrderStageSelector,
+  IstStatusType,
+  VersandStatusType,
+} from '@/components/orders/OrderStageSelector';
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -12,11 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { ArrowLeft, Phone, Mail, MapPin } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
-import { toZonedTime } from 'date-fns-tz';
-import { startOfDay } from 'date-fns';
-import { OrderStageSelector, IstStatusType, VersandStatusType } from '@/components/orders/OrderStageSelector';
 
 const TIMEZONE = 'Europe/Berlin';
 
@@ -27,14 +32,16 @@ interface OrderDetailPageProps {
 async function getOrder(id: string) {
   const { data: order, error } = await supabase
     .from('Auftrag')
-    .select(`
+    .select(
+      `
       *,
       Kunde(*),
       Arbeitsgang(
         *,
         Maschine(*)
       )
-    `)
+    `
+    )
     .eq('auftragsnummer', id)
     .single();
 
@@ -44,10 +51,11 @@ async function getOrder(id: string) {
   }
 
   // Gesamtzeit berechnen
-  const gesamtZeit = order.Arbeitsgang?.reduce(
-    (sum: number, ag: { zeitMinuten: number | null }) => sum + (ag.zeitMinuten || 0),
-    0
-  ) || 0;
+  const gesamtZeit =
+    order.Arbeitsgang?.reduce(
+      (sum: number, ag: { zeitMinuten: number | null }) => sum + (ag.zeitMinuten || 0),
+      0
+    ) || 0;
 
   // Computed Status berechnen
   const now = toZonedTime(new Date(), TIMEZONE);
@@ -69,31 +77,37 @@ async function getOrder(id: string) {
     computedStatus,
     istStatus: order.istStatus as IstStatusType,
     versandStatus: order.versandStatus as VersandStatusType,
-    kunde: order.Kunde ? {
-      id: order.Kunde.id,
-      name: order.Kunde.name,
-      firma: order.Kunde.firma,
-      telefon: order.Kunde.telefon,
-      mobil: order.Kunde.mobil,
-      email: order.Kunde.email,
-      adresse: order.Kunde.adresse,
-    } : null,
-    arbeitsgaenge: (order.Arbeitsgang || []).map((ag: {
-      id: number;
-      sortOrder: number | null;
-      beschreibung: string | null;
-      zeitMinuten: number | null;
-      Maschine: { name: string; kurzname: string | null } | null;
-    }) => ({
-      id: ag.id,
-      sortOrder: ag.sortOrder,
-      beschreibung: ag.beschreibung,
-      zeitMinuten: ag.zeitMinuten,
-      maschine: ag.Maschine ? {
-        name: ag.Maschine.name,
-        kurzname: ag.Maschine.kurzname,
-      } : null,
-    })),
+    kunde: order.Kunde
+      ? {
+          id: order.Kunde.id,
+          name: order.Kunde.name,
+          firma: order.Kunde.firma,
+          telefon: order.Kunde.telefon,
+          mobil: order.Kunde.mobil,
+          email: order.Kunde.email,
+          adresse: order.Kunde.adresse,
+        }
+      : null,
+    arbeitsgaenge: (order.Arbeitsgang || []).map(
+      (ag: {
+        id: number;
+        sortOrder: number | null;
+        beschreibung: string | null;
+        zeitMinuten: number | null;
+        Maschine: { name: string; kurzname: string | null } | null;
+      }) => ({
+        id: ag.id,
+        sortOrder: ag.sortOrder,
+        beschreibung: ag.beschreibung,
+        zeitMinuten: ag.zeitMinuten,
+        maschine: ag.Maschine
+          ? {
+              name: ag.Maschine.name,
+              kurzname: ag.Maschine.kurzname,
+            }
+          : null,
+      })
+    ),
     gesamtZeit,
   };
 }
@@ -195,9 +209,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
             <div className="space-y-3">
               <div>
                 <p className="text-sm text-neutral-500">Produkttyp</p>
-                <p className="font-medium text-ghl-text">
-                  {order.produkttyp || '–'}
-                </p>
+                <p className="font-medium text-ghl-text">{order.produkttyp || '–'}</p>
               </div>
               {order.produktbeschreibung && (
                 <div>
@@ -211,27 +223,19 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
 
         {/* Termine */}
         <div className="bg-white rounded-lg border border-neutral-200 p-6">
-          <h2 className="text-lg font-semibold text-ghl-text mb-4">
-            Termine (SOLL)
-          </h2>
+          <h2 className="text-lg font-semibold text-ghl-text mb-4">Termine (SOLL)</h2>
           <div className="grid gap-4 sm:grid-cols-3">
             <div>
               <p className="text-sm text-neutral-500">Drucktermin</p>
-              <p className="font-medium text-ghl-text">
-                {formatDate(order.drucktermin)}
-              </p>
+              <p className="font-medium text-ghl-text">{formatDate(order.drucktermin)}</p>
             </div>
             <div>
               <p className="text-sm text-neutral-500">WTV-Termin</p>
-              <p className="font-medium text-ghl-text">
-                {formatDate(order.wtvTermin)}
-              </p>
+              <p className="font-medium text-ghl-text">{formatDate(order.wtvTermin)}</p>
             </div>
             <div>
               <p className="text-sm text-neutral-500">Liefertermin</p>
-              <p className="font-medium text-ghl-text">
-                {formatDate(order.liefertermin)}
-              </p>
+              <p className="font-medium text-ghl-text">{formatDate(order.liefertermin)}</p>
             </div>
           </div>
         </div>
@@ -274,9 +278,7 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
                       </TableCell>
                       <TableCell>{ag.beschreibung || '–'}</TableCell>
                       <TableCell>
-                        {ag.maschine
-                          ? ag.maschine.kurzname || ag.maschine.name
-                          : '–'}
+                        {ag.maschine ? ag.maschine.kurzname || ag.maschine.name : '–'}
                       </TableCell>
                       <TableCell className="text-right">
                         {ag.zeitMinuten ? `${Math.round(ag.zeitMinuten)} min` : '–'}

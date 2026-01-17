@@ -241,6 +241,7 @@ function mapOrderToKPIItem(
     auftragsnummer: string;
     produkttyp: string | null;
     liefertermin: string | null;
+    // Supabase nested relations return unknown structure (single object or array)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Kunde: any;
   },

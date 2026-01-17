@@ -1,8 +1,9 @@
 'use client';
 
+import { Truck } from 'lucide-react';
+
 import { MainLayout } from '@/components/layout';
 import { VersandOrderList } from '@/components/versand';
-import { Truck } from 'lucide-react';
 
 /**
  * Versand Page - Shipping Team Order View

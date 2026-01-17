@@ -1,8 +1,9 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useRef } from "react";
-import { Search, Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Search, Loader2 } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+
+import { cn } from '@/lib/utils';
 
 /**
  * Search result from /api/orders/search endpoint
@@ -29,7 +30,7 @@ interface OrderSearchProps {
  * Large touch targets (48px+ height) for mobile usability.
  */
 export function OrderSearch({ onSelect, className }: OrderSearchProps) {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState<OrderSearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -66,16 +67,14 @@ export function OrderSearch({ onSelect, className }: OrderSearchProps) {
     debounceRef.current = setTimeout(async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(
-          `/api/orders/search?q=${encodeURIComponent(searchTerm)}`
-        );
+        const response = await fetch(`/api/orders/search?q=${encodeURIComponent(searchTerm)}`);
         if (response.ok) {
           const data = await response.json();
           setResults(data.results);
           setShowDropdown(data.results.length > 0);
         }
       } catch (error) {
-        console.error("Search error:", error);
+        console.error('Search error:', error);
         setResults([]);
       } finally {
         setIsLoading(false);
@@ -103,7 +102,7 @@ export function OrderSearch({ onSelect, className }: OrderSearchProps) {
   };
 
   return (
-    <div className={cn("relative", className)}>
+    <div className={cn('relative', className)}>
       {/* Search Input */}
       <div className="relative">
         <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
@@ -132,11 +131,9 @@ export function OrderSearch({ onSelect, className }: OrderSearchProps) {
               onClick={() => handleSelect(order)}
               className="w-full min-h-14 px-4 py-3 text-left hover:bg-ghl-bg active:bg-ghl-bg/80 border-b border-ghl-border last:border-b-0 transition-colors"
             >
-              <div className="font-semibold text-ghl-text">
-                {order.auftragsnummer}
-              </div>
+              <div className="font-semibold text-ghl-text">{order.auftragsnummer}</div>
               <div className="text-sm text-ghl-text-secondary truncate">
-                {order.kunde?.firma || order.kunde?.name || "Unbekannter Kunde"}
+                {order.kunde?.firma || order.kunde?.name || 'Unbekannter Kunde'}
                 {order.produkttyp && ` - ${order.produkttyp}`}
               </div>
             </button>

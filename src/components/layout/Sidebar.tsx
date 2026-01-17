@@ -1,15 +1,16 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+import { cn } from '@/lib/utils';
 
 const navigation = [
-  { name: "Tagesübersicht", href: "/" },
-  { name: "Aufträge", href: "/orders" },
-  { name: "Wochenplan", href: "/calendar" },
-  { name: "Versand", href: "/versand" },
-  { name: "Reports", href: "/reports" },
+  { name: 'Tagesübersicht', href: '/' },
+  { name: 'Aufträge', href: '/orders' },
+  { name: 'Wochenplan', href: '/calendar' },
+  { name: 'Versand', href: '/versand' },
+  { name: 'Reports', href: '/reports' },
 ];
 
 export function Sidebar() {
@@ -34,10 +35,10 @@ export function Sidebar() {
                 <Link
                   href={item.href}
                   className={cn(
-                    "block px-4 py-2.5 rounded-md text-sm font-medium transition-colors",
+                    'block px-4 py-2.5 rounded-md text-sm font-medium transition-colors',
                     isActive
-                      ? "bg-xpress-yellow text-xpress-text"
-                      : "text-neutral-600 hover:bg-neutral-100 hover:text-xpress-text"
+                      ? 'bg-xpress-yellow text-xpress-text'
+                      : 'text-neutral-600 hover:bg-neutral-100 hover:text-xpress-text'
                   )}
                 >
                   {item.name}

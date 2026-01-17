@@ -7,6 +7,9 @@
  * Displays daily counts for incoming and shipped orders.
  */
 
+import { format, parseISO } from 'date-fns';
+import { de } from 'date-fns/locale';
+import { Loader2 } from 'lucide-react';
 import {
   LineChart,
   Line,
@@ -17,9 +20,6 @@ import {
   ResponsiveContainer,
   Legend,
 } from 'recharts';
-import { format, parseISO } from 'date-fns';
-import { de } from 'date-fns/locale';
-import { Loader2 } from 'lucide-react';
 
 export interface ThroughputData {
   date: string; // 'yyyy-MM-dd' format
@@ -55,10 +55,7 @@ export function ThroughputChart({ data, loading }: ThroughputChartProps) {
   return (
     <div style={{ width: '100%', height: 300, minHeight: 300 }}>
       <ResponsiveContainer width="100%" height={300} minHeight={300}>
-        <LineChart
-          data={data}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-        >
+        <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
             dataKey="date"
@@ -71,10 +68,7 @@ export function ThroughputChart({ data, loading }: ThroughputChartProps) {
             }}
             tick={{ fontSize: 12 }}
           />
-          <YAxis
-            allowDecimals={false}
-            tick={{ fontSize: 12 }}
-          />
+          <YAxis allowDecimals={false} tick={{ fontSize: 12 }} />
           <Tooltip
             content={({ active, payload }) => {
               if (active && payload && payload.length) {

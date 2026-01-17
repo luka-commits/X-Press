@@ -1,9 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
+import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
+
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -12,8 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
 
 interface DateRange {
   from: Date;
@@ -188,7 +189,11 @@ export function CompletedOrdersTable({ dateRange }: CompletedOrdersTableProps) {
               <TableCell>{formatDate(order.completedAt)}</TableCell>
               <TableCell className="text-right">
                 <Link href={`/orders/${order.auftragsnummer}`}>
-                  <Button variant="ghost" size="sm" className="text-ghl-blue hover:text-ghl-blue-hover">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-ghl-blue hover:text-ghl-blue-hover"
+                  >
                     Details <ArrowRight className="ml-1 h-4 w-4" />
                   </Button>
                 </Link>

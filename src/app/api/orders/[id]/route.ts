@@ -4,17 +4,15 @@
  * GET /api/orders/[id] - Einzelner Auftrag mit allen Details
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
 import { startOfDay } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
+import { NextRequest, NextResponse } from 'next/server';
+
+import prisma from '@/lib/prisma';
 
 const TIMEZONE = 'Europe/Berlin';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
 
@@ -39,10 +37,7 @@ export async function GET(
     });
 
     if (!order) {
-      return NextResponse.json(
-        { error: 'Auftrag nicht gefunden' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Auftrag nicht gefunden' }, { status: 404 });
     }
 
     // Automatischer Status-Wechsel
@@ -54,10 +49,7 @@ export async function GET(
     }
 
     // Gesamtzeit berechnen
-    const gesamtZeit = order.arbeitsgaenge.reduce(
-      (sum, ag) => sum + (ag.zeitMinuten || 0),
-      0
-    );
+    const gesamtZeit = order.arbeitsgaenge.reduce((sum, ag) => sum + (ag.zeitMinuten || 0), 0);
 
     return NextResponse.json({
       ...order,
@@ -66,9 +58,6 @@ export async function GET(
     });
   } catch (error) {
     console.error('Order Detail API Error:', error);
-    return NextResponse.json(
-      { error: 'Fehler beim Laden des Auftrags' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Fehler beim Laden des Auftrags' }, { status: 500 });
   }
 }

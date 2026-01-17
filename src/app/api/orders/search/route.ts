@@ -6,6 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+
 import prisma from '@/lib/prisma';
 
 interface OrderSearchResult {
@@ -23,7 +24,9 @@ interface SearchResponse {
   results: OrderSearchResult[];
 }
 
-export async function GET(request: NextRequest): Promise<NextResponse<SearchResponse | { error: string }>> {
+export async function GET(
+  request: NextRequest
+): Promise<NextResponse<SearchResponse | { error: string }>> {
   try {
     const { searchParams } = new URL(request.url);
     const q = searchParams.get('q') || '';
@@ -67,9 +70,6 @@ export async function GET(request: NextRequest): Promise<NextResponse<SearchResp
     return NextResponse.json({ results });
   } catch (error) {
     console.error('Search API Error:', error);
-    return NextResponse.json(
-      { error: 'Fehler bei der Suche' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Fehler bei der Suche' }, { status: 500 });
   }
 }

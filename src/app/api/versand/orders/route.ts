@@ -6,11 +6,12 @@
  * Enables shipping team to view orders filtered by delivery date with PLZ sorting for route optimization.
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
 import { startOfDay, endOfDay, startOfWeek, endOfWeek } from 'date-fns';
 import { toZonedTime } from 'date-fns-tz';
+import { NextRequest, NextResponse } from 'next/server';
+
 import { getCoordinatesForPlz } from '@/lib/geocoding/plz-lookup';
+import prisma from '@/lib/prisma';
 
 const TIMEZONE = 'Europe/Berlin';
 
@@ -128,9 +129,6 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Versand Orders API Error:', error);
-    return NextResponse.json(
-      { error: 'Fehler beim Laden der Versand-Aufträge' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Fehler beim Laden der Versand-Aufträge' }, { status: 500 });
   }
 }

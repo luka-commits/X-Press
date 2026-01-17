@@ -1,14 +1,15 @@
-"use client";
+'use client';
 
-import { useState, useRef, useEffect } from "react";
-import { Loader2, AlertTriangle } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Loader2, AlertTriangle } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+
+import { cn } from '@/lib/utils';
 
 /**
  * Status type matching IstStatus enum from Prisma schema.
  * Used for type-safe status updates.
  */
-export type IstStatusType = "in_produktion" | "fertig" | "problem";
+export type IstStatusType = 'in_produktion' | 'fertig' | 'problem';
 
 interface StatusButtonsProps {
   orderId: string;
@@ -43,7 +44,7 @@ export function StatusButtons({
   className,
 }: StatusButtonsProps) {
   const isLoading = loadingStatus !== null;
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState('');
   const [pendingStatus, setPendingStatus] = useState<IstStatusType | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [shakeTextarea, setShakeTextarea] = useState(false);
@@ -52,7 +53,7 @@ export function StatusButtons({
   // Focus and expand textarea when "Problem" is clicked without comment
   // Also trigger shake animation for better visual feedback
   useEffect(() => {
-    if (pendingStatus === "problem" && validationError) {
+    if (pendingStatus === 'problem' && validationError) {
       textareaRef.current?.focus();
       // Trigger shake animation
       setShakeTextarea(true);
@@ -65,7 +66,7 @@ export function StatusButtons({
   useEffect(() => {
     if (loadingStatus === null && pendingStatus !== null) {
       // Loading finished, clear everything
-      setComment("");
+      setComment('');
       setPendingStatus(null);
       setValidationError(null);
     }
@@ -78,9 +79,9 @@ export function StatusButtons({
     setValidationError(null);
 
     // Require comment for "Problem" status
-    if (status === "problem" && !comment.trim()) {
-      setPendingStatus("problem");
-      setValidationError("Bitte beschreiben Sie das Problem");
+    if (status === 'problem' && !comment.trim()) {
+      setPendingStatus('problem');
+      setValidationError('Bitte beschreiben Sie das Problem');
       return;
     }
 
@@ -88,74 +89,74 @@ export function StatusButtons({
     await onStatusChange(status, comment.trim() || undefined);
   };
 
-  const isProblemPending = pendingStatus === "problem" && validationError;
+  const isProblemPending = pendingStatus === 'problem' && validationError;
 
   return (
     <div
-      className={cn("flex flex-col gap-3", className)}
+      className={cn('flex flex-col gap-3', className)}
       role="group"
       aria-label={`Status-Update für Auftrag ${orderId}`}
     >
       {/* In Produktion - Blue */}
       <button
-        onClick={() => handleClick("in_produktion")}
+        onClick={() => handleClick('in_produktion')}
         disabled={disabled || isLoading}
         className={cn(
-          "min-h-14 w-full rounded-lg border font-semibold text-white transition-colors",
-          "bg-blue-500 border-blue-600 hover:bg-blue-600 active:bg-blue-700",
-          "disabled:opacity-50 disabled:cursor-not-allowed",
-          "flex items-center justify-center gap-2"
+          'min-h-14 w-full rounded-lg border font-semibold text-white transition-colors',
+          'bg-blue-500 border-blue-600 hover:bg-blue-600 active:bg-blue-700',
+          'disabled:opacity-50 disabled:cursor-not-allowed',
+          'flex items-center justify-center gap-2'
         )}
       >
-        {loadingStatus === "in_produktion" ? (
+        {loadingStatus === 'in_produktion' ? (
           <>
             <Loader2 className="w-5 h-5 animate-spin" />
             <span>Wird aktualisiert...</span>
           </>
         ) : (
-          "In Produktion"
+          'In Produktion'
         )}
       </button>
 
       {/* Fertig - Green */}
       <button
-        onClick={() => handleClick("fertig")}
+        onClick={() => handleClick('fertig')}
         disabled={disabled || isLoading}
         className={cn(
-          "min-h-14 w-full rounded-lg border font-semibold text-white transition-colors",
-          "bg-green-500 border-green-600 hover:bg-green-600 active:bg-green-700",
-          "disabled:opacity-50 disabled:cursor-not-allowed",
-          "flex items-center justify-center gap-2"
+          'min-h-14 w-full rounded-lg border font-semibold text-white transition-colors',
+          'bg-green-500 border-green-600 hover:bg-green-600 active:bg-green-700',
+          'disabled:opacity-50 disabled:cursor-not-allowed',
+          'flex items-center justify-center gap-2'
         )}
       >
-        {loadingStatus === "fertig" ? (
+        {loadingStatus === 'fertig' ? (
           <>
             <Loader2 className="w-5 h-5 animate-spin" />
             <span>Wird aktualisiert...</span>
           </>
         ) : (
-          "Fertig"
+          'Fertig'
         )}
       </button>
 
       {/* Problem - Red */}
       <button
-        onClick={() => handleClick("problem")}
+        onClick={() => handleClick('problem')}
         disabled={disabled || isLoading}
         className={cn(
-          "min-h-14 w-full rounded-lg border font-semibold text-white transition-colors",
-          "bg-red-500 border-red-600 hover:bg-red-600 active:bg-red-700",
-          "disabled:opacity-50 disabled:cursor-not-allowed",
-          "flex items-center justify-center gap-2"
+          'min-h-14 w-full rounded-lg border font-semibold text-white transition-colors',
+          'bg-red-500 border-red-600 hover:bg-red-600 active:bg-red-700',
+          'disabled:opacity-50 disabled:cursor-not-allowed',
+          'flex items-center justify-center gap-2'
         )}
       >
-        {loadingStatus === "problem" ? (
+        {loadingStatus === 'problem' ? (
           <>
             <Loader2 className="w-5 h-5 animate-spin" />
             <span>Wird aktualisiert...</span>
           </>
         ) : (
-          "Problem"
+          'Problem'
         )}
       </button>
 
@@ -187,16 +188,20 @@ export function StatusButtons({
             // Clear validation error when user starts typing
             if (validationError) setValidationError(null);
           }}
-          placeholder={isProblemPending ? "Was ist das Problem? Bitte hier beschreiben..." : "Kommentar (optional)"}
+          placeholder={
+            isProblemPending
+              ? 'Was ist das Problem? Bitte hier beschreiben...'
+              : 'Kommentar (optional)'
+          }
           disabled={disabled || isLoading}
           rows={isProblemPending ? 3 : 2}
           className={cn(
-            "w-full rounded-lg border px-4 py-3 text-sm resize-none transition-all",
-            "bg-ghl-card border-ghl-border text-white placeholder:text-gray-400",
-            "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",
-            "disabled:opacity-50 disabled:cursor-not-allowed",
-            isProblemPending && "border-red-500 ring-2 ring-red-500/50 placeholder:text-red-400/70",
-            shakeTextarea && "animate-shake"
+            'w-full rounded-lg border px-4 py-3 text-sm resize-none transition-all',
+            'bg-ghl-card border-ghl-border text-white placeholder:text-gray-400',
+            'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+            'disabled:opacity-50 disabled:cursor-not-allowed',
+            isProblemPending && 'border-red-500 ring-2 ring-red-500/50 placeholder:text-red-400/70',
+            shakeTextarea && 'animate-shake'
           )}
         />
       </div>

@@ -1,5 +1,6 @@
-import { supabase } from '@/lib/supabase';
 import { NextResponse } from 'next/server';
+
+import { supabase } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,11 +27,12 @@ export async function GET() {
     },
     count,
     error: error?.message || null,
-    orders: data?.map(o => ({
-      auftragsnummer: o.auftragsnummer,
-      produkttyp: o.produkttyp,
-      status: o.status,
-      kunde: o.Kunde,
-    })) || [],
+    orders:
+      data?.map((o) => ({
+        auftragsnummer: o.auftragsnummer,
+        produkttyp: o.produkttyp,
+        status: o.status,
+        kunde: o.Kunde,
+      })) || [],
   });
 }

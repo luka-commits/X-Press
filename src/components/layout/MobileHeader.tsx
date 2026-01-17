@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 interface MobileHeaderProps {
   title?: string;
   showBack?: boolean;
 }
 
-export function MobileHeader({ title = "XOS Status", showBack = false }: MobileHeaderProps) {
+export function MobileHeader({ title = 'XOS Status', showBack = false }: MobileHeaderProps) {
   const router = useRouter();
 
   const handleBack = () => {

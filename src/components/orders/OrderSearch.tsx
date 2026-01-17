@@ -1,9 +1,10 @@
 'use client';
 
+import { Search } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useState, useEffect } from 'react';
+
 import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
 
 export function OrderSearch() {
   const router = useRouter();

@@ -7,6 +7,7 @@
  */
 
 import { BarChart, Bar, XAxis, YAxis, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+
 import { MachineCapacity } from '@/lib/dashboard-queries';
 
 interface CapacityChartProps {
@@ -15,9 +16,9 @@ interface CapacityChartProps {
 
 // Ampel-Farben
 const COLORS = {
-  green: '#22c55e',  // <70%
+  green: '#22c55e', // <70%
   yellow: '#eab308', // 70-90%
-  red: '#ef4444',    // >90%
+  red: '#ef4444', // >90%
 };
 
 function getBarColor(auslastung: number): string {
@@ -31,9 +32,7 @@ export function CapacityChart({ machines }: CapacityChartProps) {
     return (
       <div className="bg-white rounded-lg p-6 border border-neutral-200">
         <h2 className="text-lg font-semibold text-ghl-text mb-4">Maschinen-Auslastung</h2>
-        <p className="text-neutral-500 text-center py-8">
-          Keine Leitmaschinen konfiguriert
-        </p>
+        <p className="text-neutral-500 text-center py-8">Keine Leitmaschinen konfiguriert</p>
       </div>
     );
   }
@@ -49,9 +48,7 @@ export function CapacityChart({ machines }: CapacityChartProps) {
 
   return (
     <div className="bg-white rounded-lg p-6 border border-ghl-border shadow-sm">
-      <h2 className="text-lg font-semibold text-ghl-text mb-4">
-        Maschinen-Auslastung (Heute)
-      </h2>
+      <h2 className="text-lg font-semibold text-ghl-text mb-4">Maschinen-Auslastung (Heute)</h2>
       <div style={{ width: '100%', height: 256, minHeight: 256 }}>
         <ResponsiveContainer width="100%" height={256} minHeight={256}>
           <BarChart
@@ -59,17 +56,8 @@ export function CapacityChart({ machines }: CapacityChartProps) {
             layout="vertical"
             margin={{ top: 5, right: 30, left: 100, bottom: 5 }}
           >
-            <XAxis
-              type="number"
-              domain={[0, 100]}
-              tickFormatter={(value) => `${value}%`}
-            />
-            <YAxis
-              type="category"
-              dataKey="name"
-              width={90}
-              tick={{ fontSize: 12 }}
-            />
+            <XAxis type="number" domain={[0, 100]} tickFormatter={(value) => `${value}%`} />
+            <YAxis type="category" dataKey="name" width={90} tick={{ fontSize: 12 }} />
             <Tooltip
               content={({ active, payload }) => {
                 if (active && payload && payload.length) {
@@ -80,7 +68,10 @@ export function CapacityChart({ machines }: CapacityChartProps) {
                       <p className="text-sm text-neutral-600">
                         {data.gesamtZeit} / {data.kapazitaet} min
                       </p>
-                      <p className="text-sm font-medium" style={{ color: getBarColor(data.auslastung) }}>
+                      <p
+                        className="text-sm font-medium"
+                        style={{ color: getBarColor(data.auslastung) }}
+                      >
                         {data.auslastung}% Auslastung
                       </p>
                     </div>

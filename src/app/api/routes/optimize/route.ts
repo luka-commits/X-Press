@@ -1,9 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
+
 import type {
   OptimizeRouteRequest,
   OptimizeRouteResponse,
   OptimizeRouteError,
-} from "@/types/route";
+} from '@/types/route';
 
 /**
  * Response shape from Google Routes API
@@ -41,9 +42,9 @@ export async function POST(request: NextRequest) {
 
     // Check for API key
     if (!process.env.GOOGLE_ROUTES_API_KEY) {
-      console.error("Route optimization: GOOGLE_ROUTES_API_KEY not configured");
+      console.error('Route optimization: GOOGLE_ROUTES_API_KEY not configured');
       const errorResponse: OptimizeRouteError = {
-        error: "Routes API key not configured",
+        error: 'Routes API key not configured',
       };
       return NextResponse.json(errorResponse, { status: 500 });
     }
@@ -51,7 +52,7 @@ export async function POST(request: NextRequest) {
     // Validate waypoints
     if (!waypoints || waypoints.length < 1) {
       const errorResponse: OptimizeRouteError = {
-        error: "At least one waypoint is required",
+        error: 'At least one waypoint is required',
       };
       return NextResponse.json(errorResponse, { status: 400 });
     }
@@ -62,18 +63,18 @@ export async function POST(request: NextRequest) {
 
     // Call Google Routes API
     const routesResponse = await fetch(
-      "https://routes.googleapis.com/directions/v2:computeRoutes",
+      'https://routes.googleapis.com/directions/v2:computeRoutes',
       {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          "X-Goog-Api-Key": process.env.GOOGLE_ROUTES_API_KEY,
-          "X-Goog-FieldMask": [
-            "routes.duration",
-            "routes.distanceMeters",
-            "routes.polyline.encodedPolyline",
-            "routes.optimizedIntermediateWaypointIndex",
-          ].join(","),
+          'Content-Type': 'application/json',
+          'X-Goog-Api-Key': process.env.GOOGLE_ROUTES_API_KEY,
+          'X-Goog-FieldMask': [
+            'routes.duration',
+            'routes.distanceMeters',
+            'routes.polyline.encodedPolyline',
+            'routes.optimizedIntermediateWaypointIndex',
+          ].join(','),
         },
         body: JSON.stringify({
           origin: {
@@ -100,10 +101,10 @@ export async function POST(request: NextRequest) {
               },
             },
           })),
-          travelMode: "DRIVE",
+          travelMode: 'DRIVE',
           optimizeWaypointOrder: true,
-          languageCode: "de-DE",
-          units: "METRIC",
+          languageCode: 'de-DE',
+          units: 'METRIC',
         }),
       }
     );
@@ -111,9 +112,9 @@ export async function POST(request: NextRequest) {
     // Handle Google Routes API error
     if (!routesResponse.ok) {
       const errorData = await routesResponse.json();
-      console.error("Routes API error:", errorData);
+      console.error('Routes API error:', errorData);
       const errorResponse: OptimizeRouteError = {
-        error: "Route optimization failed",
+        error: 'Route optimization failed',
         details: errorData,
       };
       return NextResponse.json(errorResponse, { status: routesResponse.status });
@@ -123,9 +124,9 @@ export async function POST(request: NextRequest) {
 
     // Check for API error in response body
     if (data.error) {
-      console.error("Routes API returned error:", data.error);
+      console.error('Routes API returned error:', data.error);
       const errorResponse: OptimizeRouteError = {
-        error: data.error.message || "Route optimization failed",
+        error: data.error.message || 'Route optimization failed',
         details: data.error,
       };
       return NextResponse.json(errorResponse, { status: data.error.code || 500 });
@@ -133,9 +134,9 @@ export async function POST(request: NextRequest) {
 
     // Validate response has routes
     if (!data.routes || data.routes.length === 0) {
-      console.error("Routes API returned no routes");
+      console.error('Routes API returned no routes');
       const errorResponse: OptimizeRouteError = {
-        error: "No routes found",
+        error: 'No routes found',
       };
       return NextResponse.json(errorResponse, { status: 404 });
     }
@@ -157,9 +158,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error("Route optimization error:", error);
+    console.error('Route optimization error:', error);
     const errorResponse: OptimizeRouteError = {
-      error: "Internal server error",
+      error: 'Internal server error',
       details: error instanceof Error ? error.message : undefined,
     };
     return NextResponse.json(errorResponse, { status: 500 });

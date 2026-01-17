@@ -11,9 +11,10 @@
  * within the specified date range, grouped by day.
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
 import { format, parseISO, isValid } from 'date-fns';
+import { NextRequest, NextResponse } from 'next/server';
+
+import { supabase } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
 
@@ -58,10 +59,7 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       console.error('Analytics API Error:', error);
-      return NextResponse.json(
-        { error: 'Fehler beim Laden der Analysedaten' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'Fehler beim Laden der Analysedaten' }, { status: 500 });
     }
 
     // Group orders by day using statusUpdatedAt
@@ -89,9 +87,6 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Analytics API Error:', error);
-    return NextResponse.json(
-      { error: 'Fehler beim Laden der Analysedaten' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Fehler beim Laden der Analysedaten' }, { status: 500 });
   }
 }

@@ -7,8 +7,9 @@
  * Includes DateRangePicker for selecting time period and VolumeChart for visualization.
  */
 
-import { useState, useEffect, useCallback } from 'react';
 import { subDays, format, startOfDay, endOfDay } from 'date-fns';
+import { useState, useEffect, useCallback } from 'react';
+
 import { DateRangePicker, type DateRange } from './DateRangePicker';
 import { VolumeChart, type VolumeData } from './VolumeChart';
 
@@ -62,10 +63,7 @@ export function AnalyticsView() {
     <div className="space-y-6">
       {/* Header row with DateRangePicker */}
       <div className="flex justify-end">
-        <DateRangePicker
-          value={dateRange}
-          onChange={handleDateRangeChange}
-        />
+        <DateRangePicker value={dateRange} onChange={handleDateRangeChange} />
       </div>
 
       {/* Error state */}

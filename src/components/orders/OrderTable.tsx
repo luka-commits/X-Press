@@ -1,9 +1,12 @@
 'use client';
 
-import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
+import { ChevronUp, ChevronDown, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -12,8 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { ChevronUp, ChevronDown, ArrowRight } from 'lucide-react';
 
 interface Kunde {
   id: number;
@@ -197,7 +198,11 @@ export function OrderTable({ orders, total, page, totalPages }: OrderTableProps)
                 <TableCell>{getPipelineBadge(order)}</TableCell>
                 <TableCell className="text-right">
                   <Link href={`/orders/${order.auftragsnummer}`}>
-                    <Button variant="ghost" size="sm" className="text-ghl-blue hover:text-ghl-blue-hover">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-ghl-blue hover:text-ghl-blue-hover"
+                    >
                       Details <ArrowRight className="ml-1 h-4 w-4" />
                     </Button>
                   </Link>

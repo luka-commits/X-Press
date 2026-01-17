@@ -4,9 +4,10 @@
  * Zeigt Aufträge mit geplantem Liefertermin ≤ 2 Tage (SOLL-Daten)
  */
 
-import Link from 'next/link';
 import { format } from 'date-fns';
 import { de } from 'date-fns/locale';
+import Link from 'next/link';
+
 import { CriticalOrder } from '@/lib/dashboard-queries';
 import { cn } from '@/lib/utils';
 
@@ -29,25 +30,22 @@ export function CriticalOrdersList({ orders }: CriticalOrdersListProps) {
 
   return (
     <div className="bg-white rounded-lg p-6 border border-ghl-border shadow-sm">
-      <h2 className="text-lg font-semibold text-ghl-text mb-4">
-        Bald fällig ({orders.length})
-      </h2>
+      <h2 className="text-lg font-semibold text-ghl-text mb-4">Bald fällig ({orders.length})</h2>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-ghl-border">
               <th className="text-left py-2 px-3 font-medium text-ghl-text-secondary">Auftrag</th>
               <th className="text-left py-2 px-3 font-medium text-ghl-text-secondary">Kunde</th>
-              <th className="text-left py-2 px-3 font-medium text-ghl-text-secondary">Liefertermin</th>
+              <th className="text-left py-2 px-3 font-medium text-ghl-text-secondary">
+                Liefertermin
+              </th>
               <th className="text-right py-2 px-3 font-medium text-ghl-text-secondary">Tage</th>
             </tr>
           </thead>
           <tbody>
             {orders.map((order) => (
-              <tr
-                key={order.auftragsnummer}
-                className="border-b border-gray-100 hover:bg-gray-50"
-              >
+              <tr key={order.auftragsnummer} className="border-b border-gray-100 hover:bg-gray-50">
                 <td className="py-2 px-3">
                   <Link
                     href={`/orders/${order.auftragsnummer}`}

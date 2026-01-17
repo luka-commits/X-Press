@@ -8,12 +8,13 @@
  * plus a PLZ distribution chart for regional analysis.
  */
 
-import { useState, useEffect, useCallback } from 'react';
 import { subDays, format, startOfDay, endOfDay } from 'date-fns';
-import { DateRangePicker, type DateRange } from './DateRangePicker';
-import { PlzChart, type PlzData } from './PlzChart';
 import { CheckCircle2, AlertTriangle, Package } from 'lucide-react';
 import { Loader2 } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+
+import { DateRangePicker, type DateRange } from './DateRangePicker';
+import { PlzChart, type PlzData } from './PlzChart';
 
 interface DeliveryMetrics {
   total: number;
@@ -81,10 +82,7 @@ export function VersandView() {
     <div className="space-y-6">
       {/* Header row with DateRangePicker */}
       <div className="flex justify-end">
-        <DateRangePicker
-          value={dateRange}
-          onChange={handleDateRangeChange}
-        />
+        <DateRangePicker value={dateRange} onChange={handleDateRangeChange} />
       </div>
 
       {/* Error state */}
@@ -102,7 +100,11 @@ export function VersandView() {
           icon={<CheckCircle2 className="w-5 h-5 text-green-600" />}
           loading={loading}
           value={data ? `${data.deliveryMetrics.onTimePercent}%` : '-'}
-          subtext={data ? `${data.deliveryMetrics.onTime} von ${data.deliveryMetrics.onTime + data.deliveryMetrics.late} punktlich` : undefined}
+          subtext={
+            data
+              ? `${data.deliveryMetrics.onTime} von ${data.deliveryMetrics.onTime + data.deliveryMetrics.late} punktlich`
+              : undefined
+          }
           valueColor="text-green-600"
         />
 
@@ -112,9 +114,11 @@ export function VersandView() {
           icon={<AlertTriangle className="w-5 h-5 text-amber-600" />}
           loading={loading}
           value={data ? data.deliveryMetrics.late.toString() : '-'}
-          subtext={data && data.deliveryMetrics.avgDelayDays > 0
-            ? `Ø ${data.deliveryMetrics.avgDelayDays} Tage verspatet`
-            : undefined}
+          subtext={
+            data && data.deliveryMetrics.avgDelayDays > 0
+              ? `Ø ${data.deliveryMetrics.avgDelayDays} Tage verspatet`
+              : undefined
+          }
           valueColor="text-amber-600"
         />
 
@@ -148,7 +152,14 @@ interface KpiCardProps {
   valueColor?: string;
 }
 
-function KpiCard({ title, icon, loading, value, subtext, valueColor = 'text-ghl-text' }: KpiCardProps) {
+function KpiCard({
+  title,
+  icon,
+  loading,
+  value,
+  subtext,
+  valueColor = 'text-ghl-text',
+}: KpiCardProps) {
   return (
     <div className="bg-white rounded-lg p-6 border border-neutral-200">
       <div className="flex items-center gap-2 mb-3">
@@ -163,9 +174,7 @@ function KpiCard({ title, icon, loading, value, subtext, valueColor = 'text-ghl-
       ) : (
         <>
           <p className={`text-3xl font-bold ${valueColor}`}>{value}</p>
-          {subtext && (
-            <p className="text-sm text-neutral-500 mt-1">{subtext}</p>
-          )}
+          {subtext && <p className="text-sm text-neutral-500 mt-1">{subtext}</p>}
         </>
       )}
     </div>
