@@ -42,11 +42,11 @@ const mockChainBuilder = () => {
   });
 
   // Return value when promise is awaited (used by default)
-  builder._resolveValue = { data: [], count: 0, error: null };
+  (builder as Record<string, unknown>)._resolveValue = { data: [], count: 0, error: null };
 
   // Make it thenable (promise-like)
   builder.then = jest.fn((resolve) => {
-    return Promise.resolve(builder._resolveValue).then(resolve);
+    return Promise.resolve((builder as Record<string, unknown>)._resolveValue).then(resolve);
   });
 
   return builder;
@@ -305,7 +305,7 @@ describe('GET /api/reports/pipeline', () => {
   describe('Error Handling', () => {
     it('returns 500 on database errors', async () => {
       // Override the mock to throw an error
-      mockSupabase.from = jest.fn(() => {
+      (mockSupabase as { from: jest.Mock }).from = jest.fn(() => {
         throw new Error('Database connection failed');
       });
 
@@ -327,7 +327,7 @@ describe('GET /api/reports/pipeline', () => {
         );
       });
 
-      mockSupabase.from = jest.fn(() => errorBuilder);
+      (mockSupabase as { from: jest.Mock }).from = jest.fn(() => errorBuilder);
 
       const request = createRequest({ from: '2026-01-10', to: '2026-01-17' });
 
