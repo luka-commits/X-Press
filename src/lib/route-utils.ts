@@ -2,17 +2,15 @@
  * Route URL utilities for Google Maps navigation link generation.
  *
  * Google Maps URLs API format:
- * https://www.google.com/maps/dir/?api=1&destination={lat},{lng}&waypoints={lat},{lng}|{lat},{lng}|...&travelmode=driving&dir_action=navigate
+ * https://www.google.com/maps/dir/?api=1&origin={lat},{lng}&destination={lat},{lng}&waypoints={lat},{lng}|{lat},{lng}|...&travelmode=driving&dir_action=navigate
  *
  * Key parameters:
  * - api=1: Required for Maps URLs API
+ * - origin: Start point (X-Press headquarters)
  * - destination: Final stop (X-Press for return trip)
  * - waypoints: All delivery stops, pipe-separated coordinates
  * - travelmode: driving (for delivery routes)
  * - dir_action: navigate (starts turn-by-turn navigation immediately)
- *
- * Note: Origin is omitted to use the device's current location,
- * which enables instant navigation when the driver is already at X-Press.
  *
  * @see https://developers.google.com/maps/documentation/urls/get-started
  */
@@ -27,7 +25,7 @@ const MAX_URL_LENGTH = 2048;
  * Generates a Google Maps navigation URL for a multi-stop delivery route.
  *
  * The URL:
- * - Omits origin to use device's current location (driver already at X-Press)
+ * - Sets X-Press as origin (start point)
  * - Sets X-Press as destination (return trip)
  * - Includes all delivery stops as waypoints in the given order
  * - Uses driving mode with immediate navigation launch
@@ -40,7 +38,7 @@ const MAX_URL_LENGTH = 2048;
  *   { lieferLat: 52.5200, lieferLng: 13.4050 },
  *   { lieferLat: 52.4800, lieferLng: 13.3900 }
  * ]);
- * // https://www.google.com/maps/dir/?api=1&destination=52.404600,13.371800&waypoints=52.520000,13.405000|52.480000,13.390000&travelmode=driving&dir_action=navigate
+ * // https://www.google.com/maps/dir/?api=1&origin=52.404600,13.371800&destination=52.404600,13.371800&waypoints=52.520000,13.405000|52.480000,13.390000&travelmode=driving&dir_action=navigate
  */
 export function generateGoogleMapsUrl(
   orders: Array<{ lieferLat: number; lieferLng: number }>
@@ -48,8 +46,8 @@ export function generateGoogleMapsUrl(
   // Round coordinates to 6 decimal places (11cm precision, sufficient for delivery)
   const round = (n: number) => n.toFixed(6);
 
-  // X-Press as destination (return trip)
-  const destination = `${round(XPRESS_LOCATION.lat)},${round(XPRESS_LOCATION.lng)}`;
+  // X-Press as origin (start) and destination (return trip)
+  const xpressCoords = `${round(XPRESS_LOCATION.lat)},${round(XPRESS_LOCATION.lng)}`;
 
   // All delivery stops as waypoints (in optimized order)
   const waypoints = orders
@@ -59,7 +57,8 @@ export function generateGoogleMapsUrl(
   // Build URL using URL API for proper encoding
   const url = new URL("https://www.google.com/maps/dir/");
   url.searchParams.set("api", "1");
-  url.searchParams.set("destination", destination);
+  url.searchParams.set("origin", xpressCoords);
+  url.searchParams.set("destination", xpressCoords);
   url.searchParams.set("waypoints", waypoints);
   url.searchParams.set("travelmode", "driving");
   url.searchParams.set("dir_action", "navigate");

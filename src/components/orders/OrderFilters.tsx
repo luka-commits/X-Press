@@ -20,9 +20,7 @@ export function OrderFilters({ produkttypen, sachbearbeiter }: OrderFiltersProps
   const searchParams = useSearchParams();
 
   const currentDeadline = searchParams.get('deadline') || 'all';
-  const currentStatus = searchParams.get('status') || 'all';
-  const currentIstStatus = searchParams.get('istStatus') || 'all';
-  const currentVersandStatus = searchParams.get('versandStatus') || 'all';
+  const currentPipeline = searchParams.get('pipeline') || 'all';
   const currentProdukttyp = searchParams.get('produkttyp') || '';
   const currentSachbearbeiter = searchParams.get('sachbearbeiter') || '';
 
@@ -44,24 +42,14 @@ export function OrderFilters({ produkttypen, sachbearbeiter }: OrderFiltersProps
     { value: 'overdue', label: 'Überfällig' },
   ];
 
-  const statusOptions = [
+  const pipelineOptions = [
     { value: 'all', label: 'Alle Status' },
-    { value: 'aktiv', label: 'Aktiv' },
-    { value: 'abgeschlossen', label: 'Abgeschlossen' },
-  ];
-
-  const istStatusOptions = [
-    { value: 'all', label: 'Alle IST-Status' },
-    { value: 'fertig', label: 'Fertig' },
-    { value: 'in_produktion', label: 'In Produktion' },
-    { value: 'problem', label: 'Problem' },
-  ];
-
-  const versandStatusOptions = [
-    { value: 'all', label: 'Alle Versand-Status' },
     { value: 'offen', label: 'Offen' },
+    { value: 'in_produktion', label: 'In Produktion' },
+    { value: 'fertig', label: 'Fertig' },
     { value: 'versandbereit', label: 'Versandbereit' },
     { value: 'versendet', label: 'Versendet' },
+    { value: 'problem', label: 'Problem' },
   ];
 
   const clearFilters = () => {
@@ -73,9 +61,7 @@ export function OrderFilters({ produkttypen, sachbearbeiter }: OrderFiltersProps
 
   const hasActiveFilters =
     currentDeadline !== 'all' ||
-    currentStatus !== 'all' ||
-    currentIstStatus !== 'all' ||
-    currentVersandStatus !== 'all' ||
+    currentPipeline !== 'all' ||
     currentProdukttyp !== '' ||
     currentSachbearbeiter !== '';
 
@@ -98,50 +84,16 @@ export function OrderFilters({ produkttypen, sachbearbeiter }: OrderFiltersProps
         </SelectContent>
       </Select>
 
-      {/* Status Dropdown */}
+      {/* Pipeline Dropdown */}
       <Select
-        value={currentStatus}
-        onValueChange={(value) => updateFilter('status', value)}
+        value={currentPipeline}
+        onValueChange={(value) => updateFilter('pipeline', value)}
       >
-        <SelectTrigger className="w-[150px] bg-white">
-          <SelectValue placeholder="Status" />
+        <SelectTrigger className="w-[160px] bg-white">
+          <SelectValue placeholder="Pipeline" />
         </SelectTrigger>
         <SelectContent>
-          {statusOptions.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-
-      {/* IST-Status Dropdown */}
-      <Select
-        value={currentIstStatus}
-        onValueChange={(value) => updateFilter('istStatus', value)}
-      >
-        <SelectTrigger className="w-[150px] bg-white">
-          <SelectValue placeholder="IST-Status" />
-        </SelectTrigger>
-        <SelectContent>
-          {istStatusOptions.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-
-      {/* Versand-Status Dropdown */}
-      <Select
-        value={currentVersandStatus}
-        onValueChange={(value) => updateFilter('versandStatus', value)}
-      >
-        <SelectTrigger className="w-[170px] bg-white">
-          <SelectValue placeholder="Versand-Status" />
-        </SelectTrigger>
-        <SelectContent>
-          {versandStatusOptions.map((option) => (
+          {pipelineOptions.map((option) => (
             <SelectItem key={option.value} value={option.value}>
               {option.label}
             </SelectItem>

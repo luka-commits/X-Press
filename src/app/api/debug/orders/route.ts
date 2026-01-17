@@ -1,8 +1,17 @@
 import { supabase } from '@/lib/supabase';
+import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
+  // Only allow in development mode to prevent information disclosure
+  if (process.env.NODE_ENV !== 'development') {
+    return NextResponse.json(
+      { error: 'Debug endpoint only available in development' },
+      { status: 403 }
+    );
+  }
+
   // Exakt die gleiche Query wie in orders/page.tsx
   const { data, count, error } = await supabase
     .from('Auftrag')

@@ -11,20 +11,45 @@ import { toZonedTime } from 'date-fns-tz';
 
 const TIMEZONE = 'Europe/Berlin';
 
+// Allowed sort columns to prevent SQL injection via dynamic orderBy
+const ALLOWED_SORT_COLUMNS = [
+  'liefertermin',
+  'auftragsnummer',
+  'produkttyp',
+  'status',
+  'kunde',
+  'prioritaet',
+  'auflage',
+  'drucktermin',
+  'createdAt',
+];
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
 
-    // Query-Parameter
+    // Query-Parameter with validation
     const search = searchParams.get('search') || '';
     const status = searchParams.get('status') || 'all';
     const deadline = searchParams.get('deadline') || 'all';
     const produkttyp = searchParams.get('produkttyp') || '';
     const sachbearbeiter = searchParams.get('sachbearbeiter') || '';
-    const page = parseInt(searchParams.get('page') || '1', 10);
-    const limit = parseInt(searchParams.get('limit') || '25', 10);
-    const sortBy = searchParams.get('sortBy') || 'liefertermin';
-    const sortOrder = (searchParams.get('sortOrder') || 'asc') as 'asc' | 'desc';
+
+    // Validate page (must be positive integer)
+    const pageParam = parseInt(searchParams.get('page') || '1', 10);
+    const page = isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
+
+    // Validate limit (1-100 to prevent excessive queries)
+    const limitParam = parseInt(searchParams.get('limit') || '25', 10);
+    const limit = isNaN(limitParam) ? 25 : Math.min(Math.max(limitParam, 1), 100);
+
+    // Validate sortBy (must be in allowed list)
+    const sortByParam = searchParams.get('sortBy') || 'liefertermin';
+    const sortBy = ALLOWED_SORT_COLUMNS.includes(sortByParam) ? sortByParam : 'liefertermin';
+
+    // Validate sortOrder (must be 'asc' or 'desc')
+    const sortOrderParam = searchParams.get('sortOrder') || 'asc';
+    const sortOrder = (sortOrderParam === 'desc' ? 'desc' : 'asc') as 'asc' | 'desc';
 
     // Basis-Where-Bedingungen
     const where: Record<string, unknown> = {};

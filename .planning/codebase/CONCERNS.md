@@ -119,20 +119,23 @@
 
 ## Summary Table
 
-| Issue | Severity | File | Fix Effort |
-|-------|----------|------|------------|
-| Exposed credentials in .env | CRITICAL | `.env` | High (git history rewrite) |
-| Debug endpoint exposed | HIGH | `api/debug/orders/route.ts` | Low (delete or guard) |
-| Missing file size check | HIGH | `api/import/route.ts` | Low |
-| Duplicate filter logic | MEDIUM | `orders/page.tsx`, `api/orders/route.ts` | Medium |
-| N+1 queries | MEDIUM | `import-service.ts` | Low |
-| No test coverage | MEDIUM | All | High (setup + write tests) |
-| Type suppressions | MEDIUM | `dashboard-queries.ts`, `calendar-queries.ts` | Medium |
-| No input validation | MEDIUM | `api/orders/route.ts` | Low (add Zod) |
-| Console.logs in production | LOW | Multiple | Low |
-| Incomplete .env.example | LOW | `.env.example` | Trivial |
+| Issue | Severity | File | Fix Effort | Status |
+|-------|----------|------|------------|--------|
+| Exposed credentials in .env | CRITICAL | `.env` | High (git history rewrite) | ⚠️ Needs credential rotation |
+| Debug endpoint exposed | HIGH | `api/debug/orders/route.ts` | Low (delete or guard) | ✅ Fixed (NODE_ENV guard) |
+| Missing file size check | HIGH | `api/import/route.ts` | Low | ✅ Fixed |
+| Duplicate filter logic | MEDIUM | `orders/page.tsx`, `api/orders/route.ts` | Medium | Open |
+| N+1 queries | MEDIUM | `import-service.ts` | Low | ✅ Fixed (batch findMany) |
+| No test coverage | MEDIUM | All | High (setup + write tests) | Open |
+| Type suppressions | MEDIUM | `dashboard-queries.ts`, `calendar-queries.ts` | Medium | Open |
+| No input validation | MEDIUM | `api/orders/route.ts` | Low (add Zod) | ✅ Fixed (inline validation) |
+| Sequential queries | MEDIUM | `dashboard-queries.ts` | Low | ✅ Fixed (Promise.all) |
+| Magic number undocumented | LOW | `xml-parser.ts` | Trivial | ✅ Already documented |
+| Console.logs in production | LOW | Multiple | Low | Open |
+| Incomplete .env.example | LOW | `.env.example` | Trivial | ✅ Fixed |
 
 ---
 
 *Concerns audit: 2026-01-16*
+*Last updated: 2026-01-17*
 *Update as issues are fixed or new ones discovered*

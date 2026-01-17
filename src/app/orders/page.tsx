@@ -16,8 +16,7 @@ interface OrdersPageProps {
   searchParams: Promise<{
     search?: string;
     status?: string;
-    istStatus?: string;
-    versandStatus?: string;
+    pipeline?: string;
     deadline?: string;
     produkttyp?: string;
     sachbearbeiter?: string;
@@ -36,8 +35,7 @@ async function getOrders(searchParams: OrdersPageProps['searchParams']) {
 
   const search = params.search || '';
   const status = params.status || 'all';
-  const istStatus = params.istStatus || 'all';
-  const versandStatus = params.versandStatus || 'all';
+  const pipeline = params.pipeline || 'all';
   const deadline = params.deadline || 'all';
   const produkttyp = params.produkttyp || '';
   const sachbearbeiter = params.sachbearbeiter || '';
@@ -101,14 +99,32 @@ async function getOrders(searchParams: OrdersPageProps['searchParams']) {
     query = query.eq('sachbearbeiter', sachbearbeiter);
   }
 
-  // IST-Status filter
-  if (istStatus && istStatus !== 'all') {
-    query = query.eq('istStatus', istStatus);
-  }
-
-  // VersandStatus filter
-  if (versandStatus && versandStatus !== 'all') {
-    query = query.eq('versandStatus', versandStatus);
+  // Pipeline filter (kombiniert istStatus und versandStatus)
+  if (pipeline && pipeline !== 'all') {
+    switch (pipeline) {
+      case 'offen':
+        // Noch nichts gestartet
+        query = query.is('istStatus', null).is('versandStatus', null);
+        break;
+      case 'in_produktion':
+        query = query.eq('istStatus', 'in_produktion');
+        break;
+      case 'fertig':
+        // Produktion fertig, aber noch nicht versandbereit/versendet
+        query = query
+          .eq('istStatus', 'fertig')
+          .or('versandStatus.is.null,versandStatus.eq.offen');
+        break;
+      case 'versandbereit':
+        query = query.eq('versandStatus', 'versandbereit');
+        break;
+      case 'versendet':
+        query = query.eq('versandStatus', 'versendet');
+        break;
+      case 'problem':
+        query = query.eq('istStatus', 'problem');
+        break;
+    }
   }
 
   // Volltext-Suche (OR-Bedingung) - jetzt inkl. Kunde

@@ -58,6 +58,14 @@ export async function POST(request: NextRequest) {
     } else {
       // Raw XML
       xmlContent = await request.text();
+
+      // Check size for raw XML (content-length header may not be set)
+      if (xmlContent.length > MAX_FILE_SIZE) {
+        return NextResponse.json(
+          { error: 'File too large. Maximum size is 50MB.' },
+          { status: 413 }
+        );
+      }
     }
 
     if (!xmlContent.trim()) {

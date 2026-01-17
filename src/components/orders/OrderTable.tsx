@@ -90,8 +90,8 @@ export function OrderTable({ orders, total, page, totalPages }: OrderTableProps)
     return kunde.firma || kunde.name || '–';
   };
 
-  const getPipelineStatusBadge = (order: Order) => {
-    // Problem always takes priority (shown prominently)
+  const getPipelineBadge = (order: Order) => {
+    // Problem überschreibt alles
     if (order.istStatus === 'problem') {
       return (
         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-capacity-red/10 text-capacity-red">
@@ -100,7 +100,7 @@ export function OrderTable({ orders, total, page, totalPages }: OrderTableProps)
       );
     }
 
-    // Check versandStatus first (later stages in pipeline)
+    // Versand-Phasen (spätere Pipeline-Stufen)
     if (order.versandStatus === 'versendet') {
       return (
         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
@@ -117,7 +117,7 @@ export function OrderTable({ orders, total, page, totalPages }: OrderTableProps)
       );
     }
 
-    // Check production status
+    // Produktions-Phasen
     if (order.istStatus === 'fertig') {
       return (
         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-capacity-green/10 text-capacity-green">
@@ -134,10 +134,10 @@ export function OrderTable({ orders, total, page, totalPages }: OrderTableProps)
       );
     }
 
-    // Default: No status yet
+    // Default: Offen (noch nichts gestartet)
     return (
-      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-400">
-        –
+      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-500">
+        Offen
       </span>
     );
   };
@@ -173,9 +173,9 @@ export function OrderTable({ orders, total, page, totalPages }: OrderTableProps)
             </TableHead>
             <TableHead
               className="cursor-pointer hover:bg-neutral-50"
-              onClick={() => handleSort('istStatus')}
+              onClick={() => handleSort('pipeline')}
             >
-              Pipeline-Status <SortIcon column="istStatus" />
+              Pipeline <SortIcon column="pipeline" />
             </TableHead>
             <TableHead className="text-right">Aktion</TableHead>
           </TableRow>
@@ -194,7 +194,7 @@ export function OrderTable({ orders, total, page, totalPages }: OrderTableProps)
                 <TableCell>{getKundenName(order.kunde)}</TableCell>
                 <TableCell>{order.produkttyp || '–'}</TableCell>
                 <TableCell>{formatDate(order.liefertermin)}</TableCell>
-                <TableCell>{getPipelineStatusBadge(order)}</TableCell>
+                <TableCell>{getPipelineBadge(order)}</TableCell>
                 <TableCell className="text-right">
                   <Link href={`/orders/${order.auftragsnummer}`}>
                     <Button variant="ghost" size="sm" className="text-ghl-blue hover:text-ghl-blue-hover">
