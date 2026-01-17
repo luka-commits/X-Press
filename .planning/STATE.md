@@ -49,6 +49,7 @@ Progress: ██████████ 100% (v1.9 - 8 of 8 phases complete)
 | v1.6 Pipeline-Analytics | 2 | 2 | ~16 min |
 | v1.7 KPI-Klick-Overlay | 3 | 3 | ~4 min |
 | v1.8 Reports-Drilldown | 2 | 4 | ~12 min |
+| v1.9 Fixes | 8 | 17 | ~60 min |
 
 ## Accumulated Context
 
@@ -75,7 +76,7 @@ None currently.
 - v1.6 shipped: 2026-01-17 (2 phases, 2 plans)
 - v1.7 shipped: 2026-01-17 (3 phases, 3 plans: KPI-Klick-Overlay)
 - v1.8 shipped: 2026-01-17 (2 phases, 4 plans: Reports-Drilldown)
-- v1.9 created: 2026-01-17 (8 phases: Testing, Bug-Fixes, Performance, Code-Quality)
+- v1.9 shipped: 2026-01-18 (8 phases, 17 plans: Testing, Bug-Fixes, Performance, Code-Quality)
 
 ## Session Continuity
 

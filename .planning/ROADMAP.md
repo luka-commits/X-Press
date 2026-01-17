@@ -11,11 +11,11 @@
 - ✅ **v1.6 Pipeline-Analytics** — Phases 23-24 (shipped 2026-01-17)
 - ✅ **v1.7 KPI-Klick-Overlay** — Phases 25-27 (shipped 2026-01-17)
 - ✅ **v1.8 Reports-Drilldown** — Phases 28-29 (shipped 2026-01-17)
-- 🚧 **v1.9 Fixes** — Phases 30-37 (in progress)
+- ✅ **v1.9 Fixes** — Phases 30-37 (shipped 2026-01-18)
 
 ---
 
-### 🚧 v1.9 Fixes (In Progress)
+### ✅ v1.9 Fixes (Shipped 2026-01-18)
 
 **Milestone Goal:** Systematisches Testing, Bug-Fixes, Performance-Optimierung und Code-Quality Verbesserungen.
 
@@ -96,16 +96,16 @@ Plans:
 - [x] 36-02: Reports Recharts lazy loading (all chart components) — completed 2026-01-18
 - [x] 36-03: Verify optimizations (Lighthouse re-audit, checkpoint) — completed 2026-01-18
 
-#### Phase 37: Code-Quality
+#### Phase 37: Code-Quality ✓
 
 **Goal**: ESLint strict, TypeScript strict, Dead-Code entfernen, Konsistenz
 **Depends on**: Phase 36
 **Research**: Unlikely (established tooling)
-**Plans**: 1/2
+**Plans**: 2/2 complete
 
 Plans:
 - [x] 37-01: TypeScript test types + lint auto-fix (jest-dom types, import order) — completed 2026-01-18
-- [ ] 37-02: ESLint strict mode + cleanup (no-explicit-any, eslint-disable review)
+- [x] 37-02: ESLint strict mode + cleanup (no-explicit-any, eslint-disable review) — completed 2026-01-18
 
 ---
 
@@ -265,4 +265,4 @@ Bei Klick auf KPIs und Charts in der Reports-Seite öffnet sich ein Dialog mit d
 | 34. Bug-Fixes | v1.9 | 1/1 | Complete | 2026-01-18 |
 | 35. Performance-Audit | v1.9 | 1/1 | Complete | 2026-01-18 |
 | 36. Performance-Optimierung | v1.9 | 3/3 | Complete | 2026-01-18 |
-| 37. Code-Quality | v1.9 | 1/2 | In progress | - |
+| 37. Code-Quality | v1.9 | 2/2 | Complete | 2026-01-18 |
