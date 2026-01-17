@@ -1,97 +1,180 @@
 # Testing Patterns
 
-**Analysis Date:** 2026-01-16
+**Last Updated:** 2026-01-17
 
 ## Test Framework
 
-**Status:** Not configured
+**Status:** Configured (Jest 30 + Testing Library)
+
+**Framework Stack:**
+- **Jest:** 30.2.0 with `next/jest` helper
+- **Testing Library React:** 16.3.1
+- **jest-dom:** 6.9.1 for extended matchers
+
+**Configuration Files:**
+- `jest.config.js` - Jest configuration with Next.js integration
+- `jest.setup.js` - Testing Library matchers and global mocks
+
+## Test File Organization
+
+**Current Structure:**
+```
+src/
+  __tests__/
+    utils/                    # Test utilities (excluded from test discovery)
+      prisma-mock.ts          # Mocked Prisma client
+      supabase-mock.ts        # Mocked Supabase client
+      index.ts                # Central exports
+    fixtures/                 # Test data (excluded from test discovery)
+      orders.ts               # Order factory functions and samples
+      machines.ts             # Machine factory functions and samples
+      index.ts                # Central exports
+  components/
+    dashboard/
+      __tests__/
+        KPICard.test.tsx      # Component tests
+  hooks/
+    __tests__/
+      useOrderFormatter.test.ts  # Hook tests
+```
+
+**Pattern:** `__tests__/` directories co-located with source code
+
+## Running Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run with coverage
+npm test -- --coverage
+
+# Run specific test file
+npm test -- KPICard.test.tsx
+
+# Run in watch mode
+npm test -- --watch
+```
+
+## Test Utilities
+
+**Location:** `src/__tests__/utils/`
+
+**Prisma Mock Usage:**
+```typescript
+import { mockPrisma, mockPrismaReset, setupMockData } from '@/__tests__/utils';
+
+// Mock the Prisma module
+jest.mock('@/lib/prisma', () => ({
+  prisma: mockPrisma,
+  default: mockPrisma,
+}));
+
+// Reset before each test
+beforeEach(() => mockPrismaReset());
+
+// Configure mock data
+setupMockData({
+  auftraege: [mockOrder1, mockOrder2],
+  maschinen: [mockMachine1],
+});
+```
+
+**Supabase Mock Usage:**
+```typescript
+import { mockSupabase, mockSupabaseReset, mockAuftraege } from '@/__tests__/utils';
+
+// Mock the Supabase module
+jest.mock('@/lib/supabase', () => ({
+  supabase: mockSupabase,
+}));
+
+// Reset before each test
+beforeEach(() => mockSupabaseReset());
+
+// Configure mock data
+mockAuftraege([mockOrder1, mockOrder2]);
+```
+
+## Test Fixtures
+
+**Location:** `src/__tests__/fixtures/`
+
+**Order Fixtures:**
+```typescript
+import {
+  createMockOrder,
+  createInProduktionOrder,
+  createProblemOrder,
+  sampleOrders,
+  allSampleOrders,
+} from '@/__tests__/fixtures';
+
+// Factory with overrides
+const order = createMockOrder({ status: 'problem' });
+
+// Pre-created samples
+const { offen, inProduktion, fertig, problem } = sampleOrders;
+```
+
+**Machine Fixtures:**
+```typescript
+import {
+  createMockMachine,
+  createLeitmaschine,
+  sampleMachines,
+  allLeitmaschinen,
+} from '@/__tests__/fixtures';
+
+// Factory with overrides
+const machine = createLeitmaschine({ name: 'Custom Machine' });
+
+// Pre-created samples (actual X-Press machines)
+const { speedmasterXL106, polarPace, sammelhefterST400 } = sampleMachines;
+```
+
+## Coverage
 
 **Current State:**
-- No test files found (`*.test.ts`, `*.spec.ts`, `__tests__/`)
-- No test framework installed (no Jest, Vitest, Testing Library)
-- No test scripts in `package.json`
+- Tests: 30 tests in 2 suites
+- Coverage: Not yet measured (run with `--coverage`)
+
+**Tested Areas:**
+- `KPICard` component - rendering, variants, click handling
+- `useOrderFormatter` hook - date formatting, status badges, pipeline stages
+
+## Priority Test Candidates
+
+**Critical Business Logic (not yet tested):**
+1. `src/lib/xml-parser.ts` - Complex encoding fixes, date conversion
+2. `src/lib/import-service.ts` - Database transactions, machine creation
+3. `src/lib/dashboard-queries.ts` - Date filtering, aggregation logic
+
+**API Routes (not yet tested):**
+1. `src/app/api/import/route.ts` - File upload, XML parsing
+2. `src/app/api/orders/route.ts` - Query parameter handling
+3. `src/app/api/orders/[id]/status/route.ts` - Status update validation
+
+**Components (not yet tested):**
+1. `src/components/orders/OrderFilters.tsx` - Filter state management
+2. `src/components/dashboard/DashboardClient.tsx` - Auto-refresh logic
 
 ## Linting & Code Quality
 
 **ESLint:**
 - Installed: `eslint ^8.57.0`, `eslint-config-next 14.2.21`
-- Configuration: Next.js default (no `.eslintrc` file)
+- Configuration: Next.js default
 - Script: `npm run lint`
 
 **TypeScript:**
 - Version: `^5.7.3`
-- Strict mode: Enabled (`"strict": true`)
+- Strict mode: Enabled
 - Config: `tsconfig.json`
 
 **Prettier:**
-- Not configured (no `.prettierrc`)
-
-## Test File Organization
-
-**Recommended Structure (not implemented):**
-```
-src/
-  lib/
-    xml-parser.ts
-    xml-parser.test.ts      # Co-located
-  components/
-    dashboard/
-      KPICard.tsx
-      KPICard.test.tsx      # Co-located
-```
-
-## Priority Test Candidates
-
-**Critical Business Logic:**
-1. `src/lib/xml-parser.ts` - Complex encoding fixes, date conversion
-2. `src/lib/import-service.ts` - Database transactions, machine creation
-3. `src/lib/dashboard-queries.ts` - Date filtering, aggregation logic
-
-**API Routes:**
-1. `src/app/api/import/route.ts` - File upload, XML parsing
-2. `src/app/api/orders/route.ts` - Query parameter handling
-
-**Components (if testing added):**
-1. `src/components/orders/OrderFilters.tsx` - Filter state management
-2. `src/components/dashboard/DashboardClient.tsx` - Auto-refresh logic
-
-## Recommended Framework
-
-**For this codebase:**
-- Vitest (fast, TypeScript-first, Next.js compatible)
-- React Testing Library (component testing)
-- MSW (API mocking)
-
-**Minimal Setup:**
-```bash
-npm install -D vitest @testing-library/react @testing-library/jest-dom
-```
-
-## Coverage
-
-**Current:** 0% (no tests)
-
-**Target Areas:**
-- XML encoding fix (`fixEncoding()`) - edge cases for umlauts
-- Date conversion (`excelDateToJS()`) - Excel date edge cases
-- Query aggregation - verify correct grouping
-
-## Recommendations
-
-**Phase 1 - Critical Path:**
-1. Add Vitest configuration
-2. Test `xml-parser.ts` with sample XMLs from `data/samples/`
-3. Test `import-service.ts` with mocked Prisma
-
-**Phase 2 - API Layer:**
-1. Test API routes with request mocking
-2. Verify error responses
-
-**Phase 3 - Components:**
-1. Test interactive components (filters, search)
-2. Snapshot tests for presentational components
+- Configured via `.prettierrc`
+- Integrated with lint-staged
 
 ---
 
-*Testing analysis: 2026-01-16*
-*Update when test infrastructure added*
+*Updated: 2026-01-17 - Test infrastructure configured with Jest 30, mocks, and fixtures*
