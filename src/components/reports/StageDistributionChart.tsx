@@ -29,20 +29,18 @@ function getStageKey(name: string): string {
 }
 
 export function StageDistributionChart({ data, total, onStageClick }: StageDistributionChartProps) {
-    // 1. Calculate Percentages
-    // 2. Sort or map to GHL Colors if needed, but reporting-queries already does this?
-    //    Actually, let's enforce the GHL sequence here to be safe.
-    const ghlColors = [
-        '#3B82F6', // Blue
-        '#06B6D4', // Cyan
-        '#818CF8', // Indigo
-        '#A78BFA', // Violet
-        '#C084FC', // Purple
+    // Distinct Palette (synced with FunnelChart)
+    const distinctColors = [
+        '#2563EB', // Blue-600
+        '#06B6D4', // Cyan-500
+        '#8B5CF6', // Violet-500
+        '#EC4899', // Pink-500
+        '#6366F1', // Indigo-500
     ];
 
     const formattedData = data.map((d, i) => ({
         ...d,
-        fill: ghlColors[i % ghlColors.length]
+        fill: distinctColors[i % distinctColors.length]
     }));
 
     return (
@@ -50,23 +48,12 @@ export function StageDistributionChart({ data, total, onStageClick }: StageDistr
             {/* Header */}
             <div className="flex items-center justify-between mb-2">
                 <h2 className="text-base font-semibold text-ghl-text">Stage Distribution</h2>
-                <div className="bg-neutral-50 border border-neutral-200 rounded px-2 py-1 text-sm text-neutral-600 flex items-center gap-2 cursor-pointer">
-                    <span>Amira NEU</span>
-                    <svg className="w-4 h-4 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                </div>
             </div>
 
             {/* Main Value */}
             <div className="mb-6">
                 <span className="text-4xl font-bold text-ghl-text">{total}</span>
-                <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs px-2 py-0.5 rounded bg-red-50 text-red-500 font-medium">
-                        ↓ 66.67%
-                    </span>
-                    <span className="text-xs text-neutral-500">vs Last 31 Days</span>
-                </div>
+                <p className="text-xs text-neutral-500 mt-1">Total Orders</p>
             </div>
 
             <div className="flex-1 flex items-start mt-2">
@@ -135,8 +122,7 @@ export function StageDistributionChart({ data, total, onStageClick }: StageDistr
                                             {item.name}
                                         </span>
                                         <div className="flex items-center gap-1 text-[10px] text-neutral-400">
-                                            <span>€0 ({pct}%)</span>
-                                            <span>- {item.value}</span>
+                                            <span>{item.value} ({pct}%)</span>
                                         </div>
                                     </div>
                                 </div>
