@@ -49,6 +49,8 @@ export default async function DashboardPage() {
       <KPICardsGrid
         total={kpis.total}
         critical={kpis.critical}
+        overdue={kpis.overdue}
+        problem={kpis.problem}
         avgCapacity={kpis.avgCapacity}
         engpass={kpis.engpass}
       />

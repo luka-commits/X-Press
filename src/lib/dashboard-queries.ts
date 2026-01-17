@@ -16,6 +16,7 @@ export interface DashboardKPIs {
   total: number;
   critical: number;
   overdue: number;
+  problem: number;
   avgCapacity: number;
   engpass: {
     name: string;
@@ -72,7 +73,7 @@ export async function getDashboardKPIs(date: Date = new Date()): Promise<Dashboa
   const dateStart = startOfDay(referenceDate);
 
   // Parallel queries for performance
-  const [activeResult, criticalResult, overdueResult] = await Promise.all([
+  const [activeResult, criticalResult, overdueResult, problemResult] = await Promise.all([
     // Total open orders (not yet shipped)
     supabase
       .from('Auftrag')
@@ -93,6 +94,13 @@ export async function getDashboardKPIs(date: Date = new Date()): Promise<Dashboa
       .select('*', { count: 'exact', head: true })
       .neq('versandStatus', 'versendet')
       .lt('liefertermin', dateStart.toISOString()),
+
+    // Problem orders (istStatus = 'problem', not shipped)
+    supabase
+      .from('Auftrag')
+      .select('*', { count: 'exact', head: true })
+      .eq('istStatus', 'problem')
+      .neq('versandStatus', 'versendet'),
   ]);
 
   // Get average capacity and engpass (calculated from machine capacity)
@@ -111,6 +119,7 @@ export async function getDashboardKPIs(date: Date = new Date()): Promise<Dashboa
     total: activeResult.count || 0,
     critical: criticalResult.count || 0,
     overdue: overdueResult.count || 0,
+    problem: problemResult.count || 0,
     avgCapacity,
     engpass: engpassMachine ? {
       name: engpassMachine.kurzname || engpassMachine.name,
@@ -347,6 +356,54 @@ export async function getOverdueOrders(date: Date = new Date()): Promise<KPIOrde
 
   if (error || !data) {
     console.error('Error fetching overdue orders:', error);
+    return [];
+  }
+
+  return data.map((order) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const rawKunde = order.Kunde as any;
+    const kunde = Array.isArray(rawKunde) ? rawKunde[0] : rawKunde;
+    const liefertermin = order.liefertermin ? new Date(order.liefertermin) : null;
+    const tageUebrig = liefertermin ? differenceInDays(liefertermin, dateStart) : 0;
+
+    return {
+      auftragsnummer: order.auftragsnummer,
+      kunde: kunde?.firma || kunde?.name || '–',
+      produkttyp: order.produkttyp,
+      liefertermin: order.liefertermin || '',
+      tageUebrig,
+    };
+  });
+}
+
+// ============================================================
+// Problem Orders Query (for KPI Detail: "Problemaufträge")
+// ============================================================
+
+/**
+ * Lädt alle Problemaufträge (istStatus = 'problem', nicht versendet)
+ * @param date - Referenzdatum für tageUebrig-Berechnung (Default: heute)
+ */
+export async function getProblemOrders(date: Date = new Date()): Promise<KPIOrderItem[]> {
+  const referenceDate = date;
+  const dateStart = startOfDay(referenceDate);
+
+  const { data, error } = await supabase
+    .from('Auftrag')
+    .select(
+      `
+      auftragsnummer,
+      produkttyp,
+      liefertermin,
+      Kunde(firma, name)
+    `
+    )
+    .eq('istStatus', 'problem')
+    .neq('versandStatus', 'versendet')
+    .order('liefertermin', { ascending: true });
+
+  if (error || !data) {
+    console.error('Error fetching problem orders:', error);
     return [];
   }
 

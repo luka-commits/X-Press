@@ -16,6 +16,7 @@ import { ArrowLeft, Phone, Mail, MapPin } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { toZonedTime } from 'date-fns-tz';
 import { startOfDay } from 'date-fns';
+import { OrderStageSelector, IstStatusType, VersandStatusType } from '@/components/orders/OrderStageSelector';
 
 const TIMEZONE = 'Europe/Berlin';
 
@@ -66,6 +67,8 @@ async function getOrder(id: string) {
     wtvTermin: order.wtvTermin,
     status: order.status,
     computedStatus,
+    istStatus: order.istStatus as IstStatusType,
+    versandStatus: order.versandStatus as VersandStatusType,
     kunde: order.Kunde ? {
       id: order.Kunde.id,
       name: order.Kunde.name,
@@ -120,8 +123,6 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
     notFound();
   }
 
-  const isActive = order.computedStatus === 'aktiv';
-
   return (
     <MainLayout>
       <div className="space-y-6">
@@ -133,14 +134,13 @@ export default async function OrderDetailPage({ params }: OrderDetailPageProps) 
               Zurück zur Übersicht
             </Button>
           </Link>
-          <span
-            className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${isActive
-              ? 'bg-capacity-green/10 text-capacity-green'
-              : 'bg-neutral-100 text-neutral-500'
-              }`}
-          >
-            {isActive ? 'Aktiv' : 'Abgeschlossen'}
-          </span>
+          <div className="flex items-center gap-3">
+            <OrderStageSelector
+              orderId={order.auftragsnummer}
+              istStatus={order.istStatus}
+              versandStatus={order.versandStatus}
+            />
+          </div>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">

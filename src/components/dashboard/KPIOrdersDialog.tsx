@@ -28,14 +28,14 @@ interface KPIOrder {
 }
 
 interface KPIOrdersResponse {
-  type: 'total' | 'critical';
+  type: 'total' | 'critical' | 'overdue' | 'problem';
   orders: KPIOrder[];
   count: number;
   date: string;
 }
 
 interface KPIOrdersDialogProps {
-  kpiType: 'total' | 'critical';
+  kpiType: 'total' | 'critical' | 'overdue' | 'problem';
   title: string;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;

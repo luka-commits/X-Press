@@ -20,12 +20,13 @@ import {
   getOpenOrders,
   getCriticalOrders,
   getOverdueOrders,
+  getProblemOrders,
   type KPIOrderItem,
 } from '@/lib/dashboard-queries';
 
 export const dynamic = 'force-dynamic';
 
-type KPIType = 'total' | 'critical' | 'overdue';
+type KPIType = 'total' | 'critical' | 'overdue' | 'problem';
 
 interface KPIOrdersResponse {
   type: KPIType;
@@ -34,7 +35,7 @@ interface KPIOrdersResponse {
   date: string;
 }
 
-const VALID_TYPES: KPIType[] = ['total', 'critical', 'overdue'];
+const VALID_TYPES: KPIType[] = ['total', 'critical', 'overdue', 'problem'];
 
 export async function GET(request: NextRequest) {
   try {
@@ -45,14 +46,14 @@ export async function GET(request: NextRequest) {
 
     if (!typeParam) {
       return NextResponse.json(
-        { error: 'Fehlender Parameter: type ist erforderlich (total | critical | overdue)' },
+        { error: 'Fehlender Parameter: type ist erforderlich (total | critical | overdue | problem)' },
         { status: 400 }
       );
     }
 
     if (!VALID_TYPES.includes(typeParam as KPIType)) {
       return NextResponse.json(
-        { error: `Ungültiger Typ: "${typeParam}". Erlaubte Werte: total, critical, overdue` },
+        { error: `Ungültiger Typ: "${typeParam}". Erlaubte Werte: total, critical, overdue, problem` },
         { status: 400 }
       );
     }
@@ -87,6 +88,9 @@ export async function GET(request: NextRequest) {
         break;
       case 'overdue':
         orders = await getOverdueOrders(referenceDate);
+        break;
+      case 'problem':
+        orders = await getProblemOrders(referenceDate);
         break;
     }
 

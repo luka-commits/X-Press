@@ -60,6 +60,8 @@ export function KPICard({ label, value, suffix = '', variant = 'default', onClic
 interface KPICardsGridProps {
   total: number;
   critical: number;
+  overdue: number;
+  problem: number;
   avgCapacity: number;
   engpass: {
     name: string;
@@ -67,9 +69,9 @@ interface KPICardsGridProps {
   } | null;
 }
 
-export function KPICardsGrid({ total, critical, avgCapacity, engpass }: KPICardsGridProps) {
+export function KPICardsGrid({ total, critical, overdue, problem, avgCapacity, engpass }: KPICardsGridProps) {
   const [dialogState, setDialogState] = useState<{
-    type: 'total' | 'critical' | null;
+    type: 'total' | 'critical' | 'overdue' | 'problem' | null;
     isOpen: boolean;
   }>({
     type: null,
@@ -89,7 +91,7 @@ export function KPICardsGrid({ total, critical, avgCapacity, engpass }: KPICards
         : 'success'
     : 'default';
 
-  const openDialog = (type: 'total' | 'critical') => {
+  const openDialog = (type: 'total' | 'critical' | 'overdue' | 'problem') => {
     setDialogState({ type, isOpen: true });
   };
 
@@ -100,18 +102,23 @@ export function KPICardsGrid({ total, critical, avgCapacity, engpass }: KPICards
   };
 
   const getDialogTitle = () => {
-    if (dialogState.type === 'total') {
-      return 'Offene Aufträge';
+    switch (dialogState.type) {
+      case 'total':
+        return 'Offene Aufträge';
+      case 'critical':
+        return 'Bald fällig (≤2 Tage)';
+      case 'overdue':
+        return 'Überfällige Aufträge';
+      case 'problem':
+        return 'Problemaufträge';
+      default:
+        return '';
     }
-    if (dialogState.type === 'critical') {
-      return 'Bald fällig (≤2 Tage)';
-    }
-    return '';
   };
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
         <KPICard
           label="Offene Aufträge"
           value={total}
@@ -122,6 +129,18 @@ export function KPICardsGrid({ total, critical, avgCapacity, engpass }: KPICards
           value={critical}
           variant={critical > 0 ? 'warning' : 'default'}
           onClick={() => openDialog('critical')}
+        />
+        <KPICard
+          label="Überfällig"
+          value={overdue}
+          variant={overdue > 0 ? 'critical' : 'default'}
+          onClick={() => openDialog('overdue')}
+        />
+        <KPICard
+          label="Problemaufträge"
+          value={problem}
+          variant={problem > 0 ? 'critical' : 'default'}
+          onClick={() => openDialog('problem')}
         />
         <KPICard
           label="Ø Auslastung"

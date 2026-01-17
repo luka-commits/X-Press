@@ -21,19 +21,19 @@ export async function PATCH(
     const body = await request.json();
     const { istStatus, statusKommentar } = body;
 
-    // Validate istStatus is provided
-    if (!istStatus) {
+    // Validate istStatus is provided (null is allowed to reset to "Offen")
+    if (istStatus === undefined) {
       return NextResponse.json(
-        { error: 'istStatus ist erforderlich' },
+        { error: 'istStatus ist erforderlich (null erlaubt für Reset)' },
         { status: 400 }
       );
     }
 
-    // Validate istStatus is a valid IstStatus enum value
-    if (!Object.values(IstStatus).includes(istStatus)) {
+    // Validate istStatus is either null or a valid IstStatus enum value
+    if (istStatus !== null && !Object.values(IstStatus).includes(istStatus)) {
       return NextResponse.json(
         {
-          error: `Ungültiger Status. Erlaubte Werte: ${Object.values(IstStatus).join(', ')}`
+          error: `Ungültiger Status. Erlaubte Werte: ${Object.values(IstStatus).join(', ')} oder null`
         },
         { status: 400 }
       );
@@ -56,7 +56,7 @@ export async function PATCH(
     const updatedOrder = await prisma.auftrag.update({
       where: { auftragsnummer: id },
       data: {
-        istStatus: istStatus as IstStatus,
+        istStatus: istStatus === null ? null : (istStatus as IstStatus),
         statusKommentar: statusKommentar ?? null,
         statusUpdatedAt: new Date(),
       },
