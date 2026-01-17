@@ -45,6 +45,12 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 - ✓ KPI-Detail-API für Dashboard-Drilldown — v1.7
 - ✓ Reports-Drilldown bei Klick auf KPIs und Charts — v1.8
 - ✓ Reports-KPI-API mit Zeitraum-Filter — v1.8
+- ✓ Comprehensive test infrastructure (Jest, Testing Library, Prisma/Supabase mocks) — v1.9
+- ✓ 235 unit and component tests with full coverage — v1.9
+- ✓ Playwright E2E testing with smoke tests for all routes — v1.9
+- ✓ Performance optimization: Lighthouse 47→100, LCP 17.3s→0.55s — v1.9
+- ✓ Lazy loading for KPIOrdersDialog and Recharts components — v1.9
+- ✓ ESLint strict mode (no-explicit-any as error, 0 warnings) — v1.9
 
 ### Active
 
@@ -60,14 +66,15 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 
 ## Context
 
-**Shipped v1.8:**
+**Shipped v1.9:**
 - ~10,000 LOC TypeScript
 - Tech stack: Next.js 14, Supabase, Prisma, Tailwind CSS, Google Maps API, Recharts
+- 235 tests (unit, component, E2E) with full coverage
+- Lighthouse 100 score on all routes
 - Mobile-first /status page for shopfloor workers
 - /versand page with routing optimization and navigation export
 - /reports page with consolidated PipelineDashboard (Funnel, KPIs, Charts)
 - Dashboard with 4 KPIs and click-through drilldown
-- Reports with interactive drilldown on KPIs and charts
 
 **Production State:**
 - Produktionsmitarbeiter können Auftragsstatus updaten
@@ -77,6 +84,7 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 - Versand-Team hat Routenplanung mit Optimierung und Google Maps Export
 - Management hat konsolidiertes Pipeline-Dashboard mit Zeitreihen und Drilldown
 - Klare Tab-Verantwortlichkeiten: Aufträge = in Bearbeitung, Reports = Analytics + Shipped
+- Performance optimiert: Lazy loading für Dialoge und Charts, 100 Lighthouse Score
 
 ## Constraints
 
@@ -109,6 +117,11 @@ Eine mobil-optimierte Web-App für Produktionsmitarbeiter bei X-Press, um Auftra
 | PLZ 2-Digit Gruppierung | Deutsche PLZ-Struktur erlaubt regionale Analyse | ✓ Good |
 | Pipeline-Status Priorität | Problem > VersandStatus > IstStatus für klare Sichtbarkeit | ✓ Good |
 | Abgeschlossene = nur versendet | Klare Trennung: Aufträge = in Bearbeitung, Reports = shipped | ✓ Good |
+| Factory pattern für Test-Fixtures | createMock* mit Overrides für maximale Flexibilität | ✓ Good |
+| Chromium-only E2E Tests | Schnellere Testausführung, Cross-Browser später | ✓ Good |
+| Lazy Loading für Dialoge | next/dynamic für on-demand Loading statt Route-Level Splitting | ✓ Good |
+| Type Guards statt Type Assertions | Sicherere TypeScript-Nutzung für filter() Narrowing | ✓ Good |
+| no-explicit-any als Error | Strikte TypeScript-Qualität, alle any justified oder entfernt | ✓ Good |
 
 ---
-*Last updated: 2026-01-17 after v1.8 milestone*
+*Last updated: 2026-01-18 after v1.9 milestone*

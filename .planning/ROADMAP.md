@@ -15,100 +15,6 @@
 
 ---
 
-### ✅ v1.9 Fixes (Shipped 2026-01-18)
-
-**Milestone Goal:** Systematisches Testing, Bug-Fixes, Performance-Optimierung und Code-Quality Verbesserungen.
-
-#### Phase 30: Test-Setup ✓
-
-**Goal**: Jest und Testing-Library konfigurieren, Test-Grundlagen schaffen
-**Depends on**: Previous milestone complete
-**Research**: Unlikely (established patterns)
-**Plans**: 1/1 complete
-
-Plans:
-- [x] 30-01: Test utilities and mocks (Prisma/Supabase mocks, fixtures, docs update) — completed 2026-01-17
-
-#### Phase 31: Unit-Tests API ✓
-
-**Goal**: Tests für API-Routen und Datenlogik schreiben
-**Depends on**: Phase 30
-**Research**: Unlikely (internal patterns)
-**Plans**: 2/2 complete
-
-Plans:
-- [x] 31-01: Core Orders API tests (list, status, search) — completed 2026-01-18
-- [x] 31-02: Dashboard & Reports API tests (kpi-orders, pipeline) — completed 2026-01-18
-
-#### Phase 32: Component-Tests ✓
-
-**Goal**: Tests für kritische UI-Komponenten (Dashboard, Versand, Reports)
-**Depends on**: Phase 30
-**Research**: Unlikely (internal patterns)
-**Plans**: 3/3 complete
-
-Plans:
-- [x] 32-01: Dashboard dialog tests (KPIOrdersDialog, DashboardClient) — completed 2026-01-18
-- [x] 32-02: Orders & Versand tests (OrderFilters, VersandKPIs) — completed 2026-01-18
-- [x] 32-03: Reports tests (SnapshotKPIs, ReportsOrdersDialog) — completed 2026-01-18
-
-#### Phase 33: E2E-Tests ✓
-
-**Goal**: End-to-End Tests für Hauptworkflows (Status-Update, Versand, Reports)
-**Depends on**: Phase 31, 32
-**Research**: Unlikely (Playwright/Cypress patterns)
-**Plans**: 3/3 complete
-
-Plans:
-- [x] 33-01: Playwright E2E setup (smoke tests for all pages) — completed 2026-01-18
-- [x] 33-02: Status workflow E2E tests (search, select, update) — completed 2026-01-18
-- [x] 33-03: Dashboard & Reports drilldown E2E tests — completed 2026-01-18
-
-#### Phase 34: Bug-Fixes ✓
-
-**Goal**: Gefundene Bugs aus Testing und bekannte Issues beheben
-**Depends on**: Phase 33
-**Research**: Unlikely (internal code)
-**Plans**: 1/1 complete
-
-Plans:
-- [x] 34-01: Bug analysis (no bugs found - all tests pass) — completed 2026-01-18
-
-#### Phase 35: Performance-Audit ✓
-
-**Goal**: Lighthouse-Audit, Bundle-Analyse, Render-Performance messen
-**Depends on**: Phase 34
-**Research**: Unlikely (standard tools)
-**Plans**: 1/1 complete
-
-Plans:
-- [x] 35-01: Performance audit (Lighthouse, bundle analysis, Core Web Vitals) — completed 2026-01-18
-
-#### Phase 36: Performance-Optimierung ✓
-
-**Goal**: Identifizierte Bottlenecks beheben (Bundle-Size, Lazy-Loading, Caching)
-**Depends on**: Phase 35
-**Research**: Unlikely (Next.js patterns)
-**Plans**: 3/3 complete
-
-Plans:
-- [x] 36-01: Dashboard KPIOrdersDialog lazy loading (next/dynamic) — completed 2026-01-18
-- [x] 36-02: Reports Recharts lazy loading (all chart components) — completed 2026-01-18
-- [x] 36-03: Verify optimizations (Lighthouse re-audit, checkpoint) — completed 2026-01-18
-
-#### Phase 37: Code-Quality ✓
-
-**Goal**: ESLint strict, TypeScript strict, Dead-Code entfernen, Konsistenz
-**Depends on**: Phase 36
-**Research**: Unlikely (established tooling)
-**Plans**: 2/2 complete
-
-Plans:
-- [x] 37-01: TypeScript test types + lint auto-fix (jest-dom types, import order) — completed 2026-01-18
-- [x] 37-02: ESLint strict mode + cleanup (no-explicit-any, eslint-disable review) — completed 2026-01-18
-
----
-
 ## Completed Milestones
 
 - ✅ [v1.0 Mobile Status-Update](milestones/v1.0-ROADMAP.md) (Phases 1-8) — SHIPPED 2026-01-16
@@ -120,6 +26,7 @@ Plans:
 - ✅ [v1.6 Pipeline-Analytics](milestones/v1.6-ROADMAP.md) (Phases 23-24) — SHIPPED 2026-01-17
 - ✅ [v1.7 KPI-Klick-Overlay](milestones/v1.7-ROADMAP.md) (Phases 25-27) — SHIPPED 2026-01-17
 - ✅ [v1.8 Reports-Drilldown](milestones/v1.8-ROADMAP.md) (Phases 28-29) — SHIPPED 2026-01-17
+- ✅ [v1.9 Fixes](milestones/v1.9-ROADMAP.md) (Phases 30-37) — SHIPPED 2026-01-18
 
 <details>
 <summary>✅ v1.0 Mobile Status-Update (Phases 1-8) — SHIPPED 2026-01-16</summary>
@@ -222,6 +129,22 @@ Bei Klick auf KPIs und Charts in der Reports-Seite öffnet sich ein Dialog mit d
 
 - [x] Phase 28: Reports-KPI-API (1/1 plans) — completed 2026-01-17
 - [x] Phase 29: Reports-Drilldown-UI (3/3 plans) — completed 2026-01-17
+
+</details>
+
+<details>
+<summary>✅ v1.9 Fixes (Phases 30-37) — SHIPPED 2026-01-18</summary>
+
+Systematisches Testing, Bug-Fixes, Performance-Optimierung und Code-Quality Verbesserungen.
+
+- [x] Phase 30: Test-Setup (1/1 plans) — completed 2026-01-17
+- [x] Phase 31: Unit-Tests API (2/2 plans) — completed 2026-01-18
+- [x] Phase 32: Component-Tests (3/3 plans) — completed 2026-01-18
+- [x] Phase 33: E2E-Tests (3/3 plans) — completed 2026-01-18
+- [x] Phase 34: Bug-Fixes (1/1 plans) — completed 2026-01-18
+- [x] Phase 35: Performance-Audit (1/1 plans) — completed 2026-01-18
+- [x] Phase 36: Performance-Optimierung (3/3 plans) — completed 2026-01-18
+- [x] Phase 37: Code-Quality (2/2 plans) — completed 2026-01-18
 
 </details>
 

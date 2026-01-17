@@ -1,5 +1,75 @@
 # Project Milestones: XOS Mobile Status-Update
 
+## v1.9 Fixes (Shipped: 2026-01-18)
+
+**Delivered:** Umfassendes Testing, Performance-Optimierung und Code-Quality Verbesserungen für Produktionsreife.
+
+**Phases completed:** 30-37 (16 plans total)
+
+**Key accomplishments:**
+
+- Created comprehensive test infrastructure (Jest, Testing Library, Prisma/Supabase mocks)
+- Built 235 unit and component tests achieving full API and UI coverage
+- Set up Playwright E2E testing with smoke tests for all 5 routes
+- Performance audit and optimization: Dashboard 47 → 100 Lighthouse score
+- Implemented lazy loading: LCP 17.3s → 0.55s, TBT 2,030ms → 0ms
+- Upgraded ESLint to strict mode with zero warnings
+
+**Stats:**
+
+- 139 files modified (+77,778 / -1,822 lines)
+- 8 phases, 16 plans
+- 1 day (2026-01-17 → 2026-01-18)
+
+**Git range:** `991c13f` (feat(30-01)) → `c2af524` (docs(37-02))
+
+**Archive:** [v1.9-ROADMAP.md](milestones/v1.9-ROADMAP.md)
+
+---
+
+## v1.8 Reports-Drilldown (Shipped: 2026-01-17)
+
+**Delivered:** Bei Klick auf KPIs und Charts in der Reports-Seite öffnet sich ein Dialog mit der zugehörigen Auftragsliste.
+
+**Phases completed:** 28-29 (4 plans total)
+
+**Key accomplishments:**
+
+- Reports-KPI-API mit Zeitraum-Filter für SnapshotKPIs und PipelineKPIs
+- ThroughputChart und PipelineFunnel clickable mit Drilldown
+- ReportsOrdersDialog mit kontextabhängigem Titel und Filtern
+- StageDistributionChart bar click opens filtered order list
+
+**Stats:**
+
+- 2 phases, 4 plans
+- Same day (2026-01-17)
+
+**Archive:** [v1.8-ROADMAP.md](milestones/v1.8-ROADMAP.md)
+
+---
+
+## v1.7 KPI-Klick-Overlay (Shipped: 2026-01-17)
+
+**Delivered:** Bei Klick auf KPI-Karten im Dashboard öffnet sich ein Dialog mit der zugehörigen Auftragsliste.
+
+**Phases completed:** 25-27 (3 plans total)
+
+**Key accomplishments:**
+
+- KPIOrdersDialog Komponente für Dashboard-Drilldown
+- KPI-Detail-API für gefilterte Auftragslisten
+- Clickable KPI cards im Dashboard mit sofortigem Feedback
+
+**Stats:**
+
+- 3 phases, 3 plans
+- Same day (2026-01-17)
+
+**Archive:** [v1.7-ROADMAP.md](milestones/v1.7-ROADMAP.md)
+
+---
+
 ## v1.6 Pipeline-Analytics (Shipped: 2026-01-17)
 
 **Delivered:** Konsolidiertes Pipeline-Dashboard mit Zeitreihen-Chart und entschlacktem Dashboard.
