@@ -43,10 +43,11 @@ export async function GET(request: NextRequest) {
       .eq('versandStatus', 'versendet');
 
     // Apply date range filter on versandUpdatedAt (include NULL values for legacy data)
-    if (from) {
+    if (from && to) {
+      query = query.or(`and(versandUpdatedAt.gte.${from}T00:00:00,versandUpdatedAt.lte.${to}T23:59:59),versandUpdatedAt.is.null`);
+    } else if (from) {
       query = query.or(`versandUpdatedAt.gte.${from}T00:00:00,versandUpdatedAt.is.null`);
-    }
-    if (to) {
+    } else if (to) {
       query = query.or(`versandUpdatedAt.lte.${to}T23:59:59,versandUpdatedAt.is.null`);
     }
 

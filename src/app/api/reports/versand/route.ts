@@ -76,8 +76,7 @@ export async function GET(request: NextRequest) {
       .from('Auftrag')
       .select('auftragsnummer, liefertermin, versandUpdatedAt, statusUpdatedAt, lieferPlz, versandStatus')
       .eq('versandStatus', 'versendet')
-      .or(`versandUpdatedAt.gte.${fromParam},versandUpdatedAt.is.null`)
-      .or(`versandUpdatedAt.lte.${toParam},versandUpdatedAt.is.null`);
+      .or(`and(versandUpdatedAt.gte.${fromParam},versandUpdatedAt.lte.${toParam}),versandUpdatedAt.is.null`);
 
     if (error) {
       console.error('Versand Reports API Error:', error);

@@ -110,7 +110,7 @@ export async function getFunnelData(): Promise<FunnelData> {
 
 /**
  * Stage Distribution for Pie Chart
- * Returns all pipeline stages for the Donut view
+ * Returns all pipeline stages for the Donut view (exclusive stages)
  */
 export async function getStageDistribution() {
     const funnel = await getFunnelData();
@@ -118,6 +118,107 @@ export async function getStageDistribution() {
     return {
         data: funnel.stages,
         total: funnel.totalValue
+    };
+}
+
+/**
+ * CUMULATIVE Funnel Data - each stage counts orders that have
+ * REACHED that milestone or beyond.
+ *
+ * Pipeline progression: Offen → In Produktion → Fertig → Versandbereit → Versendet
+ *
+ * Cumulative counts (each includes all orders from later stages):
+ * - "In Produktion": Orders in in_produktion, fertig, versandbereit, or versendet
+ * - "Fertig": Orders in fertig, versandbereit, or versendet
+ * - "Versandbereit": Orders in versandbereit or versendet
+ * - "Versendet": Orders in versendet only
+ * - "Offen": Orders that haven't started (no progression yet) - NOT cumulative
+ * - "Problem": Orders with issues (separate track)
+ */
+export async function getCumulativeFunnelData(): Promise<FunnelData> {
+    const { data: orders, error } = await supabase
+        .from('Auftrag')
+        .select(`
+            auftragsnummer,
+            status,
+            istStatus,
+            versandStatus
+        `)
+        .eq('status', 'aktiv');
+
+    if (error || !orders) {
+        console.error('Error fetching cumulative funnel data:', error);
+        return { stages: [], totalValue: 0, trend: 0 };
+    }
+
+    // Count orders at each checkpoint (cumulative)
+    let countOffen = 0;
+    let countInProduktion = 0;  // Started production or beyond
+    let countFertig = 0;         // Finished production or beyond
+    let countVersandbereit = 0;  // Ready for shipping or shipped
+    let countVersendet = 0;      // Shipped
+    let countProblem = 0;
+
+    for (const order of orders) {
+        // Problem is a separate track
+        if (order.istStatus === 'problem') {
+            countProblem++;
+            continue;
+        }
+
+        // Check progression level
+        const hasStartedProduction = order.istStatus === 'in_produktion' ||
+                                     order.istStatus === 'fertig' ||
+                                     order.versandStatus === 'versandbereit' ||
+                                     order.versandStatus === 'versendet';
+
+        const hasFinishedProduction = order.istStatus === 'fertig' ||
+                                      order.versandStatus === 'versandbereit' ||
+                                      order.versandStatus === 'versendet';
+
+        const isReadyForShipping = order.versandStatus === 'versandbereit' ||
+                                   order.versandStatus === 'versendet';
+
+        const hasShipped = order.versandStatus === 'versendet';
+
+        // Cumulative counting - add to all applicable milestones
+        if (hasShipped) {
+            countVersendet++;
+        }
+        if (isReadyForShipping) {
+            countVersandbereit++;
+        }
+        if (hasFinishedProduction) {
+            countFertig++;
+        }
+        if (hasStartedProduction) {
+            countInProduktion++;
+        }
+        if (!hasStartedProduction) {
+            countOffen++;
+        }
+    }
+
+    const countTotal = orders.length;
+
+    // Build stages array - cumulative values
+    const stages: FunnelStage[] = [
+        { name: 'Offen', value: countOffen, fill: '#737373' },
+        { name: 'In Produktion', value: countInProduktion, fill: '#F59E0B' },
+        { name: 'Fertig', value: countFertig, fill: '#22C55E' },
+        { name: 'Versandbereit', value: countVersandbereit, fill: '#A855F7' },
+        { name: 'Versendet', value: countVersendet, fill: '#3B82F6' },
+    ];
+
+    // Add Problem count if > 0 (separate indicator)
+    if (countProblem > 0) {
+        stages.push({ name: 'Problem', value: countProblem, fill: '#EF4444' });
+    }
+
+    return {
+        stages,
+        totalValue: countTotal,
+        trend: 0
     };
 }
 
@@ -264,6 +365,8 @@ export async function getOrdersByStage(stage: StageType, date: Date = new Date()
         .eq('status', 'aktiv');
 
     // Apply stage-specific filters
+    // Note: For cumulative funnel, these return ALL orders that have REACHED that milestone
+    // (e.g., 'fertig' includes orders with istStatus=fertig even if versandStatus is also set)
     switch (stage) {
         case 'problem':
             query = query.eq('istStatus', 'problem');
@@ -272,13 +375,16 @@ export async function getOrdersByStage(stage: StageType, date: Date = new Date()
             query = query.eq('versandStatus', 'versendet');
             break;
         case 'versandbereit':
-            query = query.eq('versandStatus', 'versandbereit');
+            // Orders that are ready to ship OR already shipped
+            query = query.or('versandStatus.eq.versandbereit,versandStatus.eq.versendet');
             break;
         case 'fertig':
-            query = query.eq('istStatus', 'fertig');
+            // Orders with istStatus=fertig OR already in versand stages (they passed through fertig)
+            query = query.or('istStatus.eq.fertig,versandStatus.eq.versandbereit,versandStatus.eq.versendet');
             break;
         case 'in_produktion':
-            query = query.eq('istStatus', 'in_produktion');
+            // Orders that have started production (in_produktion or beyond)
+            query = query.or('istStatus.eq.in_produktion,istStatus.eq.fertig,versandStatus.eq.versandbereit,versandStatus.eq.versendet');
             break;
         case 'offen':
             // Offen: no istStatus AND versandStatus NOT in ('versandbereit', 'versendet')

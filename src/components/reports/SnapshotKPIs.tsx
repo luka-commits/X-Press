@@ -11,7 +11,7 @@
 import { Package, AlertTriangle, Clock, Calendar, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-type KpiClickType = 'problem' | 'oldest' | 'tomorrow';
+type KpiClickType = 'problem' | 'oldest' | 'tomorrow' | 'openOrders';
 
 interface SnapshotKPIsProps {
   data: {
@@ -42,7 +42,7 @@ const KPI_CARDS: KpiCardConfig[] = [
     icon: Package,
     iconColorClass: 'text-blue-600',
     getValue: (v) => String(v ?? 0),
-    // No clickType - not clickable (just a total count)
+    clickType: 'openOrders',
   },
   {
     key: 'problemAuftraege',

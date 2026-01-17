@@ -65,8 +65,7 @@ export async function GET(request: NextRequest) {
         .from('Auftrag')
         .select('versandUpdatedAt, createdAt')
         .eq('versandStatus', 'versendet')
-        .or(`versandUpdatedAt.gte.${fromParam}T00:00:00,versandUpdatedAt.is.null`)
-        .or(`versandUpdatedAt.lte.${toParam}T23:59:59,versandUpdatedAt.is.null`),
+        .or(`and(versandUpdatedAt.gte.${fromParam}T00:00:00,versandUpdatedAt.lte.${toParam}T23:59:59),versandUpdatedAt.is.null`),
     ]);
 
     // Count orders per day for eingang

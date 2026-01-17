@@ -11,6 +11,8 @@
 import { Truck, Clock, CheckCircle2, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+type PipelineKpiClickType = 'shipped';
+
 interface PipelineKPIsProps {
   kpis: {
     avgDaysToShip: number | null;
@@ -23,6 +25,7 @@ interface PipelineKPIsProps {
     totalShipped: number;
   } | null;
   loading: boolean;
+  onKpiClick?: (type: PipelineKpiClickType) => void;
 }
 
 interface KpiCardConfig {
@@ -33,6 +36,7 @@ interface KpiCardConfig {
   getValue: (kpis: NonNullable<PipelineKPIsProps['kpis']>) => string;
   // For avgDaysToShip, lower is better, so we invert the comparison
   invertComparison?: boolean;
+  clickType?: PipelineKpiClickType;
 }
 
 const KPI_CARDS: KpiCardConfig[] = [
@@ -42,6 +46,7 @@ const KPI_CARDS: KpiCardConfig[] = [
     icon: Truck,
     iconColorClass: 'text-blue-600',
     getValue: (kpis) => String(kpis.totalShipped),
+    clickType: 'shipped',
   },
   {
     key: 'avgDaysToShip',
@@ -60,7 +65,7 @@ const KPI_CARDS: KpiCardConfig[] = [
   },
 ];
 
-export function PipelineKPIs({ kpis, prevPeriod, loading }: PipelineKPIsProps) {
+export function PipelineKPIs({ kpis, prevPeriod, loading, onKpiClick }: PipelineKPIsProps) {
   return (
     <div className="space-y-4">
       {/* Section header */}
@@ -72,12 +77,23 @@ export function PipelineKPIs({ kpis, prevPeriod, loading }: PipelineKPIsProps) {
           const IconComponent = card.icon;
           const currentValue = kpis ? kpis[card.key] : null;
           const prevValue = prevPeriod ? prevPeriod[card.key] : null;
+          const isClickable = !!card.clickType && !!onKpiClick;
 
-          return (
-            <div
-              key={card.key}
-              className="bg-white rounded-lg border border-neutral-200 p-4"
-            >
+          const handleClick = () => {
+            if (card.clickType && onKpiClick) {
+              onKpiClick(card.clickType);
+            }
+          };
+
+          const handleKeyDown = (e: React.KeyboardEvent) => {
+            if ((e.key === 'Enter' || e.key === ' ') && card.clickType && onKpiClick) {
+              e.preventDefault();
+              onKpiClick(card.clickType);
+            }
+          };
+
+          const cardContent = (
+            <>
               {/* Icon and label */}
               <div className="flex items-center gap-2 mb-2">
                 <IconComponent className={cn('w-5 h-5', card.iconColorClass)} />
@@ -106,6 +122,37 @@ export function PipelineKPIs({ kpis, prevPeriod, loading }: PipelineKPIsProps) {
                   />
                 </>
               )}
+            </>
+          );
+
+          // Clickable cards have hover effect and keyboard accessibility
+          if (isClickable) {
+            return (
+              <div
+                key={card.key}
+                role="button"
+                tabIndex={0}
+                onClick={handleClick}
+                onKeyDown={handleKeyDown}
+                className={cn(
+                  'bg-white rounded-lg border border-neutral-200 p-4',
+                  'cursor-pointer transition-all',
+                  'hover:border-ghl-blue hover:shadow-sm',
+                  'focus:outline-none focus:ring-2 focus:ring-ghl-blue focus:ring-offset-2'
+                )}
+              >
+                {cardContent}
+              </div>
+            );
+          }
+
+          // Non-clickable cards
+          return (
+            <div
+              key={card.key}
+              className="bg-white rounded-lg border border-neutral-200 p-4"
+            >
+              {cardContent}
             </div>
           );
         })}

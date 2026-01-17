@@ -199,8 +199,7 @@ async function fetchThroughput(from: string, to: string): Promise<{
       .from('Auftrag')
       .select('*', { count: 'exact', head: true })
       .eq('versandStatus', 'versendet')
-      .or(`versandUpdatedAt.gte.${fromWithTime},versandUpdatedAt.is.null`)
-      .or(`versandUpdatedAt.lte.${toWithTime},versandUpdatedAt.is.null`),
+      .or(`and(versandUpdatedAt.gte.${fromWithTime},versandUpdatedAt.lte.${toWithTime}),versandUpdatedAt.is.null`),
   ]);
 
   return {
@@ -281,8 +280,7 @@ async function fetchPeriodKpis(from: string, to: string): Promise<PeriodKpis> {
     .from('Auftrag')
     .select('createdAt, liefertermin, versandUpdatedAt')
     .eq('versandStatus', 'versendet')
-    .or(`versandUpdatedAt.gte.${fromWithTime},versandUpdatedAt.is.null`)
-    .or(`versandUpdatedAt.lte.${toWithTime},versandUpdatedAt.is.null`);
+    .or(`and(versandUpdatedAt.gte.${fromWithTime},versandUpdatedAt.lte.${toWithTime}),versandUpdatedAt.is.null`);
 
   if (error || !orders) {
     console.error('Period KPIs fetch error:', error);

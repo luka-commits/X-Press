@@ -95,15 +95,26 @@ export function ReportsDashboard() {
   const [snapshotData, setSnapshotData] = useState<SnapshotData | null>(null);
   const [snapshotLoading, setSnapshotLoading] = useState(true);
 
-  // Fetch funnel data (current snapshot, independent of date range)
+  // Fetch funnel and stage distribution data (current snapshot, independent of date range)
+  // Funnel: cumulative (stages show orders that REACHED that milestone)
+  // Stage Distribution: exclusive (each order counted in only one stage)
   const fetchFunnelData = useCallback(async () => {
     setFunnelLoading(true);
     try {
-      const response = await fetch('/api/reports/funnel');
-      if (!response.ok) throw new Error('Fehler beim Laden der Funnel-Daten');
-      const result = await response.json();
-      setFunnelData(result.stages || []);
-      setStageDistribution({ data: result.stages || [], total: result.totalValue || 0 });
+      // Fetch both in parallel
+      const [funnelResponse, stageResponse] = await Promise.all([
+        fetch('/api/reports/funnel'),                     // cumulative (default)
+        fetch('/api/reports/funnel?mode=exclusive'),      // exclusive for donut
+      ]);
+
+      if (!funnelResponse.ok) throw new Error('Fehler beim Laden der Funnel-Daten');
+      if (!stageResponse.ok) throw new Error('Fehler beim Laden der Stage-Daten');
+
+      const funnelResult = await funnelResponse.json();
+      const stageResult = await stageResponse.json();
+
+      setFunnelData(funnelResult.stages || []);
+      setStageDistribution({ data: stageResult.stages || [], total: stageResult.totalValue || 0 });
     } catch (err) {
       console.error('Funnel fetch error:', err);
       setFunnelData([]);
@@ -211,7 +222,18 @@ export function ReportsDashboard() {
   };
 
   // Handler for SnapshotKPIs click
-  const handleKpiClick = (type: 'problem' | 'oldest' | 'tomorrow') => {
+  const handleKpiClick = (type: 'problem' | 'oldest' | 'tomorrow' | 'openOrders') => {
+    // 'openOrders' maps to stage type with stage='offen'
+    if (type === 'openOrders') {
+      setDialogState({
+        isOpen: true,
+        type: 'stage',
+        stage: 'offen',
+        title: 'Offene Aufträge',
+      });
+      return;
+    }
+
     const titles = {
       problem: 'Problem-Aufträge',
       oldest: 'Älteste Aufträge',
@@ -222,6 +244,18 @@ export function ReportsDashboard() {
       type,
       title: titles[type],
     });
+  };
+
+  // Handler for PipelineKPIs click (shipped)
+  const handlePipelineKpiClick = (type: 'shipped') => {
+    if (type === 'shipped') {
+      setDialogState({
+        isOpen: true,
+        type: 'stage',
+        stage: 'versendet',
+        title: 'Versendete Aufträge',
+      });
+    }
   };
 
   // Handler for FunnelChart and StageDistributionChart clicks
@@ -310,6 +344,7 @@ export function ReportsDashboard() {
           kpis={pipelineData?.periodKpis ?? null}
           prevPeriod={pipelineData?.prevPeriodKpis ?? null}
           loading={pipelineLoading}
+          onKpiClick={handlePipelineKpiClick}
         />
 
         {/* Two-column row: ThroughputChart + PlzChart */}
