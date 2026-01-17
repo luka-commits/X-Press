@@ -37,8 +37,13 @@ const customJestConfig = {
     '!src/app/**/loading.tsx',
   ],
 
-  // Ignore patterns
-  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
+  // Ignore patterns - exclude test utilities and fixtures from test discovery
+  testPathIgnorePatterns: [
+    '<rootDir>/node_modules/',
+    '<rootDir>/.next/',
+    '<rootDir>/src/__tests__/utils/',
+    '<rootDir>/src/__tests__/fixtures/',
+  ],
 };
 
 // createJestConfig returns a Promise, so this exports the config async
