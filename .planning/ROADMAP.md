@@ -40,17 +40,17 @@ Plans:
 - [x] 31-01: Core Orders API tests (list, status, search) — completed 2026-01-18
 - [x] 31-02: Dashboard & Reports API tests (kpi-orders, pipeline) — completed 2026-01-18
 
-#### Phase 32: Component-Tests
+#### Phase 32: Component-Tests ✓
 
 **Goal**: Tests für kritische UI-Komponenten (Dashboard, Versand, Reports)
 **Depends on**: Phase 30
 **Research**: Unlikely (internal patterns)
-**Plans**: 2/3 complete
+**Plans**: 3/3 complete
 
 Plans:
 - [x] 32-01: Dashboard dialog tests (KPIOrdersDialog, DashboardClient) — completed 2026-01-18
 - [x] 32-02: Orders & Versand tests (OrderFilters, VersandKPIs) — completed 2026-01-18
-- [ ] 32-03: Reports tests (SnapshotKPIs, ReportsOrdersDialog)
+- [x] 32-03: Reports tests (SnapshotKPIs, ReportsOrdersDialog) — completed 2026-01-18
 
 #### Phase 33: E2E-Tests
 
