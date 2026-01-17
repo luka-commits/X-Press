@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-01-17)
 
 ## Current Position
 
-Phase: 22 of 22 (Reports & Navigation)
-Plan: 1/1 complete
-Status: Phase complete, milestone complete
-Last activity: 2026-01-17 — Completed 22-01-PLAN.md
+Phase: 23 of 24 (Reports neu)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-01-17 — Milestone v1.6 created
 
-Progress: ██████████ 100% (v1.5)
+Progress: ░░░░░░░░░░ 0% (v1.6)
 
 ## Milestones
 
@@ -24,6 +24,7 @@ Progress: ██████████ 100% (v1.5)
 - ✅ v1.3 Routenplanung (Phases 15-17) — SHIPPED 2026-01-16
 - ✅ v1.4 Reporting (Phases 18-20) — SHIPPED 2026-01-17
 - ✅ v1.5 System-Konsolidierung (Phases 21-22) — SHIPPED 2026-01-17
+- 🚧 v1.6 Pipeline-Analytics (Phases 23-24) — in progress
 
 ## Performance Metrics
 
@@ -65,10 +66,11 @@ None currently.
 - v1.3 shipped: 2026-01-16 (3 phases, 3 plans)
 - v1.4 shipped: 2026-01-17 (3 phases, 5 plans)
 - v1.5 shipped: 2026-01-17 (2 phases, 2 plans)
+- v1.6 created: 2026-01-17 (Pipeline-Analytics, 2 phases: 23-24)
 
 ## Session Continuity
 
 Last session: 2026-01-17
-Stopped at: v1.5 milestone archived
+Stopped at: v1.6 milestone initialized
 Resume file: None
-Next: `/gsd:discuss-milestone` or `/gsd:new-milestone`
+Next: `/gsd:plan-phase 23`
