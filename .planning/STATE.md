@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-01-17)
 
 ## Current Position
 
-Phase: 35 of 37 (Performance-Audit)
-Plan: 1 of 1 complete
-Status: Phase complete
-Last activity: 2026-01-18 — Completed 35-01-PLAN.md (Performance audit)
+Phase: 36 of 37 (Performance-Optimierung)
+Plan: 2 of 3 complete
+Status: In progress
+Last activity: 2026-01-18 — Completed 36-02-PLAN.md (Lazy load Recharts)
 
-Progress: █████░░░░░ 75% (v1.9 - 6 of 8 phases)
+Progress: █████████░ 90% (v1.9 - 7 of 8 phases in progress)
 
 ## Milestones
 
@@ -80,5 +80,5 @@ None currently.
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Completed 35-01-PLAN.md (Performance audit - phase 35 complete)
+Stopped at: Completed 36-02-PLAN.md (Lazy load Recharts charts)
 Resume file: None
