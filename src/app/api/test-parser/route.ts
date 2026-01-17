@@ -68,7 +68,13 @@ export async function GET() {
   }
 }
 
-function getMaschinenZusammenfassung(arbeitsgaenge: any[]) {
+interface ArbeitsgangSummaryItem {
+  kostenstelle: string;
+  kostenstellenName: string;
+  zeitMinuten: number;
+}
+
+function getMaschinenZusammenfassung(arbeitsgaenge: ArbeitsgangSummaryItem[]) {
   const maschinenZeit = new Map<string, { name: string; zeit: number; count: number }>();
 
   for (const ag of arbeitsgaenge) {
