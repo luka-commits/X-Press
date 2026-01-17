@@ -4,3 +4,7 @@ export { VolumeChart, type VolumeData } from './VolumeChart';
 export { AnalyticsView } from './AnalyticsView';
 export { PlzChart, type PlzData } from './PlzChart';
 export { VersandView } from './VersandView';
+export { PipelineFunnel } from './PipelineFunnel';
+export { SnapshotKPIs } from './SnapshotKPIs';
+export { PipelineKPIs } from './PipelineKPIs';
+export { PipelineDashboard } from './PipelineDashboard';

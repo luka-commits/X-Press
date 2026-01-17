@@ -10,12 +10,6 @@
 
 import { ChevronRight, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 
 interface FunnelStage {
   count: number;
@@ -75,21 +69,15 @@ const STAGES: StageConfig[] = [
 export function PipelineFunnel({ data, loading }: PipelineFunnelProps) {
   return (
     <div className="bg-white rounded-lg border border-neutral-200 p-6">
-      {/* Header with tooltip */}
+      {/* Header with info icon */}
       <div className="flex items-center gap-2 mb-6">
         <h3 className="font-semibold text-ghl-text">Durchfluss im Zeitraum</h3>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Info className="w-4 h-4 text-neutral-400 cursor-help" />
-            </TooltipTrigger>
-            <TooltipContent>
-              <p className="text-sm max-w-xs">
-                Aufträge die im gewählten Zeitraum diese Stage erreicht haben
-              </p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <span
+          title="Aufträge die im gewählten Zeitraum diese Stage erreicht haben"
+          className="cursor-help"
+        >
+          <Info className="w-4 h-4 text-neutral-400" />
+        </span>
       </div>
 
       {/* Funnel stages */}
