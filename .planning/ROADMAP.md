@@ -89,10 +89,12 @@ Plans:
 **Goal**: Identifizierte Bottlenecks beheben (Bundle-Size, Lazy-Loading, Caching)
 **Depends on**: Phase 35
 **Research**: Unlikely (Next.js patterns)
-**Plans**: TBD
+**Plans**: 0/3
 
 Plans:
-- [ ] 36-01: TBD
+- [ ] 36-01: Dashboard KPIOrdersDialog lazy loading (next/dynamic)
+- [ ] 36-02: Reports Recharts lazy loading (all chart components)
+- [ ] 36-03: Verify optimizations (Lighthouse re-audit, checkpoint)
 
 #### Phase 37: Code-Quality
 
