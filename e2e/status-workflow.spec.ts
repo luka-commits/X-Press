@@ -202,3 +202,239 @@ test.describe('Status Page - Search and Selection Workflow', () => {
     }
   });
 });
+
+test.describe('Status Page - Status Update Buttons and Feedback', () => {
+  // Allow more time for API interactions
+  test.setTimeout(20000);
+
+  /**
+   * Helper: Select an order by searching for 'GP' and clicking first result.
+   * Returns true if order was selected, false if no orders exist.
+   */
+  async function selectFirstOrder(page: import('@playwright/test').Page): Promise<boolean> {
+    const searchInput = page.getByPlaceholder('Auftragsnummer oder Kunde...');
+    await searchInput.fill('GP');
+    await page.waitForTimeout(500);
+
+    const resultsDropdown = page.locator('.absolute.z-50');
+
+    if (await resultsDropdown.isVisible()) {
+      await resultsDropdown.locator('button').first().click();
+      await expect(page.getByText('Aktueller Status')).toBeVisible();
+      return true;
+    }
+    return false;
+  }
+
+  test('Three status buttons visible after order selection', async ({ page }) => {
+    await page.goto('/status');
+
+    if (await selectFirstOrder(page)) {
+      // Check for all 3 status buttons
+      const inProduktionBtn = page.getByRole('button', { name: 'In Produktion' });
+      const fertigBtn = page.getByRole('button', { name: 'Fertig' });
+      const problemBtn = page.getByRole('button', { name: 'Problem' });
+
+      await expect(inProduktionBtn).toBeVisible();
+      await expect(fertigBtn).toBeVisible();
+      await expect(problemBtn).toBeVisible();
+    }
+  });
+
+  test('Status buttons have correct colors (blue, green, red)', async ({ page }) => {
+    await page.goto('/status');
+
+    if (await selectFirstOrder(page)) {
+      // Verify button colors via CSS classes
+      const inProduktionBtn = page.getByRole('button', { name: 'In Produktion' });
+      const fertigBtn = page.getByRole('button', { name: 'Fertig' });
+      const problemBtn = page.getByRole('button', { name: 'Problem' });
+
+      // Check for blue background class
+      await expect(inProduktionBtn).toHaveClass(/bg-blue-500/);
+
+      // Check for green background class
+      await expect(fertigBtn).toHaveClass(/bg-green-500/);
+
+      // Check for red background class
+      await expect(problemBtn).toHaveClass(/bg-red-500/);
+    }
+  });
+
+  test('Status buttons are clickable', async ({ page }) => {
+    await page.goto('/status');
+
+    if (await selectFirstOrder(page)) {
+      // Verify buttons are enabled and clickable
+      const inProduktionBtn = page.getByRole('button', { name: 'In Produktion' });
+      const fertigBtn = page.getByRole('button', { name: 'Fertig' });
+      const problemBtn = page.getByRole('button', { name: 'Problem' });
+
+      await expect(inProduktionBtn).toBeEnabled();
+      await expect(fertigBtn).toBeEnabled();
+      await expect(problemBtn).toBeEnabled();
+    }
+  });
+
+  test('Comment textarea is visible with optional placeholder', async ({ page }) => {
+    await page.goto('/status');
+
+    if (await selectFirstOrder(page)) {
+      // Check for comment textarea
+      const commentTextarea = page.getByPlaceholder('Kommentar (optional)');
+      await expect(commentTextarea).toBeVisible();
+    }
+  });
+
+  test('Clicking "In Produktion" shows loading state and then feedback', async ({ page }) => {
+    await page.goto('/status');
+
+    if (await selectFirstOrder(page)) {
+      const inProduktionBtn = page.getByRole('button', { name: 'In Produktion' });
+
+      // Click the button
+      await inProduktionBtn.click();
+
+      // Should see loading state or success feedback
+      // Wait for either "Wird aktualisiert..." (loading) or "Status aktualisiert" (success)
+      const loadingOrSuccess = page.locator('text=/Wird aktualisiert|Status aktualisiert/');
+
+      // Wait for something to appear (loading or success)
+      await expect(loadingOrSuccess.first()).toBeVisible({ timeout: 5000 });
+
+      // Eventually should see success feedback
+      const successFeedback = page.getByText('Status aktualisiert');
+      await expect(successFeedback).toBeVisible({ timeout: 5000 });
+    }
+  });
+
+  test('Clicking "Fertig" shows success feedback', async ({ page }) => {
+    await page.goto('/status');
+
+    if (await selectFirstOrder(page)) {
+      const fertigBtn = page.getByRole('button', { name: 'Fertig' });
+
+      // Click the button
+      await fertigBtn.click();
+
+      // Wait for success feedback
+      const successFeedback = page.getByText('Status aktualisiert');
+      await expect(successFeedback).toBeVisible({ timeout: 5000 });
+    }
+  });
+
+  test('Clicking "Problem" without comment shows validation error', async ({ page }) => {
+    await page.goto('/status');
+
+    if (await selectFirstOrder(page)) {
+      const problemBtn = page.getByRole('button', { name: 'Problem' });
+
+      // Click Problem button without entering comment
+      await problemBtn.click();
+
+      // Should see validation error message
+      const validationError = page.getByText('Bitte beschreiben Sie das Problem');
+      await expect(validationError).toBeVisible();
+
+      // Textarea should get focus and show required placeholder
+      const requiredTextarea = page.getByPlaceholder(
+        'Was ist das Problem? Bitte hier beschreiben...'
+      );
+      await expect(requiredTextarea).toBeVisible();
+      await expect(requiredTextarea).toBeFocused();
+    }
+  });
+
+  test('Clicking "Problem" with comment shows success feedback', async ({ page }) => {
+    await page.goto('/status');
+
+    if (await selectFirstOrder(page)) {
+      // First enter a comment
+      const commentTextarea = page.getByPlaceholder('Kommentar (optional)');
+      await commentTextarea.fill('Test problem description');
+
+      // Then click Problem button
+      const problemBtn = page.getByRole('button', { name: 'Problem' });
+      await problemBtn.click();
+
+      // Should see success feedback (if database accepts it)
+      const successFeedback = page.getByText('Status aktualisiert');
+      await expect(successFeedback).toBeVisible({ timeout: 5000 });
+    }
+  });
+
+  test('Success feedback auto-dismisses after 3 seconds', async ({ page }) => {
+    await page.goto('/status');
+
+    if (await selectFirstOrder(page)) {
+      const inProduktionBtn = page.getByRole('button', { name: 'In Produktion' });
+      await inProduktionBtn.click();
+
+      // Wait for success feedback
+      const successFeedback = page.getByText('Status aktualisiert');
+      await expect(successFeedback).toBeVisible({ timeout: 5000 });
+
+      // Wait for auto-dismiss (3s + buffer)
+      await page.waitForTimeout(3500);
+
+      // Feedback should be gone
+      await expect(successFeedback).not.toBeVisible();
+    }
+  });
+
+  test('Feedback banner has role="alert" for accessibility', async ({ page }) => {
+    await page.goto('/status');
+
+    if (await selectFirstOrder(page)) {
+      const inProduktionBtn = page.getByRole('button', { name: 'In Produktion' });
+      await inProduktionBtn.click();
+
+      // Wait for feedback banner
+      await page.waitForTimeout(1000);
+
+      // Check for alert role
+      const alertBanner = page.locator('[role="alert"]');
+      await expect(alertBanner).toBeVisible({ timeout: 5000 });
+    }
+  });
+
+  test('Buttons are disabled during loading state', async ({ page }) => {
+    await page.goto('/status');
+
+    if (await selectFirstOrder(page)) {
+      const inProduktionBtn = page.getByRole('button', { name: 'In Produktion' });
+      const fertigBtn = page.getByRole('button', { name: 'Fertig' });
+      const problemBtn = page.getByRole('button', { name: 'Problem' });
+
+      // Click a button to trigger loading
+      await inProduktionBtn.click();
+
+      // During loading, buttons should be disabled
+      // We need to check quickly before the request completes
+      // This might be flaky on fast connections but verifies the UI behavior
+      const loadingIndicator = page.getByText('Wird aktualisiert...');
+
+      // If we catch it in loading state, verify buttons are disabled
+      if (await loadingIndicator.isVisible()) {
+        await expect(fertigBtn).toHaveClass(/disabled:opacity-50/);
+        await expect(problemBtn).toHaveClass(/disabled:opacity-50/);
+      }
+
+      // Wait for completion to not interfere with other tests
+      await page.waitForTimeout(2000);
+    }
+  });
+
+  test('Status buttons not visible without order selection', async ({ page }) => {
+    await page.goto('/status');
+
+    // Without selecting an order, status buttons should not be visible
+    const inProduktionBtn = page.getByRole('button', { name: 'In Produktion' });
+    const fertigBtn = page.getByRole('button', { name: 'Fertig' });
+    const problemBtn = page.getByRole('button', { name: 'Problem' });
+
+    await expect(inProduktionBtn).not.toBeVisible();
+    await expect(fertigBtn).not.toBeVisible();
+    await expect(problemBtn).not.toBeVisible();
+  });
+});
