@@ -7,15 +7,14 @@
 
 import { render, screen, fireEvent } from '@testing-library/react';
 
+import { useDashboardRefresh } from '@/hooks';
+
 import { DashboardClient } from '../DashboardClient';
 
 // Mock the hooks module
 jest.mock('@/hooks', () => ({
   useDashboardRefresh: jest.fn(),
 }));
-
-// Import the mocked hook to configure it in tests
-import { useDashboardRefresh } from '@/hooks';
 
 const mockUseDashboardRefresh = useDashboardRefresh as jest.MockedFunction<
   typeof useDashboardRefresh
