@@ -8,3 +8,4 @@ export { PipelineFunnel } from './PipelineFunnel';
 export { SnapshotKPIs } from './SnapshotKPIs';
 export { PipelineKPIs } from './PipelineKPIs';
 export { PipelineDashboard } from './PipelineDashboard';
+export { ThroughputChart, type ThroughputData } from './ThroughputChart';
