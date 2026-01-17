@@ -45,10 +45,12 @@ Plans:
 **Goal**: Tests für kritische UI-Komponenten (Dashboard, Versand, Reports)
 **Depends on**: Phase 30
 **Research**: Unlikely (internal patterns)
-**Plans**: TBD
+**Plans**: 0/3 complete
 
 Plans:
-- [ ] 32-01: TBD
+- [ ] 32-01: Dashboard dialog tests (KPIOrdersDialog, DashboardClient)
+- [ ] 32-02: Orders & Versand tests (OrderFilters, VersandKPIs)
+- [ ] 32-03: Reports tests (SnapshotKPIs, ReportsOrdersDialog)
 
 #### Phase 33: E2E-Tests
 
