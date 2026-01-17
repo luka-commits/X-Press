@@ -267,8 +267,15 @@ export function parseXML(xmlContent: string): ParsedAuftrag {
     arbeitsvorgaengeArray.push(...avsArray);
   }
 
+  // Type guard to ensure Kostenstelle is defined
+  const hasKostenstelle = (
+    av: RawArbeitsvorgang
+  ): av is RawArbeitsvorgang & { '@_Kostenstelle': string } => {
+    return Boolean(av && av['@_Kostenstelle']);
+  };
+
   const arbeitsgaenge: ParsedArbeitsgang[] = arbeitsvorgaengeArray
-    .filter((av) => av && av['@_Kostenstelle'])
+    .filter(hasKostenstelle)
     .map((av) => {
       // Aggregate ZEIT from Elemente
       const zeitMinuten = aggregiereZeit(av.Elemente);
