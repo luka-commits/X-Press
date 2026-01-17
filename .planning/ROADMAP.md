@@ -29,16 +29,16 @@
 Plans:
 - [x] 30-01: Test utilities and mocks (Prisma/Supabase mocks, fixtures, docs update) — completed 2026-01-17
 
-#### Phase 31: Unit-Tests API
+#### Phase 31: Unit-Tests API ✓
 
 **Goal**: Tests für API-Routen und Datenlogik schreiben
 **Depends on**: Phase 30
 **Research**: Unlikely (internal patterns)
-**Plans**: 0/2
+**Plans**: 2/2 complete
 
 Plans:
-- [ ] 31-01: Core Orders API tests (list, status, search)
-- [ ] 31-02: Dashboard & Reports API tests (kpi-orders, pipeline)
+- [x] 31-01: Core Orders API tests (list, status, search) — completed 2026-01-18
+- [x] 31-02: Dashboard & Reports API tests (kpi-orders, pipeline) — completed 2026-01-18
 
 #### Phase 32: Component-Tests
 
@@ -252,7 +252,7 @@ Bei Klick auf KPIs und Charts in der Reports-Seite öffnet sich ein Dialog mit d
 | 28. Reports-KPI-API | v1.8 | 1/1 | Complete | 2026-01-17 |
 | 29. Reports-Drilldown-UI | v1.8 | 3/3 | Complete | 2026-01-17 |
 | 30. Test-Setup | v1.9 | 1/1 | Complete | 2026-01-17 |
-| 31. Unit-Tests API | v1.9 | 0/? | Not started | - |
+| 31. Unit-Tests API | v1.9 | 2/2 | Complete | 2026-01-18 |
 | 32. Component-Tests | v1.9 | 0/? | Not started | - |
 | 33. E2E-Tests | v1.9 | 0/? | Not started | - |
 | 34. Bug-Fixes | v1.9 | 0/? | Not started | - |
