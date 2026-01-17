@@ -25,8 +25,6 @@ import {
 import { CompletedOrdersTable } from './CompletedOrdersTable';
 import { DateRangePicker, type DateRange } from './DateRangePicker';
 import { PipelineKPIs } from './PipelineKPIs';
-
-// Keep type imports as static (types are stripped at build time)
 import type { PlzData } from './PlzChart';
 import { ReportsOrdersDialog } from './ReportsOrdersDialog';
 import { SnapshotKPIs } from './SnapshotKPIs';

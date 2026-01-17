@@ -6,6 +6,8 @@
  * @jest-environment node
  */
 
+import { NextRequest } from 'next/server';
+
 import { createMockOrder, sampleOrders } from '@/__tests__/fixtures';
 import { mockPrisma, mockPrismaReset } from '@/__tests__/utils';
 
@@ -19,9 +21,6 @@ jest.mock('@/lib/prisma', () => ({
 jest.mock('date-fns-tz', () => ({
   toZonedTime: jest.fn((date: Date) => date),
 }));
-
-// Import NextRequest dynamically to avoid issues with test environment
-import { NextRequest } from 'next/server';
 
 // Import the route handler after mocking
 import { GET } from '../route';
