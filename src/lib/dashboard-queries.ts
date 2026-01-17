@@ -49,6 +49,9 @@ export interface CriticalOrder {
   tageUebrig: number;
 }
 
+// KPIOrderItem is an alias for CriticalOrder - same shape used for all KPI detail lists
+export type KPIOrderItem = CriticalOrder;
+
 export interface WeekStatistics {
   auftraegeGesamt: number;
   maschinenStunden: number;
@@ -70,17 +73,17 @@ export async function getDashboardKPIs(date: Date = new Date()): Promise<Dashboa
 
   // Parallel queries for performance
   const [activeResult, criticalResult, overdueResult] = await Promise.all([
-    // Total active orders
+    // Total open orders (not yet shipped)
     supabase
       .from('Auftrag')
       .select('*', { count: 'exact', head: true })
-      .eq('status', 'aktiv'),
+      .neq('versandStatus', 'versendet'),
 
     // Critical orders (liefertermin within 2 days from reference date)
     supabase
       .from('Auftrag')
       .select('*', { count: 'exact', head: true })
-      .eq('status', 'aktiv')
+      .neq('versandStatus', 'versendet')
       .gte('liefertermin', dateStart.toISOString())
       .lte('liefertermin', endOfDay(twoDaysLater).toISOString()),
 
@@ -88,7 +91,7 @@ export async function getDashboardKPIs(date: Date = new Date()): Promise<Dashboa
     supabase
       .from('Auftrag')
       .select('*', { count: 'exact', head: true })
-      .eq('status', 'aktiv')
+      .neq('versandStatus', 'versendet')
       .lt('liefertermin', dateStart.toISOString()),
   ]);
 
@@ -242,13 +245,108 @@ export async function getCriticalOrders(date: Date = new Date()): Promise<Critic
       Kunde(firma, name)
     `
     )
-    .eq('status', 'aktiv')
+    .neq('versandStatus', 'versendet')
     .gte('liefertermin', dateStart.toISOString())
     .lte('liefertermin', endOfDay(twoDaysLater).toISOString())
     .order('liefertermin', { ascending: true });
 
   if (error || !data) {
     console.error('Error fetching critical orders:', error);
+    return [];
+  }
+
+  return data.map((order) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const rawKunde = order.Kunde as any;
+    const kunde = Array.isArray(rawKunde) ? rawKunde[0] : rawKunde;
+    const liefertermin = order.liefertermin ? new Date(order.liefertermin) : null;
+    const tageUebrig = liefertermin ? differenceInDays(liefertermin, dateStart) : 0;
+
+    return {
+      auftragsnummer: order.auftragsnummer,
+      kunde: kunde?.firma || kunde?.name || '–',
+      produkttyp: order.produkttyp,
+      liefertermin: order.liefertermin || '',
+      tageUebrig,
+    };
+  });
+}
+
+// ============================================================
+// Open Orders Query (for KPI Detail: "Offene Aufträge")
+// ============================================================
+
+/**
+ * Lädt alle offenen Aufträge (nicht versendet)
+ * @param date - Referenzdatum für tageUebrig-Berechnung (Default: heute)
+ */
+export async function getOpenOrders(date: Date = new Date()): Promise<KPIOrderItem[]> {
+  const referenceDate = date;
+  const dateStart = startOfDay(referenceDate);
+
+  const { data, error } = await supabase
+    .from('Auftrag')
+    .select(
+      `
+      auftragsnummer,
+      produkttyp,
+      liefertermin,
+      Kunde(firma, name)
+    `
+    )
+    .neq('versandStatus', 'versendet')
+    .order('liefertermin', { ascending: true });
+
+  if (error || !data) {
+    console.error('Error fetching open orders:', error);
+    return [];
+  }
+
+  return data.map((order) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const rawKunde = order.Kunde as any;
+    const kunde = Array.isArray(rawKunde) ? rawKunde[0] : rawKunde;
+    const liefertermin = order.liefertermin ? new Date(order.liefertermin) : null;
+    const tageUebrig = liefertermin ? differenceInDays(liefertermin, dateStart) : 0;
+
+    return {
+      auftragsnummer: order.auftragsnummer,
+      kunde: kunde?.firma || kunde?.name || '–',
+      produkttyp: order.produkttyp,
+      liefertermin: order.liefertermin || '',
+      tageUebrig,
+    };
+  });
+}
+
+// ============================================================
+// Overdue Orders Query (for KPI Detail: "Überfällig")
+// ============================================================
+
+/**
+ * Lädt alle überfälligen Aufträge (Liefertermin vor Referenzdatum, nicht versendet)
+ * @param date - Referenzdatum (Default: heute)
+ */
+export async function getOverdueOrders(date: Date = new Date()): Promise<KPIOrderItem[]> {
+  const referenceDate = date;
+  const dateStart = startOfDay(referenceDate);
+
+  const { data, error } = await supabase
+    .from('Auftrag')
+    .select(
+      `
+      auftragsnummer,
+      produkttyp,
+      liefertermin,
+      Kunde(firma, name)
+    `
+    )
+    .neq('versandStatus', 'versendet')
+    .lt('liefertermin', dateStart.toISOString())
+    .order('liefertermin', { ascending: true });
+
+  if (error || !data) {
+    console.error('Error fetching overdue orders:', error);
     return [];
   }
 
