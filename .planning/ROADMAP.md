@@ -34,7 +34,7 @@ Plans:
 **Plans:** TBD
 
 Plans:
-- [ ] 29-01: TBD (run /gsd:plan-phase 29 to break down)
+- [x] 29-01: ReportsOrdersDialog + clickable SnapshotKPIs — completed 2026-01-17
 
 ---
 
@@ -174,4 +174,4 @@ Bei Klick auf KPI-Karten im Dashboard öffnet sich ein Dialog mit der zugehörig
 | 26. KPI-Detail-API | v1.7 | 1/1 | Complete | 2026-01-17 |
 | 27. KPI-Overlay-UI | v1.7 | 1/1 | Complete | 2026-01-17 |
 | 28. Reports-KPI-API | v1.8 | 1/1 | Complete | 2026-01-17 |
-| 29. Reports-Drilldown-UI | v1.8 | 0/? | Not started | - |
+| 29. Reports-Drilldown-UI | v1.8 | 1/? | In progress | - |
