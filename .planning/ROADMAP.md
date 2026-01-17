@@ -79,10 +79,10 @@ Plans:
 **Goal**: Lighthouse-Audit, Bundle-Analyse, Render-Performance messen
 **Depends on**: Phase 34
 **Research**: Unlikely (standard tools)
-**Plans**: TBD
+**Plans**: 1 planned
 
 Plans:
-- [ ] 35-01: TBD
+- [ ] 35-01: Performance audit (Lighthouse, bundle analysis, Core Web Vitals)
 
 #### Phase 36: Performance-Optimierung
 
