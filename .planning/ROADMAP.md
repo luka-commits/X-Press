@@ -34,10 +34,11 @@ Plans:
 **Goal**: Tests für API-Routen und Datenlogik schreiben
 **Depends on**: Phase 30
 **Research**: Unlikely (internal patterns)
-**Plans**: TBD
+**Plans**: 0/2
 
 Plans:
-- [ ] 31-01: TBD
+- [ ] 31-01: Core Orders API tests (list, status, search)
+- [ ] 31-02: Dashboard & Reports API tests (kpi-orders, pipeline)
 
 #### Phase 32: Component-Tests
 
