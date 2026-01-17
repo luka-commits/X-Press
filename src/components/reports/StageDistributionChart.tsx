@@ -6,6 +6,7 @@ interface StageData {
     name: string;
     value: number;
     fill: string;
+    [key: string]: any;
 }
 
 interface StageDistributionChartProps {

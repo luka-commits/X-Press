@@ -85,7 +85,8 @@ export function FunnelChart({ data }: FunnelChartProps) {
                                 position="right"
                                 fill="#111827"
                                 fontWeight={500}
-                                formatter={(val: number) => val}
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                formatter={(val: any) => val}
                             />
                             {/* Render Cells specific colors */}
                             {formattedData.map((entry, index) => (
