@@ -4,9 +4,23 @@ import { FunnelStage } from '@/lib/reporting-queries';
 
 interface FunnelChartProps {
     data: FunnelStage[];
+    onStageClick?: (stage: string) => void;
 }
 
-export function FunnelChart({ data }: FunnelChartProps) {
+// Map display names to API stage keys
+function getStageKey(name: string): string {
+    const mapping: Record<string, string> = {
+        'Offen': 'offen',
+        'In Produktion': 'in_produktion',
+        'Fertig': 'fertig',
+        'Versandbereit': 'versandbereit',
+        'Versendet': 'versendet',
+        'Problem': 'problem',
+    };
+    return mapping[name] || name.toLowerCase().replace(/\s+/g, '_');
+}
+
+export function FunnelChart({ data, onStageClick }: FunnelChartProps) {
     // Calculate total orders
     const totalOrders = data.reduce((sum, stage) => sum + stage.value, 0);
 
@@ -48,7 +62,7 @@ export function FunnelChart({ data }: FunnelChartProps) {
             {/* Trend Badge - placeholder for now */}
             <div className="flex items-center gap-2 mb-6">
                 <span className="text-xs px-2 py-0.5 rounded bg-neutral-100 text-neutral-500">
-                    Aktive Aufträge
+                    Offene Aufträge
                 </span>
             </div>
 
@@ -66,11 +80,20 @@ export function FunnelChart({ data }: FunnelChartProps) {
                         {/* Bar with label */}
                         <div className="col-span-6">
                             <div
-                                className="relative h-10 rounded flex items-center px-3"
+                                className="relative h-10 rounded flex items-center px-3 cursor-pointer hover:opacity-80 transition"
                                 style={{
                                     backgroundColor: stage.fill,
                                     width: `${Math.max(stage.barWidth, 20)}%`,
                                     minWidth: '100px'
+                                }}
+                                role="button"
+                                tabIndex={0}
+                                onClick={() => onStageClick?.(getStageKey(stage.name))}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' || e.key === ' ') {
+                                        e.preventDefault();
+                                        onStageClick?.(getStageKey(stage.name));
+                                    }
                                 }}
                             >
                                 <span className="text-white text-sm font-medium truncate">
