@@ -173,20 +173,16 @@ Plans:
 Plans:
 - [ ] 39-01: TBD
 
-#### Phase 40: API-Caching
+#### Phase 40: API-Caching — SKIPPED
 
 **Goal**: Response-Caching für KPI-Routes, Cache-Headers
-**Depends on**: Phase 39
-**Research**: Unlikely (Next.js caching patterns)
-**Plans**: TBD
-
-Plans:
-- [ ] 40-01: TBD
+**Status**: Skipped — Not needed for 2-user internal tool. Caching would cause stale data confusion (up to 60s delay after status updates).
+**Research**: Complete (see 40-RESEARCH.md)
 
 #### Phase 41: Query-Optimization
 
 **Goal**: Aggregation in DB verschieben, Over-Fetching eliminieren
-**Depends on**: Phase 40
+**Depends on**: Phase 39
 **Research**: Unlikely (Prisma/Supabase patterns)
 **Plans**: TBD
 
@@ -236,5 +232,5 @@ Plans:
 | 37. Code-Quality | v1.9 | 2/2 | Complete | 2026-01-18 |
 | 38. Observability | v2.0 | 1/1 | Complete | 2026-01-18 |
 | 39. CI-Enhancement | v2.0 | 0/? | Not started | - |
-| 40. API-Caching | v2.0 | 0/? | Not started | - |
+| 40. API-Caching | v2.0 | - | Skipped | 2026-01-18 |
 | 41. Query-Optimization | v2.0 | 0/? | Not started | - |
