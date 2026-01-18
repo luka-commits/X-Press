@@ -27,6 +27,9 @@ interface StageDistributionChartProps {
   onStageClick?: (stage: string) => void;
 }
 
+// Pipeline stage order (left to right)
+const STAGE_ORDER = ['Offen', 'In Produktion', 'Fertig', 'Versandbereit', 'Versendet'];
+
 // Map display names to API stage keys
 function getStageKey(name: string): string {
   const mapping: Record<string, string> = {
@@ -38,6 +41,18 @@ function getStageKey(name: string): string {
     Problem: 'problem',
   };
   return mapping[name] || name.toLowerCase().replace(/\s+/g, '_');
+}
+
+// Sort data by pipeline stage order
+function sortByStageOrder(data: StageData[]): StageData[] {
+  return [...data].sort((a, b) => {
+    const indexA = STAGE_ORDER.indexOf(a.name);
+    const indexB = STAGE_ORDER.indexOf(b.name);
+    // Put unknown stages at the end
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
+    return indexA - indexB;
+  });
 }
 
 type ViewMode = 'pie' | 'bar';
@@ -54,13 +69,15 @@ export function StageDistributionChart({ data, total, onStageClick }: StageDistr
     '#6366F1', // Indigo-500
   ];
 
-  const formattedData = data.map((d, i) => {
+  // Sort by pipeline stage order and format
+  const sortedData = sortByStageOrder(data);
+  const formattedData = sortedData.map((d, i) => {
     const pct = total > 0 ? ((d.value / total) * 100).toFixed(1) : '0';
     return {
       ...d,
       fill: distinctColors[i % distinctColors.length],
       percentage: pct,
-      label: `${d.value} (${pct}%)`,
+      label: `${d.value}`,
     };
   });
 
@@ -182,24 +199,25 @@ export function StageDistributionChart({ data, total, onStageClick }: StageDistr
           </div>
         </div>
       ) : (
-        /* Horizontal Bar Chart */
+        /* Vertical Bar Chart - Pipeline stages left to right */
         <div className="flex-1 mt-2">
-          <ResponsiveContainer width="100%" height={formattedData.length * 44 + 16}>
+          <ResponsiveContainer width="100%" height={220}>
             <BarChart
               data={formattedData}
-              layout="vertical"
-              margin={{ top: 0, right: 80, left: 0, bottom: 0 }}
-              barCategoryGap="24%"
+              margin={{ top: 20, right: 10, left: 10, bottom: 40 }}
+              barCategoryGap="16%"
             >
-              <XAxis type="number" hide />
-              <YAxis
-                type="category"
+              <XAxis
                 dataKey="name"
                 axisLine={false}
                 tickLine={false}
-                width={100}
-                tick={{ fontSize: 12, fill: '#525252' }}
+                tick={{ fontSize: 11, fill: '#525252' }}
+                interval={0}
+                angle={-20}
+                textAnchor="end"
+                height={50}
               />
+              <YAxis hide />
               <Tooltip
                 cursor={{ fill: 'rgba(0,0,0,0.04)' }}
                 content={({ active, payload }) => {
@@ -220,7 +238,7 @@ export function StageDistributionChart({ data, total, onStageClick }: StageDistr
               />
               <Bar
                 dataKey="value"
-                radius={[0, 4, 4, 0]}
+                radius={[4, 4, 0, 0]}
                 cursor="pointer"
                 onClick={(data) => data.name && onStageClick?.(getStageKey(data.name))}
               >
@@ -229,7 +247,7 @@ export function StageDistributionChart({ data, total, onStageClick }: StageDistr
                 ))}
                 <LabelList
                   dataKey="label"
-                  position="right"
+                  position="top"
                   style={{ fontSize: 11, fill: '#525252', fontWeight: 500 }}
                 />
               </Bar>
