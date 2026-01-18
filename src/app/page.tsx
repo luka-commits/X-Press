@@ -1,5 +1,4 @@
-import { format, startOfWeek } from 'date-fns';
-import { de } from 'date-fns/locale';
+import { startOfWeek } from 'date-fns';
 
 import {
   KPICardsGrid,
@@ -34,10 +33,8 @@ export default async function DashboardPage() {
     getWeekStatistics(weekStart),
   ]);
 
-  const lastUpdated = format(new Date(), 'HH:mm:ss', { locale: de });
-
   return (
-    <MainLayout headerRight={<DashboardClient lastUpdated={lastUpdated} />}>
+    <MainLayout headerRight={<DashboardClient />}>
       {/* Week Statistics */}
       <WeekStatistics
         auftraegeGesamt={weekStats.auftraegeGesamt}

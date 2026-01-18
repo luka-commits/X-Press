@@ -12,18 +12,11 @@ import { RefreshCw, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useDashboardRefresh } from '@/hooks';
 
-interface DashboardClientProps {
-  lastUpdated: string;
-}
-
-export function DashboardClient({ lastUpdated }: DashboardClientProps) {
-  const { isRefreshing, showSuccess, countdownText, handleRefresh } = useDashboardRefresh();
+export function DashboardClient() {
+  const { isRefreshing, showSuccess, handleRefresh } = useDashboardRefresh();
 
   return (
     <div className="flex items-center gap-4 text-sm text-neutral-500">
-      <span className="transition-opacity duration-300">Aktualisiert: {lastUpdated}</span>
-      <span className="text-neutral-400">|</span>
-      <span>Nächste Aktualisierung in {countdownText}</span>
       <Button
         variant={showSuccess ? 'default' : 'outline'}
         size="sm"
