@@ -85,7 +85,7 @@ export function Header({ headerRight }: HeaderProps) {
   };
 
   return (
-    <header className="h-16 bg-white border-b border-ghl-border flex items-center justify-between px-6">
+    <header className="sticky top-0 z-50 h-16 bg-white border-b border-ghl-border flex items-center justify-between px-6">
       {/* Left: Logo + Navigation */}
       <div className="flex items-center gap-8">
         {/* Logo */}
