@@ -74,6 +74,12 @@ export function VersandOrderList() {
   const [loadingStatus, setLoadingStatus] = useState<VersandStatusType | null>(null);
   const [feedback, setFeedback] = useState<Feedback | null>(null);
 
+  // Pagination
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [total, setTotal] = useState(0);
+  const ITEMS_PER_PAGE = 25;
+
   // Filters
   const [deadlineFilter, setDeadlineFilter] = useState<DeadlineFilter>('all');
 
@@ -103,7 +109,7 @@ export function VersandOrderList() {
 
   // Fetch only versandbereit orders
   const fetchOrders = useCallback(
-    async (signal?: AbortSignal) => {
+    async (signal?: AbortSignal, pageNum?: number) => {
       setLoading(true);
       setError(null);
 
@@ -111,7 +117,8 @@ export function VersandOrderList() {
         const params = new URLSearchParams();
         params.set('deadline', deadlineFilter);
         params.set('versandStatus', 'versandbereit');
-        params.set('limit', '1000');
+        params.set('page', String(pageNum ?? page));
+        params.set('limit', String(ITEMS_PER_PAGE));
 
         const response = await fetch(`/api/versand/orders?${params.toString()}`, { signal });
 
@@ -121,6 +128,8 @@ export function VersandOrderList() {
 
         const data: VersandOrdersResponse = await response.json();
         setOrders(data.orders);
+        setTotalPages(data.totalPages);
+        setTotal(data.total);
       } catch (err) {
         if (err instanceof Error && err.name === 'AbortError') {
           return;
@@ -130,15 +139,27 @@ export function VersandOrderList() {
         setLoading(false);
       }
     },
-    [deadlineFilter]
+    [deadlineFilter, page]
   );
 
-  // Fetch on mount and filter change with cleanup
+  // Reset page to 1 when filter changes
+  useEffect(() => {
+    setPage(1);
+  }, [deadlineFilter]);
+
+  // Fetch on mount and filter/page change with cleanup
   useEffect(() => {
     const controller = new AbortController();
     fetchOrders(controller.signal);
     return () => controller.abort();
   }, [fetchOrders]);
+
+  // Handle page change
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    // Scroll to top of list
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // Handle order selection from list
   const handleOrderSelect = (order: VersandOrder) => {
@@ -577,6 +598,41 @@ export function VersandOrderList() {
                   )}
                 </div>
               ))}
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-between px-4 py-3 bg-white rounded-lg border border-ghl-border shadow-sm">
+                  <p className="text-sm text-neutral-500">
+                    {total} Aufträge, Seite {page} von {totalPages}
+                  </p>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handlePageChange(page - 1)}
+                      disabled={page <= 1}
+                      className={cn(
+                        'px-3 py-1.5 text-sm font-medium rounded-md border transition-colors',
+                        page <= 1
+                          ? 'bg-neutral-50 text-neutral-300 border-neutral-200 cursor-not-allowed'
+                          : 'bg-white text-neutral-700 border-neutral-300 hover:bg-neutral-50'
+                      )}
+                    >
+                      Zurück
+                    </button>
+                    <button
+                      onClick={() => handlePageChange(page + 1)}
+                      disabled={page >= totalPages}
+                      className={cn(
+                        'px-3 py-1.5 text-sm font-medium rounded-md border transition-colors',
+                        page >= totalPages
+                          ? 'bg-neutral-50 text-neutral-300 border-neutral-200 cursor-not-allowed'
+                          : 'bg-white text-neutral-700 border-neutral-300 hover:bg-neutral-50'
+                      )}
+                    >
+                      Weiter
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>

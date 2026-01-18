@@ -27,8 +27,8 @@ interface StageDistributionChartProps {
   onStageClick?: (stage: string) => void;
 }
 
-// Pipeline stage order (left to right)
-const STAGE_ORDER = ['Offen', 'In Produktion', 'Fertig', 'Versandbereit', 'Versendet'];
+// Pipeline stage order (left to right, Problem at end)
+const STAGE_ORDER = ['Offen', 'In Produktion', 'Fertig', 'Versandbereit', 'Versendet', 'Problem'];
 
 // Map display names to API stage keys
 function getStageKey(name: string): string {
@@ -60,13 +60,14 @@ type ViewMode = 'pie' | 'bar';
 export function StageDistributionChart({ data, total, onStageClick }: StageDistributionChartProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('bar');
 
-  // Distinct Palette (synced with FunnelChart)
+  // Distinct Palette for pipeline stages
   const distinctColors = [
-    '#2563EB', // Blue-600
-    '#06B6D4', // Cyan-500
-    '#8B5CF6', // Violet-500
-    '#EC4899', // Pink-500
-    '#6366F1', // Indigo-500
+    '#2563EB', // Blue-600 - Offen
+    '#06B6D4', // Cyan-500 - In Produktion
+    '#8B5CF6', // Violet-500 - Fertig
+    '#EC4899', // Pink-500 - Versandbereit
+    '#10B981', // Emerald-500 - Versendet
+    '#EF4444', // Red-500 - Problem
   ];
 
   // Sort by pipeline stage order and format
