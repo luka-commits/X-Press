@@ -22,7 +22,6 @@ import { generateGoogleMapsUrl, copyToClipboard, validateRouteUrl } from '@/lib/
 import { cn } from '@/lib/utils';
 import type { OptimizeRouteResponse } from '@/types/route';
 
-import { VersandKPIs, type VersandStatusFilter } from './VersandKPIs';
 import { VersandOrderCard, type VersandOrder } from './VersandOrderCard';
 import { VersandStatusButtons, type VersandStatusType } from './VersandStatusButtons';
 
@@ -58,18 +57,17 @@ const deadlineLabels: Record<DeadlineFilter, string> = {
 /**
  * VersandOrderList Component - Order List for Versand-Team
  *
+ * Shows only "versandbereit" orders ready for shipping.
  * Features:
- * - Fetches orders from GET /api/versand/orders
+ * - Fetches only versandbereit orders from GET /api/versand/orders
  * - Deadline filter: Heute / Diese Woche / Alle
- * - VersandStatus filter: Alle / Offen / Versandbereit
  * - PLZ sorting (default from API)
+ * - Route planning with optimization
  * - Expandable order cards with status buttons
- * - Success/error feedback after status updates
  */
 export function VersandOrderList() {
-  // State - orders for display (filtered) and allOrders for KPI counts
+  // State
   const [orders, setOrders] = useState<VersandOrder[]>([]);
-  const [allOrders, setAllOrders] = useState<VersandOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<VersandOrder | null>(null);
@@ -78,7 +76,6 @@ export function VersandOrderList() {
 
   // Filters
   const [deadlineFilter, setDeadlineFilter] = useState<DeadlineFilter>('all');
-  const [statusFilter, setStatusFilter] = useState<VersandStatusFilter>('all');
 
   // Map toggle (mobile only)
   const [showMap, setShowMap] = useState(false);
@@ -104,44 +101,27 @@ export function VersandOrderList() {
     }
   }, [feedback]);
 
-  // Fetch orders (filtered for display) and all orders (for KPIs)
+  // Fetch only versandbereit orders
   const fetchOrders = useCallback(
     async (signal?: AbortSignal) => {
       setLoading(true);
       setError(null);
 
       try {
-        // Fetch filtered orders for display
-        // Use high limit to show all matching orders (no artificial pagination)
         const params = new URLSearchParams();
         params.set('deadline', deadlineFilter);
+        params.set('versandStatus', 'versandbereit');
         params.set('limit', '1000');
-        if (statusFilter !== 'all') {
-          params.set('versandStatus', statusFilter);
-        }
 
-        // Fetch all orders for KPIs (same deadline, no status filter)
-        // Use high limit to ensure all orders are fetched for accurate KPI counts
-        const allParams = new URLSearchParams();
-        allParams.set('deadline', deadlineFilter);
-        allParams.set('limit', '1000');
+        const response = await fetch(`/api/versand/orders?${params.toString()}`, { signal });
 
-        const [filteredResponse, allResponse] = await Promise.all([
-          fetch(`/api/versand/orders?${params.toString()}`, { signal }),
-          fetch(`/api/versand/orders?${allParams.toString()}`, { signal }),
-        ]);
-
-        if (!filteredResponse.ok || !allResponse.ok) {
+        if (!response.ok) {
           throw new Error('Fehler beim Laden der Aufträge');
         }
 
-        const filteredData: VersandOrdersResponse = await filteredResponse.json();
-        const allData: VersandOrdersResponse = await allResponse.json();
-
-        setOrders(filteredData.orders);
-        setAllOrders(allData.orders);
+        const data: VersandOrdersResponse = await response.json();
+        setOrders(data.orders);
       } catch (err) {
-        // Ignore abort errors - component unmounted
         if (err instanceof Error && err.name === 'AbortError') {
           return;
         }
@@ -150,7 +130,7 @@ export function VersandOrderList() {
         setLoading(false);
       }
     },
-    [deadlineFilter, statusFilter]
+    [deadlineFilter]
   );
 
   // Fetch on mount and filter change with cleanup
@@ -393,9 +373,6 @@ export function VersandOrderList() {
 
   return (
     <div className="space-y-6">
-      {/* KPIs - Card-based, matching dashboard style */}
-      <VersandKPIs orders={allOrders} onFilterClick={setStatusFilter} activeFilter={statusFilter} />
-
       {/* Filter Bar - Clean horizontal layout */}
       <div className="bg-white rounded-lg border border-ghl-border p-4 shadow-sm">
         <div className="flex flex-wrap items-center gap-4">
