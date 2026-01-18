@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-01-18)
 
 ## Current Position
 
-Phase: 40 of 41 (API-Caching) - Skipped
-Plan: N/A
-Status: Phase skipped (not needed for 2-user scale)
-Last activity: 2026-01-18 — Skipped Phase 40
+Phase: 39 of 41 (CI-Enhancement) - Complete
+Plan: 1/1 in current phase
+Status: Phase complete
+Last activity: 2026-01-18 — Completed 39-01-PLAN.md
 
-Progress: ████████░░ 50% (v2.0 - 2/4 phases, 1 skipped)
+Progress: ████████░░ 75% (v2.0 - 3/4 phases, Phase 40 skipped)
 
 ## Milestones
 
@@ -33,9 +33,9 @@ Progress: ████████░░ 50% (v2.0 - 2/4 phases, 1 skipped)
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 54
+- Total plans completed: 55
 - Average duration: ~4 min
-- Total execution time: ~253 min
+- Total execution time: ~257 min
 
 **By Milestone:**
 
@@ -51,7 +51,7 @@ Progress: ████████░░ 50% (v2.0 - 2/4 phases, 1 skipped)
 | v1.7 KPI-Klick-Overlay | 3 | 3 | ~4 min |
 | v1.8 Reports-Drilldown | 2 | 4 | ~12 min |
 | v1.9 Fixes | 8 | 16 | ~60 min |
-| v2.0 Production-Readiness | 1 | 1 | ~6 min |
+| v2.0 Production-Readiness | 3 | 2 | ~10 min |
 
 ## Accumulated Context
 
@@ -63,6 +63,11 @@ See PROJECT.md Key Decisions table for full history.
 - tracesSampleRate 0.5 for internal tool (quota management)
 - replaysOnErrorSampleRate 1.0 for full error context
 - Health endpoint uses raw Prisma query for minimal overhead
+
+**Phase 39 Decisions:**
+- Coverage thresholds at 10% (current coverage ~14%), to be increased as tests are added
+- Chromium-only E2E in CI for faster setup
+- E2E job depends on lint-test to save CI resources
 
 **Phase 40 Decision:**
 - Skipped API-Caching — not needed for 2-user internal tool, would cause stale data confusion
@@ -87,11 +92,11 @@ None currently.
 - v1.7 shipped: 2026-01-17 (3 phases, 3 plans: KPI-Klick-Overlay)
 - v1.8 shipped: 2026-01-17 (2 phases, 4 plans: Reports-Drilldown)
 - v1.9 shipped: 2026-01-18 (8 phases, 16 plans: Testing, Performance, Code-Quality)
-- v2.0 in progress: 2026-01-18 (Phase 38 complete)
+- v2.0 in progress: 2026-01-18 (Phase 38, 39 complete; Phase 40 skipped)
 
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Skipped Phase 40 (API-Caching)
+Stopped at: Completed Phase 39 (CI-Enhancement)
 Resume file: None
-Next action: /gsd:plan-phase 41
+Next action: /gsd:execute-plan 41-01
