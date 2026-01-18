@@ -140,7 +140,7 @@ export function KPIOrdersDialog({ kpiType, title, isOpen, onOpenChange }: KPIOrd
                       <span
                         className={cn(
                           'inline-flex items-center justify-center w-8 h-6 rounded text-xs font-medium',
-                          order.tageUebrig === 0
+                          order.tageUebrig <= 0
                             ? 'bg-capacity-red text-white'
                             : order.tageUebrig === 1
                               ? 'bg-capacity-yellow text-white'
