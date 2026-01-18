@@ -45,7 +45,7 @@ const KPI_CARDS: KpiCardConfig[] = [
     key: 'totalShipped',
     label: 'Versendet',
     icon: Truck,
-    iconColorClass: 'text-blue-600',
+    iconColorClass: 'text-neutral-700',
     getValue: (kpis) => String(kpis.totalShipped),
     clickType: 'shipped',
   },
@@ -53,7 +53,7 @@ const KPI_CARDS: KpiCardConfig[] = [
     key: 'avgDaysToShip',
     label: 'Ø Versanddauer',
     icon: Clock,
-    iconColorClass: 'text-neutral-600',
+    iconColorClass: 'text-neutral-700',
     getValue: (kpis) => (kpis.avgDaysToShip !== null ? `${kpis.avgDaysToShip} Tage` : '-'),
     invertComparison: true, // Lower is better
   },
@@ -61,7 +61,7 @@ const KPI_CARDS: KpiCardConfig[] = [
     key: 'onTimePercent',
     label: 'Liefertreue',
     icon: CheckCircle2,
-    iconColorClass: 'text-green-600',
+    iconColorClass: 'text-neutral-700',
     getValue: (kpis) => `${kpis.onTimePercent}%`,
   },
 ];

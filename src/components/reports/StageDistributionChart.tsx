@@ -202,21 +202,45 @@ export function StageDistributionChart({ data, total, onStageClick }: StageDistr
       ) : (
         /* Vertical Bar Chart - Pipeline stages left to right */
         <div className="flex-1 mt-2">
-          <ResponsiveContainer width="100%" height={220}>
+          <ResponsiveContainer width="100%" height={280}>
             <BarChart
               data={formattedData}
-              margin={{ top: 20, right: 10, left: 10, bottom: 40 }}
-              barCategoryGap="16%"
+              margin={{ top: 30, right: 16, left: 16, bottom: 8 }}
+              barCategoryGap="20%"
             >
               <XAxis
                 dataKey="name"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 11, fill: '#525252' }}
+                tick={({ x, y, payload }) => {
+                  // Split "In Produktion" into two lines for better readability
+                  const lines =
+                    payload.value === 'In Produktion'
+                      ? ['In', 'Produktion']
+                      : payload.value === 'Versandbereit'
+                        ? ['Versand-', 'bereit']
+                        : [payload.value];
+                  return (
+                    <g transform={`translate(${x},${y})`}>
+                      {lines.map((line: string, i: number) => (
+                        <text
+                          key={i}
+                          x={0}
+                          y={i * 14}
+                          dy={12}
+                          textAnchor="middle"
+                          fill="#525252"
+                          fontSize={12}
+                          fontWeight={500}
+                        >
+                          {line}
+                        </text>
+                      ))}
+                    </g>
+                  );
+                }}
                 interval={0}
-                angle={-20}
-                textAnchor="end"
-                height={50}
+                height={45}
               />
               <YAxis hide />
               <Tooltip
@@ -225,7 +249,7 @@ export function StageDistributionChart({ data, total, onStageClick }: StageDistr
                   if (active && payload && payload.length) {
                     const d = payload[0].payload;
                     return (
-                      <div className="bg-white border border-neutral-200 shadow-lg rounded-md p-2 text-xs">
+                      <div className="bg-white border border-neutral-200 shadow-lg rounded-md px-3 py-2 text-sm">
                         <span className="font-semibold text-ghl-text">{d.name}</span>
                         <br />
                         <span className="text-neutral-600">
@@ -239,7 +263,7 @@ export function StageDistributionChart({ data, total, onStageClick }: StageDistr
               />
               <Bar
                 dataKey="value"
-                radius={[4, 4, 0, 0]}
+                radius={[6, 6, 0, 0]}
                 cursor="pointer"
                 onClick={(data) => data.name && onStageClick?.(getStageKey(data.name))}
               >
@@ -249,7 +273,8 @@ export function StageDistributionChart({ data, total, onStageClick }: StageDistr
                 <LabelList
                   dataKey="label"
                   position="top"
-                  style={{ fontSize: 11, fill: '#525252', fontWeight: 500 }}
+                  style={{ fontSize: 14, fill: '#171717', fontWeight: 600 }}
+                  offset={8}
                 />
               </Bar>
             </BarChart>
