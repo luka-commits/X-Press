@@ -133,3 +133,14 @@ model Maschine {
   createdAt               DateTime      @default(now())
   updatedAt               DateTime      @updatedAt
 }
+
+// User Profile (linked to Supabase Auth)
+model Profile {
+  id        String   @id @db.Uuid // Supabase auth.users.id
+  email     String   @unique
+  fullName  String?
+  role      String   @default("user") // user, admin, abteilungsleiter
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

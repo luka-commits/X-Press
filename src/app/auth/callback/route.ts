@@ -2,6 +2,8 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
+import { prisma } from '@/lib/prisma';
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
@@ -33,6 +35,27 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
+      // Get the user to create/update profile
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (user) {
+        // Upsert profile in database
+        await prisma.profile.upsert({
+          where: { id: user.id },
+          update: {
+            email: user.email!,
+            fullName: user.user_metadata?.full_name || null,
+          },
+          create: {
+            id: user.id,
+            email: user.email!,
+            fullName: user.user_metadata?.full_name || null,
+          },
+        });
+      }
+
       // Successful login - redirect to the requested page or home
       return NextResponse.redirect(`${origin}${next}`);
     }

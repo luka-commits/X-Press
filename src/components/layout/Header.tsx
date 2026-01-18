@@ -17,6 +17,13 @@ const navigation = [
   { name: 'Reports', href: '/reports' },
 ];
 
+interface Profile {
+  id: string;
+  email: string;
+  fullName: string | null;
+  role: string;
+}
+
 interface HeaderProps {
   headerRight?: React.ReactNode;
 }
@@ -25,6 +32,7 @@ export function Header({ headerRight }: HeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -33,6 +41,15 @@ export function Header({ headerRight }: HeaderProps) {
     // Get initial user
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
+      if (user) {
+        // Fetch/create profile
+        fetch('/api/profile')
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.id) setProfile(data);
+          })
+          .catch(console.error);
+      }
     });
 
     // Listen for auth changes
@@ -40,6 +57,16 @@ export function Header({ headerRight }: HeaderProps) {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
+      if (session?.user) {
+        fetch('/api/profile')
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.id) setProfile(data);
+          })
+          .catch(console.error);
+      } else {
+        setProfile(null);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -103,7 +130,7 @@ export function Header({ headerRight }: HeaderProps) {
         {user && (
           <div className="flex items-center gap-3 pl-4 border-l border-gray-200">
             <span className="text-sm text-ghl-text-secondary truncate max-w-[200px]">
-              {user.email}
+              {profile?.fullName || user.email}
             </span>
             <button
               onClick={handleLogout}

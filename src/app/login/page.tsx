@@ -1,37 +1,65 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { createClient } from '@/lib/auth';
 
+type AuthMode = 'login' | 'signup';
+
 export default function LoginPage() {
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [mode, setMode] = useState<AuthMode>('login');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  // Check for error from callback
+  const error = searchParams.get('error');
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setMessage(null);
 
     const supabase = createClient();
 
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-
-    if (error) {
-      setMessage({ type: 'error', text: error.message });
-    } else {
-      setMessage({
-        type: 'success',
-        text: 'Login-Link wurde an Ihre Email gesendet. Bitte prüfen Sie Ihren Posteingang.',
+    if (mode === 'signup') {
+      // Sign up with email/password
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: name,
+          },
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
       });
+
+      if (error) {
+        setMessage({ type: 'error', text: error.message });
+      } else {
+        setMessage({
+          type: 'success',
+          text: 'Konto erstellt! Bitte bestätigen Sie Ihre Email-Adresse.',
+        });
+      }
+    } else {
+      // Sign in with email/password
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        setMessage({ type: 'error', text: error.message });
+      }
+      // If successful, middleware will redirect to /
     }
 
     setLoading(false);
@@ -45,11 +73,38 @@ export default function LoginPage() {
           <h1 className="text-2xl font-semibold text-gray-900">
             X-Press <span className="text-blue-600">XOS</span>
           </h1>
-          <p className="mt-2 text-gray-600">Melden Sie sich mit Ihrer Email an</p>
+          <p className="mt-2 text-gray-600">
+            {mode === 'login' ? 'Melden Sie sich an' : 'Konto erstellen'}
+          </p>
         </div>
 
+        {/* Error from callback */}
+        {error && (
+          <div className="p-4 rounded-md text-sm bg-red-50 text-red-800 border border-red-200">
+            Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.
+          </div>
+        )}
+
         {/* Form */}
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {mode === 'signup' && (
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                Name
+              </label>
+              <Input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Max Mustermann"
+                required
+                disabled={loading}
+                className="w-full"
+              />
+            </div>
+          )}
+
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
               Email-Adresse
@@ -66,12 +121,29 @@ export default function LoginPage() {
             />
           </div>
 
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              Passwort
+            </label>
+            <Input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              required
+              minLength={6}
+              disabled={loading}
+              className="w-full"
+            />
+          </div>
+
           <Button
             type="submit"
-            disabled={loading || !email}
+            disabled={loading || !email || !password || (mode === 'signup' && !name)}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white"
           >
-            {loading ? 'Wird gesendet...' : 'Magic Link senden'}
+            {loading ? 'Bitte warten...' : mode === 'login' ? 'Anmelden' : 'Konto erstellen'}
           </Button>
         </form>
 
@@ -88,12 +160,32 @@ export default function LoginPage() {
           </div>
         )}
 
-        {/* Info */}
-        <p className="text-center text-xs text-gray-500">
-          Sie erhalten einen sicheren Login-Link per Email.
-          <br />
-          Kein Passwort erforderlich.
-        </p>
+        {/* Toggle Mode */}
+        <div className="text-center text-sm text-gray-600">
+          {mode === 'login' ? (
+            <>
+              Noch kein Konto?{' '}
+              <button
+                type="button"
+                onClick={() => setMode('signup')}
+                className="text-blue-600 hover:underline font-medium"
+              >
+                Registrieren
+              </button>
+            </>
+          ) : (
+            <>
+              Bereits ein Konto?{' '}
+              <button
+                type="button"
+                onClick={() => setMode('login')}
+                className="text-blue-600 hover:underline font-medium"
+              >
+                Anmelden
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
