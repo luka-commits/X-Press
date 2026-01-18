@@ -37,6 +37,20 @@ const customJestConfig = {
     '!src/app/**/loading.tsx',
   ],
 
+  // Coverage thresholds - CI will fail if coverage drops below these
+  // Starting with low thresholds based on current coverage, to be increased as more tests are added
+  coverageThreshold: {
+    global: {
+      branches: 10,
+      functions: 10,
+      lines: 10,
+      statements: 10,
+    },
+  },
+
+  // Coverage reporters for CI and local
+  coverageReporters: ['text', 'lcov', 'json-summary'],
+
   // Ignore patterns - exclude test utilities and fixtures from test discovery
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',
