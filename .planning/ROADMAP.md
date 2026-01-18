@@ -12,7 +12,7 @@
 - ✅ **v1.7 KPI-Klick-Overlay** — Phases 25-27 (shipped 2026-01-17)
 - ✅ **v1.8 Reports-Drilldown** — Phases 28-29 (shipped 2026-01-17)
 - ✅ **v1.9 Fixes** — Phases 30-37 (shipped 2026-01-18)
-- 🚧 **v2.0 Production-Readiness** — Phases 38-41 (in progress)
+- ✅ **v2.0 Production-Readiness** — Phases 38-41 (shipped 2026-01-18, Phases 40-41 skipped)
 
 ---
 
@@ -149,9 +149,11 @@ Systematisches Testing, Bug-Fixes, Performance-Optimierung und Code-Quality Verb
 
 </details>
 
-### 🚧 v2.0 Production-Readiness (In Progress)
+### ✅ v2.0 Production-Readiness (SHIPPED 2026-01-18)
 
 **Milestone Goal:** Robustheit, Monitoring, CI/CD und Performance-Optimierungen für Produktionsreife.
+
+**Result:** Sentry monitoring, structured logging, health endpoint, CI with E2E tests. Phases 40-41 skipped (not needed for 2-user scale).
 
 #### Phase 38: Observability
 
@@ -179,15 +181,11 @@ Plans:
 **Status**: Skipped — Not needed for 2-user internal tool. Caching would cause stale data confusion (up to 60s delay after status updates).
 **Research**: Complete (see 40-RESEARCH.md)
 
-#### Phase 41: Query-Optimization
+#### Phase 41: Query-Optimization — SKIPPED
 
 **Goal**: Aggregation in DB verschieben, Over-Fetching eliminieren
-**Depends on**: Phase 39
-**Research**: Unlikely (Prisma/Supabase patterns)
-**Plans**: TBD
-
-Plans:
-- [ ] 41-01: TBD
+**Status**: Skipped — Premature optimization. Current JS aggregation fast enough for small dataset. Can be added later when queries become slow.
+**Research**: Complete (see 41-RESEARCH.md)
 
 ## Progress
 
@@ -231,6 +229,6 @@ Plans:
 | 36. Performance-Optimierung | v1.9 | 3/3 | Complete | 2026-01-18 |
 | 37. Code-Quality | v1.9 | 2/2 | Complete | 2026-01-18 |
 | 38. Observability | v2.0 | 1/1 | Complete | 2026-01-18 |
-| 39. CI-Enhancement | v2.0 | 0/? | Not started | - |
+| 39. CI-Enhancement | v2.0 | 1/1 | Complete | 2026-01-18 |
 | 40. API-Caching | v2.0 | - | Skipped | 2026-01-18 |
-| 41. Query-Optimization | v2.0 | 0/? | Not started | - |
+| 41. Query-Optimization | v2.0 | - | Skipped | 2026-01-18 |

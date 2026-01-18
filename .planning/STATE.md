@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-18)
 
 **Core value:** Mitarbeiter können mit 3 Klicks den Auftragsstatus vom Handy aus updaten.
-**Current focus:** v2.0 Production-Readiness
+**Current focus:** None — v2.0 complete, no active milestone
 
 ## Current Position
 
-Phase: 39 of 41 (CI-Enhancement) - Complete
-Plan: 1/1 in current phase
-Status: Phase complete
-Last activity: 2026-01-18 — Completed 39-01-PLAN.md
+Phase: 41 of 41 (Query-Optimization) - Skipped
+Plan: N/A
+Status: v2.0 SHIPPED
+Last activity: 2026-01-18 — Skipped Phase 41, closed v2.0
 
-Progress: ████████░░ 75% (v2.0 - 3/4 phases, Phase 40 skipped)
+Progress: ██████████ 100% (v2.0 complete)
 
 ## Milestones
 
@@ -28,7 +28,7 @@ Progress: ████████░░ 75% (v2.0 - 3/4 phases, Phase 40 skippe
 - ✅ v1.7 KPI-Klick-Overlay (Phases 25-27) — SHIPPED 2026-01-17
 - ✅ v1.8 Reports-Drilldown (Phases 28-29) — SHIPPED 2026-01-17
 - ✅ v1.9 Fixes (Phases 30-37) — SHIPPED 2026-01-18
-- 🚧 v2.0 Production-Readiness (Phases 38-41) — in progress
+- ✅ v2.0 Production-Readiness (Phases 38-41) — SHIPPED 2026-01-18
 
 ## Performance Metrics
 
@@ -72,6 +72,9 @@ See PROJECT.md Key Decisions table for full history.
 **Phase 40 Decision:**
 - Skipped API-Caching — not needed for 2-user internal tool, would cause stale data confusion
 
+**Phase 41 Decision:**
+- Skipped Query-Optimization — premature optimization, JS aggregation fast enough for current scale
+
 ### Pending Todos
 
 None.
@@ -92,11 +95,11 @@ None currently.
 - v1.7 shipped: 2026-01-17 (3 phases, 3 plans: KPI-Klick-Overlay)
 - v1.8 shipped: 2026-01-17 (2 phases, 4 plans: Reports-Drilldown)
 - v1.9 shipped: 2026-01-18 (8 phases, 16 plans: Testing, Performance, Code-Quality)
-- v2.0 in progress: 2026-01-18 (Phase 38, 39 complete; Phase 40 skipped)
+- v2.0 shipped: 2026-01-18 (4 phases, 2 plans executed, 2 phases skipped)
 
 ## Session Continuity
 
 Last session: 2026-01-18
-Stopped at: Completed Phase 39 (CI-Enhancement)
+Stopped at: v2.0 complete
 Resume file: None
-Next action: /gsd:execute-plan 41-01
+Next action: None — all milestones complete
