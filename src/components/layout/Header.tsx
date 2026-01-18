@@ -1,8 +1,11 @@
 'use client';
 
+import { User } from '@supabase/supabase-js';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
+import { createClient } from '@/lib/auth';
 import { cn } from '@/lib/utils';
 
 const navigation = [
@@ -21,8 +24,36 @@ interface HeaderProps {
 export function Header({ headerRight }: HeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const supabase = createClient();
+
+    // Get initial user
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+    });
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleRefresh = () => {
+    router.refresh();
+  };
+
+  const handleLogout = async () => {
+    setLoading(true);
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push('/login');
     router.refresh();
   };
 
@@ -58,14 +89,32 @@ export function Header({ headerRight }: HeaderProps) {
       </div>
 
       {/* Right: Actions */}
-      {headerRight || (
-        <button
-          onClick={handleRefresh}
-          className="px-4 py-2 text-sm font-medium text-white bg-ghl-blue hover:bg-ghl-blue-hover rounded-md transition-colors shadow-sm"
-        >
-          Aktualisieren
-        </button>
-      )}
+      <div className="flex items-center gap-4">
+        {headerRight || (
+          <button
+            onClick={handleRefresh}
+            className="px-4 py-2 text-sm font-medium text-white bg-ghl-blue hover:bg-ghl-blue-hover rounded-md transition-colors shadow-sm"
+          >
+            Aktualisieren
+          </button>
+        )}
+
+        {/* User Info & Logout */}
+        {user && (
+          <div className="flex items-center gap-3 pl-4 border-l border-gray-200">
+            <span className="text-sm text-ghl-text-secondary truncate max-w-[200px]">
+              {user.email}
+            </span>
+            <button
+              onClick={handleLogout}
+              disabled={loading}
+              className="px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
+            >
+              {loading ? '...' : 'Abmelden'}
+            </button>
+          </div>
+        )}
+      </div>
     </header>
   );
 }
