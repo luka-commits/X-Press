@@ -1,6 +1,6 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,7 @@ import { createClient } from '@/lib/auth';
 type AuthMode = 'login' | 'signup';
 
 export default function LoginPage() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -46,20 +47,28 @@ export default function LoginPage() {
       } else {
         setMessage({
           type: 'success',
-          text: 'Konto erstellt! Bitte bestätigen Sie Ihre Email-Adresse.',
+          text: 'Konto erstellt! Sie können sich jetzt anmelden.',
         });
       }
     } else {
       // Sign in with email/password
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
+      console.log('Login result:', { data, error });
+
       if (error) {
+        console.error('Login error:', error);
         setMessage({ type: 'error', text: error.message });
+      } else {
+        console.log('Login successful, redirecting...');
+        // Redirect to home page after successful login
+        router.refresh();
+        router.push('/');
+        return;
       }
-      // If successful, middleware will redirect to /
     }
 
     setLoading(false);
