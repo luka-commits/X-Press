@@ -112,15 +112,19 @@ export function VersandOrderList() {
 
       try {
         // Fetch filtered orders for display
+        // Use high limit to show all matching orders (no artificial pagination)
         const params = new URLSearchParams();
         params.set('deadline', deadlineFilter);
+        params.set('limit', '1000');
         if (statusFilter !== 'all') {
           params.set('versandStatus', statusFilter);
         }
 
         // Fetch all orders for KPIs (same deadline, no status filter)
+        // Use high limit to ensure all orders are fetched for accurate KPI counts
         const allParams = new URLSearchParams();
         allParams.set('deadline', deadlineFilter);
+        allParams.set('limit', '1000');
 
         const [filteredResponse, allResponse] = await Promise.all([
           fetch(`/api/versand/orders?${params.toString()}`, { signal }),
