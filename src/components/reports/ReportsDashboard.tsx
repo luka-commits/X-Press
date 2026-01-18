@@ -13,11 +13,9 @@ import { subDays, format, startOfDay, endOfDay } from 'date-fns';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useState, useEffect, useCallback, useRef } from 'react';
 
-import type { FunnelStage } from '@/lib/reporting-queries';
 import { cn } from '@/lib/utils';
 
 import {
-  FunnelChartLazy as FunnelChart,
   StageDistributionChartLazy as StageDistributionChart,
   ThroughputChartLazy as ThroughputChart,
   PlzChartLazy as PlzChart,
@@ -62,8 +60,7 @@ export function ReportsDashboard() {
     to: endOfDay(new Date()),
   });
 
-  // Funnel / Stage Distribution (current snapshot, independent of date range)
-  const [funnelData, setFunnelData] = useState<FunnelStage[]>([]);
+  // Stage Distribution (current snapshot, independent of date range)
   const [stageDistribution, setStageDistribution] = useState<{
     data: StageDistributionData[];
     total: number;
@@ -104,40 +101,28 @@ export function ReportsDashboard() {
   const [snapshotData, setSnapshotData] = useState<SnapshotData | null>(null);
   const [snapshotLoading, setSnapshotLoading] = useState(true);
 
-  // Fetch funnel and stage distribution data (current snapshot, independent of date range)
-  // Funnel: cumulative (stages show orders that REACHED that milestone)
-  // Stage Distribution: exclusive (each order counted in only one stage)
-  const fetchFunnelData = useCallback(async () => {
+  // Fetch stage distribution data (current snapshot, independent of date range)
+  const fetchStageDistribution = useCallback(async () => {
     setFunnelLoading(true);
     try {
-      // Fetch both in parallel
-      // Switch Funnel to EXCLUSIVE mode to match user expectation (Current Status Pipeline)
-      // This fixes the "Total" double counting and "In Produktion" being non-zero.
-      const [funnelResponse, stageResponse] = await Promise.all([
-        fetch('/api/reports/funnel?mode=exclusive'), // exclusive (was cumulative)
-        fetch('/api/reports/funnel?mode=exclusive'), // exclusive for donut
-      ]);
+      const response = await fetch('/api/reports/funnel?mode=exclusive');
 
-      if (!funnelResponse.ok) throw new Error('Fehler beim Laden der Funnel-Daten');
-      if (!stageResponse.ok) throw new Error('Fehler beim Laden der Stage-Daten');
+      if (!response.ok) throw new Error('Fehler beim Laden der Stage-Daten');
 
-      const funnelResult = await funnelResponse.json();
-      const stageResult = await stageResponse.json();
-
-      setFunnelData(funnelResult.stages || []);
-      setStageDistribution({ data: stageResult.stages || [], total: stageResult.totalValue || 0 });
+      const result = await response.json();
+      setStageDistribution({ data: result.stages || [], total: result.totalValue || 0 });
     } catch (err) {
-      console.error('Funnel fetch error:', err);
-      setFunnelData([]);
+      console.error('Stage distribution fetch error:', err);
+      setStageDistribution({ data: [], total: 0 });
     } finally {
       setFunnelLoading(false);
     }
   }, []);
 
-  // Fetch funnel data once on mount
+  // Fetch stage distribution once on mount
   useEffect(() => {
-    fetchFunnelData();
-  }, [fetchFunnelData]);
+    fetchStageDistribution();
+  }, [fetchStageDistribution]);
 
   // Fetch pipeline data (throughput + period KPIs) when dateRange changes
   const fetchPipelineData = useCallback(async (range: DateRange) => {
@@ -306,48 +291,34 @@ export function ReportsDashboard() {
         </div>
       )}
 
-      {/* Section 1: Current Pipeline Snapshot */}
-      <section className="space-y-4">
-        {/* <h2 className="text-lg font-semibold text-ghl-text">Aktueller Pipeline-Stand</h2>  REMOVED HEADER */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {funnelLoading ? (
-            <>
-              <div className="bg-white rounded-lg border border-neutral-200 p-6 h-80 animate-pulse" />
-              <div className="bg-white rounded-lg border border-neutral-200 p-6 h-80 animate-pulse" />
-            </>
-          ) : (
-            <>
-              <FunnelChart data={funnelData} onStageClick={handleStageClick} />
-              <StageDistributionChart
-                data={stageDistribution.data}
-                total={stageDistribution.total}
-                onStageClick={handleStageClick}
-              />
-            </>
-          )}
-        </div>
-      </section>
+      {/* Section 1: Aktueller Stand KPIs */}
+      <SnapshotKPIs data={snapshotData} loading={snapshotLoading} onKpiClick={handleKpiClick} />
+
+      {/* Section 2: Pipeline Chart */}
+      {funnelLoading ? (
+        <div className="bg-white rounded-lg border border-neutral-200 p-6 h-80 animate-pulse" />
+      ) : (
+        <StageDistributionChart
+          data={stageDistribution.data}
+          total={stageDistribution.total}
+          onStageClick={handleStageClick}
+        />
+      )}
+
+      {/* Section 3: Versand KPIs */}
+      <PipelineKPIs
+        kpis={pipelineData?.periodKpis ?? null}
+        prevPeriod={pipelineData?.prevPeriodKpis ?? null}
+        loading={pipelineLoading}
+        onKpiClick={handlePipelineKpiClick}
+      />
 
       {/* Divider */}
       <div className="border-t border-neutral-200" />
 
-      {/* Section 2: Time-based Analytics */}
+      {/* Section 4: Zeit-basierte Analysen */}
       <section className="space-y-6">
         <h2 className="text-lg font-semibold text-ghl-text">Zeitraum-Analyse</h2>
-
-        {/* Snapshot KPIs - Current state (independent of date range) */}
-        <SnapshotKPIs data={snapshotData} loading={snapshotLoading} onKpiClick={handleKpiClick} />
-
-        {/* Divider */}
-        <div className="border-t border-neutral-200" />
-
-        {/* Pipeline KPIs - Period metrics with comparison */}
-        <PipelineKPIs
-          kpis={pipelineData?.periodKpis ?? null}
-          prevPeriod={pipelineData?.prevPeriodKpis ?? null}
-          loading={pipelineLoading}
-          onKpiClick={handlePipelineKpiClick}
-        />
 
         {/* Two-column row: ThroughputChart + PlzChart */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

@@ -2,37 +2,47 @@
 
 import { Search } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { Input } from '@/components/ui/input';
 
 export function OrderSearch() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [value, setValue] = useState(searchParams.get('search') || '');
+  const initialSearch = searchParams.get('search') || '';
+  const [value, setValue] = useState(initialSearch);
 
-  // Debounced search
-  const debouncedSearch = useCallback(
-    (searchValue: string) => {
+  // Track if this is the initial mount to avoid triggering search on first render
+  const isInitialMount = useRef(true);
+  // Track the last submitted search value to avoid duplicate submissions
+  const lastSubmittedValue = useRef(initialSearch);
+
+  useEffect(() => {
+    // Skip the initial mount - don't trigger search on page load
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    // Only trigger search if value actually changed from last submission
+    if (value === lastSubmittedValue.current) {
+      return;
+    }
+
+    const timer = setTimeout(() => {
       const params = new URLSearchParams(searchParams.toString());
-      if (searchValue) {
-        params.set('search', searchValue);
+      if (value) {
+        params.set('search', value);
       } else {
         params.delete('search');
       }
       params.set('page', '1');
+      lastSubmittedValue.current = value;
       router.push(`/orders?${params.toString()}`);
-    },
-    [router, searchParams]
-  );
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      debouncedSearch(value);
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [value, debouncedSearch]);
+  }, [value, router, searchParams]);
 
   return (
     <div className="relative">
