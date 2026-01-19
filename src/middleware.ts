@@ -2,6 +2,15 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
+  // Debug: Log all cookies received
+  const allCookies = request.cookies.getAll();
+  console.log('[Middleware] Path:', request.nextUrl.pathname);
+  console.log('[Middleware] Cookies received:', allCookies.map((c) => c.name).join(', '));
+  console.log(
+    '[Middleware] Auth cookie exists:',
+    allCookies.some((c) => c.name.includes('supabase') || c.name.includes('auth'))
+  );
+
   let supabaseResponse = NextResponse.next({
     request,
   });
@@ -12,9 +21,15 @@ export async function middleware(request: NextRequest) {
     {
       cookies: {
         getAll() {
-          return request.cookies.getAll();
+          const cookies = request.cookies.getAll();
+          console.log('[Middleware] getAll called, returning:', cookies.length, 'cookies');
+          return cookies;
         },
         setAll(cookiesToSet) {
+          console.log(
+            '[Middleware] setAll called with:',
+            cookiesToSet.map((c) => c.name).join(', ')
+          );
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
           supabaseResponse = NextResponse.next({
             request,
@@ -31,6 +46,8 @@ export async function middleware(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  console.log('[Middleware] User found:', user ? user.email : 'null');
 
   // Ungeschützte Routes
   const isAuthRoute =
