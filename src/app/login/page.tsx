@@ -67,28 +67,27 @@ export default function LoginPage() {
         console.error('Login error:', error);
         setMessage({ type: 'error', text: error.message });
       } else {
-        console.log('Login successful, redirecting...');
+        console.log('Login successful!');
+        console.log('Session from login:', data.session ? 'exists' : 'null');
+        console.log('User from login:', data.user?.email);
 
-        // First verify session is actually stored
-        const { data: sessionData } = await supabase.auth.getSession();
-        console.log('Session after login:', sessionData);
+        // Check document.cookie
+        console.log('Cookies after login:', document.cookie.substring(0, 150));
 
-        // Check document.cookie to see what cookies exist
-        console.log('Cookies present:', document.cookie.length > 0 ? 'yes' : 'no');
-        console.log('Cookie sample:', document.cookie.substring(0, 100));
+        // Wait a moment for cookie to be written
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
+        console.log('Cookies after delay:', document.cookie.substring(0, 150));
+
+        // Try getSession after delay
+        const { data: sessionCheck } = await supabase.auth.getSession();
+        console.log('getSession after delay:', sessionCheck.session ? 'exists' : 'null');
 
         if (isInIframe) {
-          // In iframe: Use full page reload (router.refresh() hangs in iframe context)
-          console.log('Using window.location for iframe redirect');
-
-          // Small delay to ensure cookies are written
-          await new Promise((resolve) => setTimeout(resolve, 100));
-
-          console.log('About to redirect to /');
-          window.location.href = '/';
-          console.log('Redirect initiated'); // This may not appear if redirect works
+          console.log('Iframe detected - using window.location.replace');
+          // Use replace() instead of href to avoid history issues
+          window.location.replace('/');
         } else {
-          // Normal context: Use Next.js router
           router.refresh();
           router.push('/');
         }
