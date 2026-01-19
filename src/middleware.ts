@@ -19,15 +19,9 @@ export async function middleware(request: NextRequest) {
           supabaseResponse = NextResponse.next({
             request,
           });
-          cookiesToSet.forEach(({ name, value, options }) => {
-            // Enable iframe-compatible cookies
-            const iframeOptions = {
-              ...options,
-              sameSite: 'none' as const,
-              secure: true,
-            };
-            supabaseResponse.cookies.set(name, value, iframeOptions);
-          });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            supabaseResponse.cookies.set(name, value, options)
+          );
         },
       },
     }
@@ -38,20 +32,12 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Debug logging
-  console.log('[Middleware]', {
-    path: request.nextUrl.pathname,
-    hasUser: !!user,
-    cookies: request.cookies.getAll().map((c) => c.name),
-  });
-
   // Ungeschützte Routes
   const isAuthRoute =
     request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/auth');
 
   // Redirect to login if not authenticated and not on auth route
   if (!user && !isAuthRoute) {
-    console.log('[Middleware] Redirecting to login - no user');
     const url = request.nextUrl.clone();
     url.pathname = '/login';
     return NextResponse.redirect(url);
@@ -59,7 +45,6 @@ export async function middleware(request: NextRequest) {
 
   // Redirect to home if authenticated and on login page
   if (user && request.nextUrl.pathname === '/login') {
-    console.log('[Middleware] Redirecting to home - user authenticated');
     const url = request.nextUrl.clone();
     url.pathname = '/';
     return NextResponse.redirect(url);

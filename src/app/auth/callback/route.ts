@@ -21,15 +21,9 @@ export async function GET(request: Request) {
           },
           setAll(cookiesToSet) {
             try {
-              cookiesToSet.forEach(({ name, value, options }) => {
-                // Enable iframe-compatible cookies
-                const iframeOptions = {
-                  ...options,
-                  sameSite: 'none' as const,
-                  secure: true,
-                };
-                cookieStore.set(name, value, iframeOptions);
-              });
+              cookiesToSet.forEach(({ name, value, options }) =>
+                cookieStore.set(name, value, options)
+              );
             } catch {
               // Ignore - called from Server Component
             }

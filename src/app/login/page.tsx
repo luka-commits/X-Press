@@ -10,7 +10,7 @@ import { createClient } from '@/lib/auth';
 type AuthMode = 'login' | 'signup';
 
 export default function LoginPage() {
-  const _router = useRouter(); // Keep for potential future use
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -58,21 +58,15 @@ export default function LoginPage() {
       });
 
       console.log('Login result:', { data, error });
-      console.log('Running in iframe:', window.self !== window.top);
-      console.log('Current location:', window.location.href);
 
       if (error) {
         console.error('Login error:', error);
         setMessage({ type: 'error', text: error.message });
       } else {
         console.log('Login successful, redirecting...');
-
-        // Check if session was actually stored
-        const { data: sessionData } = await supabase.auth.getSession();
-        console.log('Session after login:', sessionData);
-
-        // Use window.location for full page reload (works in iframe context)
-        window.location.href = '/';
+        // Redirect to home page after successful login
+        router.refresh();
+        router.push('/');
         return;
       }
     }
