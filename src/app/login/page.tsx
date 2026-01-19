@@ -59,14 +59,39 @@ export default function LoginPage() {
 
       console.log('Login result:', { data, error });
 
+      // Detect iframe context (e.g., GoHighLevel Custom Link)
+      const isInIframe = window.self !== window.top;
+      console.log('Running in iframe:', isInIframe);
+
       if (error) {
         console.error('Login error:', error);
         setMessage({ type: 'error', text: error.message });
       } else {
         console.log('Login successful, redirecting...');
-        // Redirect to home page after successful login
-        router.refresh();
-        router.push('/');
+
+        // First verify session is actually stored
+        const { data: sessionData } = await supabase.auth.getSession();
+        console.log('Session after login:', sessionData);
+
+        // Check document.cookie to see what cookies exist
+        console.log('Cookies present:', document.cookie.length > 0 ? 'yes' : 'no');
+        console.log('Cookie sample:', document.cookie.substring(0, 100));
+
+        if (isInIframe) {
+          // In iframe: Use full page reload (router.refresh() hangs in iframe context)
+          console.log('Using window.location for iframe redirect');
+
+          // Small delay to ensure cookies are written
+          await new Promise((resolve) => setTimeout(resolve, 100));
+
+          console.log('About to redirect to /');
+          window.location.href = '/';
+          console.log('Redirect initiated'); // This may not appear if redirect works
+        } else {
+          // Normal context: Use Next.js router
+          router.refresh();
+          router.push('/');
+        }
         return;
       }
     }
