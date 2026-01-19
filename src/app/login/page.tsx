@@ -10,7 +10,7 @@ import { createClient } from '@/lib/auth';
 type AuthMode = 'login' | 'signup';
 
 export default function LoginPage() {
-  const router = useRouter();
+  const _router = useRouter(); // Keep for potential future use
   const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -64,9 +64,8 @@ export default function LoginPage() {
         setMessage({ type: 'error', text: error.message });
       } else {
         console.log('Login successful, redirecting...');
-        // Redirect to home page after successful login
-        router.refresh();
-        router.push('/');
+        // Use window.location for full page reload (works in iframe context)
+        window.location.href = '/';
         return;
       }
     }
